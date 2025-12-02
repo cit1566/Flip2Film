@@ -1,8 +1,8 @@
-import { Metadata } from 'next'
-import type { PropsWithChildren } from 'react'
+import type { Metadata } from "next"
+import type { PropsWithChildren } from "react"
 
 export const metadata: Metadata = {
-  title: 'Next.js 프로젝트 템플릿',
+  title: "Next.js 프로젝트 템플릿",
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
