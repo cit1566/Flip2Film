@@ -1,4 +1,3 @@
-import '@/styles/main.css'
 import { Metadata } from 'next'
 import type { PropsWithChildren } from 'react'
 
