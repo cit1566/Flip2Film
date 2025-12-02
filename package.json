@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "description": "Bun + Next.js 프로젝트 템플릿",
   "scripts": {
+    "dev": "bun --bun next dev --turbopack",
     "prod": "next build --turbopack",
     "start": "next start",
     "lint": "bun lint:check --fix",
