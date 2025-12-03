@@ -95,8 +95,8 @@ export default [
           // import 그룹 순서 정의 (위에서 아래 순서대로)
           groups: [
             "builtin", // Node.js 내장 모듈 (fs, path, http 등)
-            "external", // 외부 라이브러리 (react, lodash, axios 등)
             "internal", // 프로젝트 내부 모듈 (`@/`로 시작하는 것들)
+            "external", // 외부 라이브러리 (react, lodash, axios 등)
             "parent", // 상위 디렉토리 모듈 (../components)
             "sibling", // 같은 디렉토리 모듈 (./Button)
             "index", // 인덱스 파일 (./index)
