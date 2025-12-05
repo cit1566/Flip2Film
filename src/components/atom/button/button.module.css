@@ -1,0 +1,90 @@
+/* -----------------------------
+   공통 버튼 기본 스타일
+----------------------------- */
+.buttonBase {
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* disabled 공통 */
+.buttonBase:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* active 공통 */
+.buttonBase:active:not(:disabled) {
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 10px 50px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+/* -----------------------------
+   Base 타입
+----------------------------- */
+.buttonTypeBase {
+  color: #6f6f6f;
+  background-color: #eeeeee;
+}
+
+.buttonTypeBase:hover:not(:disabled) {
+  background-color: #d2d2d2;
+  color: var(--color-black);
+}
+
+.buttonTypeBase:disabled {
+  background-color: var(--color-btn-gray);
+  color: #cacaca;
+}
+
+/* -----------------------------
+   Green 타입
+----------------------------- */
+.buttonTypeGreen {
+  color: white;
+  background-color: var(--color-green);
+}
+
+.buttonTypeGreen:hover:not(:disabled) {
+  background-color: #00c217;
+}
+
+.buttonTypeGreen:disabled {
+  background-color: #86b88c;
+  color: #cacaca;
+}
+
+/* -----------------------------
+   Warning 타입
+----------------------------- */
+.buttonTypeWarning {
+  color: #ff7c7c;
+  background-color: white;
+  border: solid 1px #fc9696;
+}
+
+.buttonTypeWarning:hover:not(:disabled) {
+  background-color: #ffebeb;
+  color: #f44b4b;
+}
+
+.buttonTypeWarning:disabled {
+  color: #fbd0d0;
+  border-color: #fbd8d8;
+}
