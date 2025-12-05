@@ -12,6 +12,7 @@
   --color-text-purple: #6941c6;
   --color-bolder-4: #ebebeb;
 
+  --color-btn-gray: #eeeeee; /* 버튼 회색 */
   /* Spacing */
   --inline-spacing: 15px;
   --element-gap: 10px;
