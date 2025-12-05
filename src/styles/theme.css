@@ -8,7 +8,7 @@
   --color-gray: #8c8c8c;
   --color-bg-light: #f8f9fa; /* 배경 하양 */
   --color-bg-dark: #f2f2f2;
-
+  --color-btn-gray: #eeeeee; /* 버튼 회색 */
   /* Spacing */
   --inline-spacing: 15px;
   --element-gap: 10px;
