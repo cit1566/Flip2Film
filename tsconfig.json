@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ES2022"
-    ],
+    "lib": ["dom", "dom.iterable", "ES2022"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -24,26 +20,11 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/styles/*": [
-        "./src/styles/*"
-      ],
-      "@/utils/*": [
-        "./src/utils/*"
-      ],
-<<<<<<< HEAD
-      "@/lib/*": [
-        "./src/lib/*"
-=======
-      "@/libs/*": [
-        "./src/libs/*"
->>>>>>> develop
-      ]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/libs/*": ["./src/libs/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": false,
@@ -60,10 +41,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "out",
-    "build"
-  ]
+  "exclude": ["node_modules", ".next", "out", "build"]
 }
