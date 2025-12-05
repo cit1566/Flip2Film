@@ -86,6 +86,7 @@
 
     border-top: 1px solid var(--color-bolder-4);
     padding-top: 12px;
+    padding-inline: 5px;
     font-size: 0.875rem;
 
     .userId {
@@ -102,6 +103,10 @@
       display: flex;
       align-items: center;
       gap: 4px;
+
+      svg {
+        color: #1ed534;
+      }
     }
   }
 }

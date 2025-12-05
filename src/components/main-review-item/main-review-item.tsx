@@ -5,12 +5,12 @@ import styles from "./main-review-item.module.css"
 
 export default function MainReviewItem() {
   return (
-    <section className={styles.mainReviewItem}>
+    <article className={styles.mainReviewItem}>
       {/* ------- 왼쪽 포스터 영역 ------- */}
       <Link href="/" className={styles.posterLink}>
         <Image
           src="/image/noImage.png"
-          alt="poster"
+          alt="포스터"
           width={200}
           height={300}
           className={styles.posterImage}
@@ -48,7 +48,7 @@ export default function MainReviewItem() {
           <Link href="/" className={styles.userId}>
             <Image
               src="/next-js.svg"
-              alt="userProfile"
+              alt="사용자 프로필"
               width={20}
               height={20}
             />
@@ -57,11 +57,11 @@ export default function MainReviewItem() {
 
           {/* 좋아요 수 */}
           <span className={styles.likes}>
-            <ThumbsUp size={20} color="#1ED534" />
+            <ThumbsUp size={20} />
             <span>25</span>
           </span>
         </div>
       </div>
-    </section>
+    </article>
   )
 }
