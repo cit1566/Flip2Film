@@ -1,0 +1,107 @@
+.mainReviewItem {
+  padding: 15px;
+  display: flex;
+  min-width: 363px;
+  max-width: 768px;
+  height: 302px;
+  gap: 10px;
+
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+
+  /* 공통 */
+  p,
+  h2 {
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* 오른쪽 포스터 */
+  .posterImage {
+    width: 176px;
+    height: 272px;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+}
+
+/* 왼쪽 텍스트 박스 */
+.textBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  overflow: hidden;
+
+  /* 클릭 영역 전체 */
+  .linkArea {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+
+    /* 제목 */
+    .title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--color-black);
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* 본문 요약 */
+    .plot {
+      color: var(--color-text-gray);
+      font-size: 1rem;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 7;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  /* 영화/책 상세 정보 */
+  .subjectDetail {
+    color: var(--color-text-purple);
+    font-weight: bold;
+    font-size: 0.875rem;
+    order: 0;
+  }
+
+  /* 사용자 + 좋아요 */
+  .idWithLike {
+    order: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-top: 1px solid var(--color-bolder-4);
+    padding-top: 12px;
+    font-size: 0.875rem;
+
+    .userId {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      img {
+        border-radius: 50%;
+      }
+    }
+
+    .likes {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+}
