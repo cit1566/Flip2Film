@@ -5,7 +5,10 @@
       "name": "next-js",
       "dependencies": {
         "@supabase/supabase-js": "^2.86.0",
+<<<<<<< HEAD
         "lucide-react": "^0.555.0",
+=======
+>>>>>>> develop
         "next": "^16.0.7",
         "plaiceholder": "^3.0.0",
         "react": "^19.1.1",

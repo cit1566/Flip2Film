@@ -36,8 +36,13 @@
       "@/utils/*": [
         "./src/utils/*"
       ],
+<<<<<<< HEAD
       "@/lib/*": [
         "./src/lib/*"
+=======
+      "@/libs/*": [
+        "./src/libs/*"
+>>>>>>> develop
       ]
     },
     "forceConsistentCasingInFileNames": true,
