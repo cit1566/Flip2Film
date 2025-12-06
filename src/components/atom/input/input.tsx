@@ -72,7 +72,7 @@ export default function Input({
               target: { value: "" },
             } as React.ChangeEvent<HTMLInputElement>)
           }
-          aria-label="이메일 표시"
+          aria-label="내용 지우기"
         >
           <X />
         </button>
