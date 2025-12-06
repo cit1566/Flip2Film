@@ -1,14 +1,17 @@
 import LoginForm from "@/components/login/login-form/login-form"
 import SocialLogin from "@/components/login/social-login/social-login"
+import Image from "next/image"
 import styles from "./login.module.css"
 
 export default function LoginPage() {
   return (
     <section className={styles.loginPageContainer}>
       <header className={styles.loginPageLogoSection}>
-        <img
+        <Image
           src="/logo/logo.svg"
           alt="Flip2Film 로고"
+          width={80}
+          height={80}
           className={styles.loginPageLogoImage}
         />
         <h1 className={styles.loginPageLogoTitle}>Flip2Film</h1>
