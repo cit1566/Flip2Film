@@ -26,6 +26,7 @@
     "@supabase/supabase-js": "^2.86.0",
     "lucide-react": "^0.555.0",
     "next": "^16.0.7",
+    "next-js-manual-template": ".",
     "plaiceholder": "^3.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"

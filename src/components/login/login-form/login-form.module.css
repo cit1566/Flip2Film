@@ -1,24 +1,18 @@
-.form {
+/* 로그인 폼 전체 */
+.loginForm {
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-inline: auto;
 }
 
-.inputEmail {
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.inputPassword {
-  margin-bottom: 50px;
-}
-
-.loginBtn {
+/* 로그인 버튼 */
+.loginFormSubmitButton {
   width: 100%;
   padding: 12px;
+  margin-top: 56px;
   border: none;
   border-radius: 6px;
+
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -29,32 +23,32 @@
   transition: background-color 0.15s ease-in-out;
 }
 
-.loginBtn:hover,
-.loginBtn:focus {
+.loginFormSubmitButton:hover,
+.loginFormSubmitButton:focus {
   background-color: #18c02f;
 }
 
-.bottomLinks {
+.loginFormBottomLinks {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
-  margin-block: 12px 20px;
-  gap: 10px;
+  padding-block: 12px 26px;
 
   font-size: 0.9rem;
   color: var(--color-gray);
 }
 
-.bottomLinks a {
+.loginFormLink {
   color: var(--color-gray);
   text-decoration: none;
   transition: color 0.15s ease;
 }
 
-.bottomLinks a:hover {
+.loginFormLink:hover {
   color: var(--color-black);
 }
 
-.separator {
-  opacity: 0.4;
+.loginFormSeparator {
+  padding-inline: 6px;
+  opacity: 0.5;
 }
