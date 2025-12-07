@@ -1,0 +1,4 @@
+.cardImage {
+  object-fit: fill;
+  border-radius: 5px;
+}
