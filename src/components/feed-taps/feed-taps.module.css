@@ -1,0 +1,87 @@
+.feedTapsSection {
+  background-color: var(--color-gray-light);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--color-gray-light-2);
+  word-break: keep-all;
+
+  .tab {
+    background-color: transparent;
+    border: none;
+    color: var(--color-gray);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 10px 20px;
+  }
+
+  .isActive {
+    color: var(--color-black);
+    font-weight: 800;
+    box-shadow: var(--color-green) 0 1.5px;
+    margin: 0 25px;
+  }
+}
+
+.tabPanel {
+  padding: 2px 3px 3px;
+
+  .reviewList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+  }
+
+  .reviewList,
+  .listItem {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@media (min-width: 481px) {
+  .tabs {
+    border-bottom: 2px solid var(--color-gray-light-2);
+
+    .tab {
+      font-size: 1.25rem;
+      padding: 20px;
+    }
+
+    .isActive {
+      box-shadow: var(--color-green) 0 2px;
+      margin: 0 50px;
+    }
+  }
+
+  .tabPanel {
+    padding: 3px;
+  }
+}
+
+@media (min-width: 769px) {
+  .tabs {
+    .tab {
+      font-size: 1.75rem;
+      padding: 24px;
+    }
+
+    .isActive {
+      box-shadow: var(--color-green) 0 3px;
+      margin: 0 70px;
+    }
+  }
+
+  .tabPanel {
+    padding: 4px;
+
+    .reviewList {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 3px;
+    }
+  }
+}
