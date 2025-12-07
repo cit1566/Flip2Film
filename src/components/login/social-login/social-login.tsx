@@ -1,8 +1,6 @@
 import Image from "next/image"
 import styles from "./social-login.module.css"
 
-Image
-
 export default function SocialLogin() {
   return (
     <div className={styles.socialContainer}>
