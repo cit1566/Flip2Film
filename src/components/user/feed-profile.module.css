@@ -1,0 +1,82 @@
+.userInfoWrapper {
+  padding: 20px 15px 18px;
+  background-color: var(--color-gray-light);
+}
+
+.summary {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 20px;
+
+  .summaryTexts {
+    gap: 6px;
+  }
+
+  .nickname {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0 0 6px 0;
+  }
+
+  .reviewCounts {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.bio {
+  font-size: 0.875rem;
+  height: fit-content;
+  max-height: 50px;
+  margin: 0;
+}
+
+@media (min-width: 481px) {
+  .userInfoWrapper {
+    padding: 30px 30px 28px;
+  }
+
+  .summary {
+    margin-bottom: 20px;
+    gap: 30px;
+
+    .nickname {
+      font-size: 1.25rem;
+    }
+
+    .reviewCounts {
+      font-size: 1rem;
+    }
+  }
+
+  .bio {
+    font-size: 1rem;
+    max-height: 70px;
+  }
+}
+
+@media (min-width: 769px) {
+  .userInfoWrapper {
+    padding: 65px 65px 36px;
+  }
+
+  .summary {
+    margin-bottom: 36px;
+    gap: 35px;
+
+    .nickname {
+      font-size: 2rem;
+    }
+
+    .reviewCounts {
+      font-size: 1.5rem;
+    }
+  }
+
+  .bio {
+    font-size: 1.5rem;
+    max-height: 100px;
+  }
+}
