@@ -1,8 +1,7 @@
 /* 로그인 페이지 전체 컨테이너 */
 .loginPageContainer {
   width: 100%;
-  min-width: 363px;
-  max-width: 768px;
+  max-width: 481px;
   display: flex;
   flex-direction: column;
   align-items: center;
