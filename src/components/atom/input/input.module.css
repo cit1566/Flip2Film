@@ -1,0 +1,61 @@
+/* Input 전체 래퍼 (div) */
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+/* Label */
+.inputLabel {
+  font-size: 1rem;
+  color: var(--color-black);
+}
+
+/* Input + 아이콘을 담는 최소 래퍼(span) */
+.inputBox {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+}
+
+/* Input 자체 */
+.inputField {
+  width: 100%;
+  padding: 10px 36px 10px 0;
+  border: none;
+  border-bottom: 2px solid #d9d9d9;
+  background: transparent;
+  font-size: 1rem;
+  box-shadow: none;
+  color: var(--color-black);
+  transition: border-color 0.2s ease;
+}
+
+.inputField:focus {
+  outline: none;
+  border-bottom-color: var(--color-green);
+}
+
+/* 상태 */
+.inputError {
+  border-bottom-color: red;
+}
+
+.inputDisabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 아이콘 버튼 (clear, password toggle) */
+.iconButton {
+  position: absolute;
+  right: 6px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-gray);
+}

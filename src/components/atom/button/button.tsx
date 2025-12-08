@@ -5,7 +5,8 @@ interface ButtonProps extends PropsWithChildren {
   variant: "base" | "green" | "warning"
   disabled?: boolean
   title: string
-  className?: string
+  className?: string | undefined
+  type?: "button" | "submit" | "reset"
 }
 
 export default function Button({
@@ -13,6 +14,7 @@ export default function Button({
   disabled = false,
   title,
   className,
+  type = "button",
   children,
 }: ButtonProps) {
   const variantClass = {
@@ -23,7 +25,7 @@ export default function Button({
 
   return (
     <button
-      type="button"
+      type={type ?? "button"}
       className={`${styles.buttonBase} ${variantClass} ${className}`}
       disabled={disabled}
     >

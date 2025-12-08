@@ -1,0 +1,89 @@
+"use client"
+
+import { Eye, EyeOff, X } from "lucide-react"
+import { useState } from "react"
+import styles from "./input.module.css"
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string
+  status?: "default" | "error" | "disabled"
+  clearable?: boolean
+  togglePassword?: boolean
+}
+
+export default function Input({
+  label,
+  status = "default",
+  type = "text",
+  clearable,
+  togglePassword,
+  disabled,
+  value,
+  onChange,
+  id,
+  ...props
+}: InputProps) {
+  const inputId = id ?? `input-${label?.replace(/\s+/g, "").toLowerCase()}`
+
+  const isPassword = type === "password"
+  const isEmail = type === "email"
+
+  const [showPassword, setShowPassword] = useState(false)
+
+  const actualType = isPassword && showPassword ? "text" : type
+
+  const statusClass =
+    status === "error"
+      ? styles.inputError
+      : status === "disabled"
+        ? styles.inputDisabled
+        : ""
+
+  return (
+    <div className={styles.inputWrapper}>
+      {label && (
+        <label htmlFor={inputId} className={styles.inputLabel}>
+          {label}
+        </label>
+      )}
+
+      <div className={styles.inputBox}>
+        <input
+          {...props}
+          id={inputId}
+          type={actualType}
+          value={value}
+          onChange={onChange}
+          disabled={status === "disabled" ? true : disabled}
+          className={`${styles.inputField} ${statusClass}`}
+        />
+
+        {clearable && isEmail && value && (
+          <button
+            type="button"
+            className={styles.iconButton}
+            onClick={() =>
+              onChange?.({
+                target: { value: "" },
+              } as React.ChangeEvent<HTMLInputElement>)
+            }
+            aria-label="입력 내용 지우기"
+          >
+            <X />
+          </button>
+        )}
+
+        {togglePassword && isPassword && (
+          <button
+            type="button"
+            className={styles.iconButton}
+            onClick={() => setShowPassword(!showPassword)}
+            aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 표시"}
+          >
+            {showPassword ? <EyeOff /> : <Eye />}
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
