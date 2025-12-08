@@ -1,0 +1,91 @@
+.mainBodyBox {
+  max-width: 100%;
+}
+
+/* 네비 링크 박스 */
+.navLinkBox {
+  max-width: 768px;
+  height: 40px;
+
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 20px;
+  font-size: 1.5rem;
+  position: relative;
+  margin-bottom: 20px;
+
+  a {
+    color: var(--color-text-gray-2);
+    text-decoration: none;
+    appearance: none;
+  }
+
+  .isActive {
+    color: var(--color-black);
+    /* border-bottom: 2px solid var(--color-green); */
+  }
+
+  .activeLine {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid var(--color-green);
+    .activeHome {
+      width: 30px;
+    }
+
+    .activeMovie {
+      width: 50px;
+      transform: translateX(40px);
+    }
+
+    .activeBook {
+      width: 50px;
+      transform: translateX(80px);
+    }
+  }
+}
+
+/* 768px 이하 = 모바일 */
+@media (max-width: 768px) {
+  .mainBodyBox {
+    max-width: 368px;
+  }
+
+  .contentBox {
+    max-width: 100%;
+    display: flex;
+    flex-flow: nowrap column;
+    gap: 20px;
+  }
+}
+
+/* 1023px 이하 = 태블릿 이하 */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .mainBodyBox {
+    max-width: 768px; /* px 추가 */
+  }
+
+  .contentBox {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* 1024px 이상 = 데스크탑 */
+@media (min-width: 1279px) {
+  .mainBodyBox {
+    max-width: 1279px;
+    margin: 0 auto;
+  }
+
+  .contentBox {
+    max-width: (100%-15px);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 20px;
+    column-gap: 20px;
+  }
+}
