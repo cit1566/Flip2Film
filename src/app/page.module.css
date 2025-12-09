@@ -1,0 +1,8 @@
+.mainPageBox {
+  width: 100%;
+
+  display: flex;
+  flex-flow: nowrap column;
+  align-items: center;
+  background: var(--color-bg-light);
+}
