@@ -9,7 +9,7 @@
   gap: 20px;
   font-size: 1.5rem;
   position: relative;
-  padding: 20px;
+  padding: 20px 5px;
 
   a {
     color: var(--color-text-gray-2);
@@ -41,5 +41,17 @@
       width: 50px;
       transform: translateX(98.5px);
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .navLinkBox {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .navLinkBox {
+    max-width: 768px;
   }
 }

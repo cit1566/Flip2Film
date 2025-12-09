@@ -4,4 +4,5 @@
   display: flex;
   flex-flow: nowrap column;
   align-items: center;
+  padding-inline: 15px;
 }
