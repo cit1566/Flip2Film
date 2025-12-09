@@ -2,6 +2,8 @@ import "@/styles/main.css"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import type { PropsWithChildren } from "react"
+import Header from "../components/header/header"
+import PageTransition from "../components/page-transition/page-transition"
 import styles from "./layout.module.css"
 
 export const metadata: Metadata = {
@@ -19,7 +21,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="ko-KR">
       <body className={pretendard.className}>
-        <main className={styles.container}>{children}</main>
+        {/* 헤더 컴포넌트 */}
+        <Header className={styles.header}></Header>
+        {/* 메인 page.tsx */}
+        <PageTransition className={styles.container}>{children}</PageTransition>
       </body>
     </html>
   )
