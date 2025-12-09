@@ -56,7 +56,7 @@ export default function Header({ className }: HeaderProps) {
         </button>
 
         <Link
-          href="/"
+          href="/auth/login"
           className={styles.loginLink}
           aria-label="로그인 페이지로 이동"
         >
