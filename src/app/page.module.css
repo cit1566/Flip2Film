@@ -1,8 +1,7 @@
 .mainPageBox {
   width: 100%;
-
+  max-width: 1279px;
   display: flex;
   flex-flow: nowrap column;
   align-items: center;
-  background: var(--color-bg-light);
 }

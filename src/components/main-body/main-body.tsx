@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowBigUp } from "lucide-react"
-import Link from "next/link"
 import itemListDummy from "../main-review-item/dummy.json"
 import MainReviewItem from "../main-review-item/main-review-item"
 import styles from "./main-body.module.css"
@@ -11,8 +10,6 @@ interface MainBodyProps {
 }
 
 export default function MainBody({ category }: MainBodyProps) {
-  const activeLineKey = `active${category}`
-
   function handleClickPageUp() {
     const scrollY = window.scrollY
     if (scrollY > 0) {
@@ -25,25 +22,6 @@ export default function MainBody({ category }: MainBodyProps) {
 
   return (
     <div className={styles.mainBodyBox}>
-      <div className={styles.navLinkBox}>
-        <Link href="/" className={`${category === "Home" && styles.isActive}`}>
-          홈
-        </Link>
-        <Link
-          href="./movie"
-          className={`${category === "Movie" && styles.isActive}`}
-        >
-          영화
-        </Link>
-        <Link
-          href="./book"
-          className={`${category === "Book" && styles.isActive}`}
-        >
-          도서
-        </Link>
-        {/* 활성화 탭 밑줄 */}
-        <div className={`${styles.activeLine} ${styles[activeLineKey]}`}></div>
-      </div>
       <div className={styles.contentBox}>
         {itemListDummy.map(item => {
           return (

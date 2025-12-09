@@ -3,50 +3,6 @@
   position: relative;
 }
 
-/* 네비 링크 박스 */
-.navLinkBox {
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 1.5rem;
-  position: relative;
-  margin: 20px;
-
-  a {
-    color: var(--color-text-gray-2);
-    text-decoration: none;
-    appearance: none;
-  }
-
-  .isActive {
-    color: var(--color-black);
-  }
-
-  .activeLine {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-bottom: 2px solid var(--color-green);
-    transition: all 0.3s ease;
-
-    &.activeHome {
-      width: 23px;
-    }
-
-    &.activeMovie {
-      width: 50px;
-      transform: translateX(37px);
-    }
-
-    &.activeBook {
-      width: 50px;
-      transform: translateX(98px);
-    }
-  }
-}
-
 .pageUpButton {
   position: fixed;
   bottom: 6%;

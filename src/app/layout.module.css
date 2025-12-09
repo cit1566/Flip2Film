@@ -7,4 +7,9 @@
 .container {
   min-width: 363px;
   box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  background: var(--color-bg-light);
 }
