@@ -11,7 +11,7 @@ export default function Label({
   labelText,
   id,
   mandatory = false,
-  secondInput,
+  secondInput = false,
 }: LabelProps) {
   return (
     <label
