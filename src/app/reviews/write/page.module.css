@@ -1,0 +1,25 @@
+.reviewCreateSection {
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: var(--color-bg-light);
+  color: var(--color-black);
+  padding: 15px;
+
+  width: 100%;
+}
+
+.heading {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.subMessage {
+  font-size: 0.875rem;
+  color: var(--color-gray);
+}
+
+@media (min-width: 481px) {
+  .reviewCreateSection {
+    align-items: center;
+  }
+}
