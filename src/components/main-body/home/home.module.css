@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   border-radius: 5px;
+  position: relative;
 }
 
 .carousel {
@@ -21,6 +22,59 @@
   }
 }
 
+/* 캐러셀 넘버 박스 */
+.imageNumberBox {
+  color: var(--color-text-gray-2);
+  position: absolute;
+  top: 0;
+  right: 15px;
+  width: 30px;
+  height: var(--image-box-size);
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  font-size: var(--image-box-font-size);
+  font-weight: bold;
+
+  .currentImageMarker {
+    background: var(--color-gray-light);
+    width: 15px;
+    height: 2px;
+    border-radius: 2px;
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    box-shadow: 0px 4px 10px 0px black;
+    transition: all 0.2s ease;
+  }
+
+  .imageNumber {
+    /* display: contents; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5%;
+    width: 15px;
+    height: 100%;
+
+    button {
+      color: inherit;
+      font-weight: bold;
+      margin: 0px;
+      background: none;
+      border: none;
+      transition: transform 0.2s ease;
+
+      &.activeImagePageNum {
+        transform: scale(1.5);
+        color: var(--color-gray-light);
+        text-shadow: 0px 4px 10px 0px black;
+      }
+    }
+  }
+}
+
 /* --------------- 중단점 ----------------- */
 /* 768px 이하 = 모바일 */
 @media (max-width: 768px) {
@@ -30,6 +84,33 @@
 
   .carousel {
     --image-box-size: 200px;
+  }
+
+  .imageNumberBox {
+    --image-box-size: 200px;
+    --image-box-font-size: 1rem;
+
+    .currentImageMarker {
+      &.image_1 {
+        transform: translateY(-64px);
+      }
+
+      &.image_2 {
+        transform: translateY(-33px);
+      }
+
+      &.image_3 {
+        transform: translateY(-2px);
+      }
+
+      &.image_4 {
+        transform: translateY(29px);
+      }
+
+      &.image_5 {
+        transform: translateY(60px);
+      }
+    }
   }
 }
 
@@ -42,6 +123,35 @@
   .carousel {
     --image-box-size: 300px;
   }
+
+  .imageNumberBox {
+    --image-box-size: 300px;
+    --image-box-font-size: 1.125rem;
+
+    right: 20px;
+
+    .currentImageMarker {
+      &.image_1 {
+        transform: translateY(-80px);
+      }
+
+      &.image_2 {
+        transform: translateY(-41px);
+      }
+
+      &.image_3 {
+        transform: translateY(0px);
+      }
+
+      &.image_4 {
+        transform: translateY(37px);
+      }
+
+      &.image_5 {
+        transform: translateY(75px);
+      }
+    }
+  }
 }
 
 /* 1024px 이상 = 데스크탑 */
@@ -53,5 +163,35 @@
 
   .carousel {
     --image-box-size: 400px;
+  }
+
+  .imageNumberBox {
+    --image-box-size: 400px;
+    --image-box-font-size: 24px;
+
+    right: 30px;
+
+    .currentImageMarker {
+      left: -10px;
+      &.image_1 {
+        transform: translateY(-100px);
+      }
+
+      &.image_2 {
+        transform: translateY(-50px);
+      }
+
+      &.image_3 {
+        transform: translateY(0px);
+      }
+
+      &.image_4 {
+        transform: translateY(50px);
+      }
+
+      &.image_5 {
+        transform: translateY(100px);
+      }
+    }
   }
 }

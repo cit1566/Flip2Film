@@ -24,7 +24,7 @@
   .activeLine {
     position: absolute;
     bottom: 21;
-    left: 19;
+    left: 4.5;
     border-bottom: 2px solid var(--color-green);
     transition: all 0.3s ease;
 
