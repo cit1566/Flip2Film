@@ -1,0 +1,33 @@
+.toggleButton {
+  width: 50px;
+  height: 25px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: var(--color-gray);
+  transition:
+    background-color 0.25s ease,
+    justify-content 0.25s ease;
+  padding: 0;
+}
+
+.on {
+  background-color: var(--color-green);
+  justify-content: flex-end;
+}
+
+.off {
+  background-color: var(--color-gray);
+}
+
+.toggleThumb {
+  width: 20px;
+  height: 20px;
+  background: var(--color-gray-light);
+  border-radius: 50%;
+  margin: 0 3px;
+}

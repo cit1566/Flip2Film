@@ -6,7 +6,7 @@ import styles from "./input.module.css"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
-  status?: "default" | "error" | "disabled"
+  status?: "default" | "error" | "disabled" | "success"
   clearable?: boolean
   togglePassword?: boolean
 }
@@ -29,7 +29,6 @@ export default function Input({
   const isEmail = type === "email"
 
   const [showPassword, setShowPassword] = useState(false)
-
   const actualType = isPassword && showPassword ? "text" : type
 
   const statusClass =
@@ -37,18 +36,17 @@ export default function Input({
       ? styles.inputError
       : status === "disabled"
         ? styles.inputDisabled
-        : ""
+        : status === "success"
+          ? styles.inputSuccess
+          : ""
 
   return (
-    <div className={styles.inputWrapper}>
-      {label && (
-        <label htmlFor={inputId} className={styles.inputLabel}>
-          {label}
-        </label>
-      )}
+    <label htmlFor={inputId} className={styles.inputLabelWrapper}>
+      {label && <span className={styles.inputLabel}>{label}</span>}
 
-      <div className={styles.inputBox}>
+      <span className={styles.inputBox}>
         <input
+          autoComplete="off"
           {...props}
           id={inputId}
           type={actualType}
@@ -83,7 +81,7 @@ export default function Input({
             {showPassword ? <EyeOff /> : <Eye />}
           </button>
         )}
-      </div>
-    </div>
+      </span>
+    </label>
   )
 }

@@ -1,19 +1,20 @@
-/* Input 전체 래퍼 (div) */
-.inputWrapper {
+/* label 전체 컨테이너 */
+.inputLabelWrapper {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--element-gap);
   width: 100%;
-  margin-top: 30px;
+  margin-top: var(--component-gap);
 }
 
 /* Label */
 .inputLabel {
   font-size: 1rem;
-  color: var(--color-black);
+  color: var(--color-label);
+  font-weight: 500;
 }
 
-/* Input + 아이콘을 담는 최소 래퍼(span) */
+/* Input을 감싸는 박스 */
 .inputBox {
   position: relative;
   display: inline-flex;
@@ -21,12 +22,12 @@
   align-items: center;
 }
 
-/* Input 자체 */
+/* Input */
 .inputField {
   width: 100%;
   padding: 10px 36px 10px 0;
   border: none;
-  border-bottom: 2px solid #d9d9d9;
+  border-bottom: 1px solid var(--color-border-d0);
   background: transparent;
   font-size: 1rem;
   box-shadow: none;
@@ -34,22 +35,29 @@
   transition: border-color 0.2s ease;
 }
 
+.inputField::placeholder {
+  color: var(--color-placeholder);
+}
+
 .inputField:focus {
   outline: none;
-  border-bottom-color: var(--color-green);
+  border-bottom-color: var(--color-border-85);
 }
 
 /* 상태 */
 .inputError {
-  border-bottom-color: red;
+  border-bottom-color: var(--color-border-red);
+}
+
+.inputSuccess {
+  border-bottom-color: var(--color-green);
 }
 
 .inputDisabled {
-  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* 아이콘 버튼 (clear, password toggle) */
+/* 아이콘 버튼 */
 .iconButton {
   position: absolute;
   right: 6px;
