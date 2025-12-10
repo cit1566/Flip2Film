@@ -1,0 +1,33 @@
+.inputsContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 20px;
+  max-width: 768px;
+  width: 100%;
+}
+
+.letterLimit {
+  font-size: 1rem;
+  color: var(--color-gray);
+  align-self: self-end;
+  margin: 10px 0;
+}
+
+.toggleContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  .reviewPublicMessage {
+    font-size: 1rem;
+    color: var(--color-gray);
+    margin: 0;
+    align-self: center;
+  }
+}
+
+.submitButtonsContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 20px;
+}

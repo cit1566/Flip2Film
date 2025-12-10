@@ -1,0 +1,14 @@
+.heading {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+
+  .mandatory {
+    color: var(--color-red);
+    margin-left: 3px;
+  }
+}
+
+.secondInput {
+  margin-top: 10px;
+}
