@@ -10,15 +10,19 @@
 
   width: 100%;
   height: var(--image-box-size);
-  overflow: scroll;
+  overflow-y: hidden;
   border-radius: 5px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
 
-  img {
-    width: 100%;
-    height: var(--image-box-size);
-    object-fit: cover;
-    object-position: center;
+  .scrollInner {
+    /* animation: scrollVertical 8s liner infinite; */
+    transition: transform 0.3s ease-in-out;
+    img {
+      width: 100%;
+      height: var(--image-box-size);
+      object-fit: cover;
+      object-position: center;
+    }
   }
 }
 
@@ -193,5 +197,14 @@
         transform: translateY(100px);
       }
     }
+  }
+}
+
+@keyframes scrollVertical {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
   }
 }
