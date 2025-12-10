@@ -9,8 +9,12 @@ export default function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+  }
+
   return (
-    <form className={styles.loginForm}>
+    <form className={styles.loginForm} onSubmit={handleSubmit}>
       <Input
         label="이메일"
         type="email"
@@ -39,13 +43,13 @@ export default function LoginForm() {
       />
 
       <div className={styles.loginFormBottomLinks}>
-        <Link href="/signup" className={styles.loginFormLink}>
+        <Link href="/auth/sign-up" className={styles.loginFormLink}>
           회원가입
         </Link>
 
         <span className={styles.loginFormSeparator}>/</span>
 
-        <Link href="/forgot" className={styles.loginFormLink}>
+        <Link href="/auth/forgot" className={styles.loginFormLink}>
           비밀번호 찾기
         </Link>
       </div>

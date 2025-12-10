@@ -1,0 +1,7 @@
+.termsText {
+  margin-block: var(--component-gap);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-gray);
+  line-height: 1.35;
+}
