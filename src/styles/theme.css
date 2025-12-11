@@ -12,9 +12,9 @@
   --color-text-gray: #667085;
   --color-text-purple: #6941c6;
   --color-border-4: #ebebeb;
-  --color-border-d0: #D0D0D0; /* 인풋 보더 바텀(기본) */
+  --color-border-d0: #d0d0d0; /* 인풋 보더 바텀(기본) */
   --color-border-85: #858585; /* 인풋 보더 바텀(입력) */
-  --color-border-red: #F53232 /* 인풋 보더 바텀(에러) */
+  --color-border-red: #f53232; /* 인풋 보더 바텀(에러) */
   --color-red: #ff5b5b;
   --color-yellow: #ffdc2e;
 
