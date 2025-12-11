@@ -1,8 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import FeedCard from "./feed-card"
 import styles from "./feed-taps.module.css"
-import { useState } from "react"
 import NoReviews from "./no-reviews"
 
 export default function FeedTaps() {

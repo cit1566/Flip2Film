@@ -6,8 +6,8 @@ import { useState } from "react"
 import ReviewCategory from "./category"
 import Input from "./input"
 import InputContainer from "./input-container"
-import styles from "./review-create-form.module.css"
 import Label from "./label"
+import styles from "./review-create-form.module.css"
 import StarRating from "./star-rating"
 
 export default function ReviewCreateForm() {
