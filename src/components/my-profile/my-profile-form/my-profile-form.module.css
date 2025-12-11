@@ -1,0 +1,24 @@
+.myProfileForm {
+  max-width: 481px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-gap);
+
+  margin: 0 auto;
+  padding: 30px 30px;
+}
+
+/* 버튼 그룹 */
+.formButton {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  gap: var(--component-gap);
+}
+
+/* 버튼 사이 구분선 */
+.divider {
+  height: 1px;
+  background-color: var(--color-border-d0);
+}

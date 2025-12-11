@@ -26,12 +26,13 @@
   right: -5px;
   bottom: -5px;
 
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
 
   background: var(--color-green);
   border-radius: 50%;
