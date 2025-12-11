@@ -1,7 +1,7 @@
-import styles from "./page.module.css"
 import ReviewDetailContent from "@/components/review/detail/review-detail-content"
 import ReviewContentBox from "@/components/review/review-content-box"
 import ItemCard from "../../../components/review/detail/item-card"
+import styles from "./page.module.css"
 
 const testReview = {
   category: "movie",
