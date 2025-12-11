@@ -1,121 +1,103 @@
 "use client"
 
-import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import listItemDummyData from "../../main-review-item/dummy.json"
+import MainReviewItem from "../../main-review-item/main-review-item"
+import Carousel from "./carousel/carousel"
 import styles from "./home.module.css"
 
 export default function Home() {
-  const [currentImageNum, setCurrentImageNum] = useState<number>(1)
-  const [currentImageSize, setCurrentImageSize] = useState<number>(200)
-  const imageMarker = useRef<HTMLDivElement>(null)
-  const scrollInner = useRef<HTMLDivElement>(null)
-  const activeImagepageNum = `image_${currentImageNum}`
+  // 영화 목록 리스트
+  const movieList = listItemDummyData.filter(item => item.category === "movie")
+  // 도서 목록 리스트
+  const bookList = listItemDummyData.filter(item => item.category === "book")
 
-  useEffect(() => {
-    // 이미지 사이즈 - ex) "199.975px"
-    let ImageSize: string | null = null
+  const top5ToLiked = [...listItemDummyData]
+    .sort((a, b) => b.liked - a.liked)
+    .slice(0, 5)
 
-    // 이미지 사이즈 숫자만 - ex) 200
-    let ImageSizeToNum: number = 0
+  const latest5ListMovie = [...movieList]
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    .slice(0, 5)
 
-    if (scrollInner.current?.children[0]) {
-      ImageSize = getComputedStyle(
-        scrollInner.current?.children[0]
-      ).getPropertyValue("height")
-      const removeImageSizeToPx = ImageSize.split("px", 1)
-      ImageSizeToNum = Math.round(Number(...removeImageSizeToPx))
-      setCurrentImageSize(ImageSizeToNum)
-    }
-
-    function handleResize() {
-      if (scrollInner.current?.children[0]) {
-        ImageSize = getComputedStyle(
-          scrollInner.current?.children[0]
-        ).getPropertyValue("height")
-        const removeImageSizeToPx = ImageSize.split("px", 1)
-        ImageSizeToNum = Math.round(Number(...removeImageSizeToPx))
-      }
-    }
-
-    window.addEventListener("resize", handleResize)
-
-    if (scrollInner.current) {
-      switch (currentImageNum) {
-        case 1:
-          scrollInner.current.style.transform = `translateY(${0}px)`
-          break
-        case 2:
-          scrollInner.current.style.transform = `translateY(-${ImageSize ?? "200px"})`
-          break
-        case 3:
-          scrollInner.current.style.transform = `translateY(-${ImageSizeToNum * 2}px)`
-          break
-        case 4:
-          scrollInner.current.style.transform = `translateY(-${ImageSizeToNum * 3}px)`
-          break
-        case 5:
-          scrollInner.current.style.transform = `translateY(-${ImageSizeToNum * 4}px)`
-          break
-      }
-    }
-  }, [currentImageNum, currentImageSize])
+  const latest5ListBook = [...bookList]
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    .slice(0, 5)
 
   return (
     <div className={styles.homeBox}>
-      <div className={styles.carousel}>
-        <div ref={scrollInner} className={styles.scrollInner}>
-          <Image
-            src="/movie-poster.webp"
-            alt="연습 포스터"
-            width={50}
-            height={100}
-          ></Image>
-          <Image
-            src="/movie-poster.webp"
-            alt="연습 포스터"
-            width={50}
-            height={100}
-          ></Image>
-          <Image
-            src="/movie-poster.webp"
-            alt="연습 포스터"
-            width={50}
-            height={100}
-          ></Image>
-          <Image
-            src="/movie-poster.webp"
-            alt="연습 포스터"
-            width={50}
-            height={100}
-          ></Image>
-          <Image
-            src="/movie-poster.webp"
-            alt="연습 포스터"
-            width={50}
-            height={100}
-          ></Image>
+      <Carousel></Carousel>
+
+      {/* 최다 좋아요 */}
+      <div className={styles.mostLike}>
+        <h3 className={styles.mostLikeTitle}>최다 좋아요 수 영화/도서</h3>
+        <div className={styles.mostLikeItems}>
+          {top5ToLiked.map(
+            (
+              { id, review_owner_id, title, content, category, liked },
+              index
+            ) => {
+              return (
+                <MainReviewItem
+                  key={id + index}
+                  title={title}
+                  category={category}
+                  content={content}
+                  like={liked}
+                  userId={review_owner_id}
+                />
+              )
+            }
+          )}
         </div>
       </div>
 
-      {/* 캐러셀 넘버 컴포넌트 */}
-      <div className={styles.imageNumberBox}>
-        <div
-          ref={imageMarker}
-          className={`${styles.currentImageMarker} ${styles[activeImagepageNum]}`}
-        ></div>
-        <div className={styles.imageNumber}>
-          {Array.from({ length: 5 }, (_, index) => {
-            return (
-              <button
-                key={index + 1}
-                type="button"
-                onClick={() => setCurrentImageNum(index + 1)}
-                className={`${currentImageNum === index + 1 && styles.activeImagePageNum}`}
-              >
-                {index + 1}
-              </button>
+      {/* 최신 목록 */}
+      <div className={styles.latestList}>
+        <h3 className={styles.latestListTitle}>최신 작품 영화 감상평</h3>
+        <div className={styles.latestListItems}>
+          {latest5ListMovie.map(
+            (
+              { id, review_owner_id, title, content, category, liked },
+              index
+            ) => (
+              <MainReviewItem
+                key={id + index}
+                title={title}
+                category={category}
+                content={content}
+                like={liked}
+                userId={review_owner_id}
+              />
             )
-          })}
+          )}
+        </div>
+      </div>
+
+      {/* 최신 목록 */}
+      <div className={styles.latestList}>
+        <h3 className={styles.latestListTitle}>최신 작품 도서 감상평</h3>
+        <div className={styles.latestListItems}>
+          {latest5ListBook.map(
+            (
+              { id, review_owner_id, title, content, category, liked },
+              index
+            ) => (
+              <MainReviewItem
+                key={id + index}
+                title={title}
+                category={category}
+                content={content}
+                like={liked}
+                userId={review_owner_id}
+              />
+            )
+          )}
         </div>
       </div>
     </div>
