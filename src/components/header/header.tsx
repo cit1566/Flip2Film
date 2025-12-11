@@ -13,6 +13,7 @@ interface HeaderProps {
 export default function Header({ className }: HeaderProps) {
   const [show, setShow] = useState(true)
   const [lastScroll, setLastScroll] = useState(0)
+  const [isSearchOpen, setSearchOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +33,9 @@ export default function Header({ className }: HeaderProps) {
 
   return (
     <header
+      role="banner"
+      aria-label="메인 헤더"
+      aria-hidden={!show}
       className={`${styles.header} ${className} ${show ? styles.show : styles.hide}`}
     >
       {/* Logo */}
@@ -51,12 +55,18 @@ export default function Header({ className }: HeaderProps) {
           type="button"
           className={styles.searchButton}
           aria-label="검색 열기"
+          aria-expanded={isSearchOpen}
+          aria-controls="search-panel"
+          onClick={() => {
+            setSearchOpen(bool => !bool)
+          }}
         >
           <Search aria-hidden="true" />
         </button>
 
         <Link
           href="/auth/login"
+          role="link"
           className={styles.loginLink}
           aria-label="로그인 페이지로 이동"
         >
