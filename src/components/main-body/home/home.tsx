@@ -34,15 +34,69 @@ export default function Home() {
       <Carousel></Carousel>
 
       {/* 최다 좋아요 */}
-      <div className={styles.mostLike}>
-        <h3 className={styles.mostLikeTitle}>최다 좋아요 수 영화/도서</h3>
-        <div className={styles.mostLikeItems}>
+      <section className={styles.mostLike} aria-labelledby="mostLikeTitle">
+        <h2 id="mostLikeTitle" className={styles.mostLikeTitle}>
+          최다 좋아요 수 영화/도서
+        </h2>
+        <ul className={styles.mostLikeItems}>
           {top5ToLiked.map(
             (
               { id, review_owner_id, title, content, category, liked },
               index
             ) => {
               return (
+                <li key={id + index}>
+                  <MainReviewItem
+                    title={title}
+                    category={category}
+                    content={content}
+                    like={liked}
+                    userId={review_owner_id}
+                  />
+                </li>
+              )
+            }
+          )}
+        </ul>
+      </section>
+
+      {/* 최신 목록 */}
+      <section className={styles.latestList} aria-labelledby="latestListMovie">
+        <h2 id="latestListMovie" className={styles.latestListTitle}>
+          최신 작품 영화 감상평
+        </h2>
+        <ul className={styles.latestListItems}>
+          {latest5ListMovie.map(
+            (
+              { id, review_owner_id, title, content, category, liked },
+              index
+            ) => (
+              <li key={id + index}>
+                <MainReviewItem
+                  title={title}
+                  category={category}
+                  content={content}
+                  like={liked}
+                  userId={review_owner_id}
+                />
+              </li>
+            )
+          )}
+        </ul>
+      </section>
+
+      {/* 최신 목록 */}
+      <section className={styles.latestList} aria-labelledby="latestListBook">
+        <h2 id="latestListBook" className={styles.latestListTitle}>
+          최신 작품 도서 감상평
+        </h2>
+        <ul className={styles.latestListItems}>
+          {latest5ListBook.map(
+            (
+              { id, review_owner_id, title, content, category, liked },
+              index
+            ) => (
+              <li key={id + index}>
                 <MainReviewItem
                   key={id + index}
                   title={title}
@@ -51,55 +105,11 @@ export default function Home() {
                   like={liked}
                   userId={review_owner_id}
                 />
-              )
-            }
-          )}
-        </div>
-      </div>
-
-      {/* 최신 목록 */}
-      <div className={styles.latestList}>
-        <h3 className={styles.latestListTitle}>최신 작품 영화 감상평</h3>
-        <div className={styles.latestListItems}>
-          {latest5ListMovie.map(
-            (
-              { id, review_owner_id, title, content, category, liked },
-              index
-            ) => (
-              <MainReviewItem
-                key={id + index}
-                title={title}
-                category={category}
-                content={content}
-                like={liked}
-                userId={review_owner_id}
-              />
+              </li>
             )
           )}
-        </div>
-      </div>
-
-      {/* 최신 목록 */}
-      <div className={styles.latestList}>
-        <h3 className={styles.latestListTitle}>최신 작품 도서 감상평</h3>
-        <div className={styles.latestListItems}>
-          {latest5ListBook.map(
-            (
-              { id, review_owner_id, title, content, category, liked },
-              index
-            ) => (
-              <MainReviewItem
-                key={id + index}
-                title={title}
-                category={category}
-                content={content}
-                like={liked}
-                userId={review_owner_id}
-              />
-            )
-          )}
-        </div>
-      </div>
+        </ul>
+      </section>
     </div>
   )
 }

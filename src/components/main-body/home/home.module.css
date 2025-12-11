@@ -19,6 +19,14 @@
   width: 100%;
   overflow-x: scroll;
 
+  li {
+    width: 100%;
+    display: contents;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
   .mostLikeTitle {
     color: var(--color-black);
     font-weight: bold;
@@ -30,7 +38,8 @@
     display: flex;
     gap: 20px;
     padding-block: 10px;
-    /* padding-inline: 1px; */
+    margin: 0px;
+    padding-inline: 0px;
   }
 }
 
@@ -40,6 +49,10 @@
   flex-flow: column nowrap;
   align-items: start;
   gap: 5px;
+
+  li {
+    display: contents;
+  }
 
   .latestListTitle {
     color: var(--color-black);
@@ -53,6 +66,8 @@
     overflow-x: scroll;
     gap: 20px;
     padding-block: 10px;
+    margin: 0px;
+    padding-inline: 0px;
   }
 }
 
