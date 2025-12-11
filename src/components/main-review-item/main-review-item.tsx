@@ -22,12 +22,15 @@ export default function MainReviewItem({
   userId,
 }: MainReviewItemProps) {
   return (
-    <article className={styles.mainReviewItem}>
+    <article
+      className={styles.mainReviewItem}
+      aria-labelledby={`review-title-${userId}`}
+    >
       {/* ------- 왼쪽 포스터 영역 ------- */}
       <Link href="/" className={styles.posterLink}>
         <Image
           src={`${extractImageSrcList(content)}`}
-          alt="포스터"
+          alt={`${title} 포스터`}
           width={200}
           height={300}
           className={styles.posterImage}
@@ -39,11 +42,14 @@ export default function MainReviewItem({
         {/* 제목 + 상세정보 + 본문 전체가 클릭되도록 */}
         <Link href="/" className={styles.linkArea}>
           {/* 제목 */}
-          <h2 className={styles.title}>{title}</h2>
+          <h2 id={`review-title-${userId}`} className={styles.title}>
+            {title}
+          </h2>
 
           {/* 본문 미리보기 */}
           <div
             className={styles.plot}
+            aria-label="리뷰 내용 미리보기"
             dangerouslySetInnerHTML={{ __html: removeImageTags(content) }}
           >
             {/* {content} */}
@@ -67,9 +73,9 @@ export default function MainReviewItem({
           </Link>
 
           {/* 좋아요 수 */}
-          <span className={styles.likes}>
-            <ThumbsUp size={20} />
-            <span>{like}</span>
+          <span className={styles.likes} aria-label={`좋아요 ${like}개`}>
+            <ThumbsUp size={20} aria-hidden="true" />
+            <span aria-hidden="true">{like}</span>
           </span>
         </div>
       </div>
