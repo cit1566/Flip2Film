@@ -1,3 +1,7 @@
+body {
+  background: var(--color-bg-light);
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -11,5 +15,13 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  background: var(--color-bg-light);
+}
+
+.footer {
+  background: var(--color-bg-dark);
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid var(--color-border-d0);
 }

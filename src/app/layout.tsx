@@ -25,6 +25,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <Header className={styles.header}></Header>
         {/* 메인 page.tsx */}
         <PageTransition className={styles.container}>{children}</PageTransition>
+        <footer className={styles.footer}>
+          © Flip2Film All rights reserved. @GitHub
+        </footer>
       </body>
     </html>
   )
