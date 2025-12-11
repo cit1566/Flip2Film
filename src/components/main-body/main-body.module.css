@@ -3,6 +3,10 @@
   position: relative;
 }
 
+.contentBox {
+  padding-bottom: 30px;
+}
+
 .pageUpButton {
   position: fixed;
   bottom: 6%;
@@ -41,7 +45,6 @@
     display: flex;
     flex-flow: nowrap column;
     gap: 20px;
-    margin-inline: 10px;
   }
 }
 

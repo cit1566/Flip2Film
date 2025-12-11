@@ -1,7 +1,7 @@
 .mainReviewItem {
   padding: 15px;
   display: flex;
-  min-width: 363px;
+  min-width: 360px;
   max-width: 768px;
   height: 302px;
   gap: 10px;
@@ -88,7 +88,6 @@
 
     border-top: 1px solid var(--color-border-4);
     padding-top: 12px;
-    padding-inline: 5px;
     font-size: 0.875rem;
 
     .userId {

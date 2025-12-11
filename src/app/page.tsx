@@ -6,7 +6,6 @@ export default function HomePage() {
   return (
     <section className={styles.mainPageBox}>
       <NavLink category="Home"></NavLink>
-      {/* <MainBody category="Home" /> */}
       <Home></Home>
     </section>
   )
