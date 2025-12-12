@@ -1,0 +1,82 @@
+.homeBox {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  position: relative;
+
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 30px;
+  padding-bottom: 30px;
+}
+
+/* 최다 좋아요 컨테이너 */
+.mostLike {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  gap: 5px;
+  width: 100%;
+  overflow-x: scroll;
+
+  li {
+    width: 100%;
+    display: contents;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .mostLikeTitle {
+    color: var(--color-black);
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .mostLikeItems {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    padding-block: 10px;
+    margin: 0px;
+    padding-inline: 0px;
+  }
+}
+
+/* 최신 목록 */
+.latestList {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  gap: 5px;
+
+  li {
+    display: contents;
+  }
+
+  .latestListTitle {
+    color: var(--color-black);
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .latestListItems {
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    gap: 20px;
+    padding-block: 10px;
+    margin: 0px;
+    padding-inline: 0px;
+  }
+}
+
+@media (min-width: 1279px) {
+  .mostLikeItems article {
+    min-width: 400px;
+  }
+
+  .latestListItems article {
+    min-width: 400px;
+  }
+}

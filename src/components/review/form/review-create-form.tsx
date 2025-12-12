@@ -5,7 +5,8 @@ import ToggleButton from "@/components/atom/toggle/toggle-button"
 import { useState } from "react"
 import ReviewCategory from "./category"
 import Input from "./input"
-import InputContainer from "./input-container"
+import ReviewContentBox from "@/components/review/review-content-box"
+import styles from "./review-create-form.module.css"
 import Label from "./label"
 import styles from "./review-create-form.module.css"
 import StarRating from "./star-rating"
@@ -19,7 +20,7 @@ export default function ReviewCreateForm() {
       <ReviewCategory />
 
       {/* 검색 */}
-      <InputContainer>
+      <ReviewContentBox>
         <Input
           labelText="영화/도서 검색"
           id="item"
@@ -28,10 +29,10 @@ export default function ReviewCreateForm() {
           mandatory={true}
           placeholder="영화 또는 도서명을 검색하세요."
         />
-      </InputContainer>
+      </ReviewContentBox>
 
       {/* 리뷰 작성(제목, 내용) */}
-      <InputContainer>
+      <ReviewContentBox>
         <Input
           labelText="제목"
           id="title"
@@ -48,15 +49,15 @@ export default function ReviewCreateForm() {
           secondInput={true}
         />
         <p className={styles.letterLimit}>0 / 10000</p>
-      </InputContainer>
+      </ReviewContentBox>
 
       {/* 별점 */}
-      <InputContainer>
+      <ReviewContentBox>
         <StarRating />
-      </InputContainer>
+      </ReviewContentBox>
 
       {/* 리뷰 공개 설정 */}
-      <InputContainer>
+      <ReviewContentBox>
         <Label labelText="공개 여부" id="is_public" />
         <div className={styles.toggleContainer}>
           <p className={styles.reviewPublicMessage}>
@@ -69,7 +70,7 @@ export default function ReviewCreateForm() {
             onChange={value => setIsPublic(value)}
           />
         </div>
-      </InputContainer>
+      </ReviewContentBox>
 
       {/* 폼 제출 */}
       <div className={styles.submitButtonsContainer}>

@@ -1,0 +1,49 @@
+.article {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px;
+  width: 100%;
+}
+
+.itemImageContainer {
+  width: 90px;
+}
+
+.itemImageWraper {
+  margin: 0;
+  width: 100%;
+
+  .itemImage {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+}
+
+.itemDetail {
+  margin-left: 20px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+  word-break: keep-all;
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .detail {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+@media (min-width: 481px) {
+  .itemImageContainer {
+    width: 144px;
+  }
+
+  .itemDetail {
+    justify-content: center;
+  }
+}

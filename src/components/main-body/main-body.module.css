@@ -1,0 +1,75 @@
+.mainBodyBox {
+  max-width: 100%;
+  position: relative;
+}
+
+.contentBox {
+  margin: 0px;
+  padding-left: 0px;
+  padding-bottom: 30px;
+
+  li {
+    display: contents;
+  }
+}
+
+.pageUpButton {
+  position: fixed;
+  bottom: 6%;
+  right: 11%;
+  border-radius: 50%;
+  width: 50px;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: #1ed53381;
+  transition:
+    background 0.15s ease-in,
+    box-shadow 0.15s ease-in,
+    transform 0.1s ease-in;
+
+  svg {
+    color: white;
+  }
+
+  &:hover {
+    background: var(--color-green);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* 768px 이하 = 모바일 */
+@media (max-width: 768px) {
+  .contentBox {
+    max-width: 100%;
+    display: flex;
+    flex-flow: nowrap column;
+    gap: 20px;
+  }
+}
+
+/* 1023px 이하 = 태블릿 이하 */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .contentBox {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* 1024px 이상 = 데스크탑 */
+@media (min-width: 1279px) {
+  .contentBox {
+    max-width: (100%-15px);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 20px;
+    column-gap: 20px;
+  }
+}

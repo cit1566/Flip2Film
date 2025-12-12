@@ -57,6 +57,11 @@
   cursor: not-allowed;
 }
 
+.inputField:disabled {
+  color: var(--color-placeholder);
+  -webkit-text-fill-color: var(--color-placeholder);
+}
+
 /* 아이콘 버튼 */
 .iconButton {
   position: absolute;

@@ -1,0 +1,57 @@
+/* 네비 링크 박스 */
+.navLinkBox {
+  width: 100%;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+  font-size: 1.5rem;
+  position: relative;
+  padding: 20px 5px;
+
+  a {
+    color: var(--color-text-gray-2);
+    text-decoration: none;
+    appearance: none;
+  }
+
+  .isActive {
+    color: var(--color-black);
+  }
+
+  .activeLine {
+    position: absolute;
+    bottom: 21;
+    left: 4.5;
+    border-bottom: 2px solid var(--color-green);
+    transition: all 0.3s ease;
+
+    &.activeHome {
+      width: 23px;
+    }
+
+    &.activeMovie {
+      width: 50px;
+      transform: translateX(37.5px);
+    }
+
+    &.activeBook {
+      width: 50px;
+      transform: translateX(98.5px);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .navLinkBox {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .navLinkBox {
+    max-width: 768px;
+  }
+}

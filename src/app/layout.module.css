@@ -1,3 +1,27 @@
+body {
+  background: var(--color-bg-light);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  transition: transform 0.1s ease;
+}
+
 .container {
   min-width: 363px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.footer {
+  background: var(--color-bg-dark);
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid var(--color-border-d0);
 }

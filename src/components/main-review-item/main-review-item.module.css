@@ -1,7 +1,7 @@
 .mainReviewItem {
   padding: 15px;
   display: flex;
-  min-width: 363px;
+  min-width: 360px;
   max-width: 768px;
   height: 302px;
   gap: 10px;
@@ -32,11 +32,13 @@
 
 /* 왼쪽 텍스트 박스 */
 .textBox {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 12px;
   overflow: hidden;
+  flex-shrink: 1;
 
   /* 클릭 영역 전체 */
   .linkArea {
@@ -84,9 +86,8 @@
     justify-content: space-between;
     align-items: center;
 
-    border-top: 1px solid var(--color-bolder-4);
+    border-top: 1px solid var(--color-border-4);
     padding-top: 12px;
-    padding-inline: 5px;
     font-size: 0.875rem;
 
     .userId {
@@ -105,7 +106,8 @@
       gap: 4px;
 
       svg {
-        color: #1ed534;
+        color: var(--color-green);
+        fill: var(--color-green);
       }
     }
   }

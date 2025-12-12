@@ -1,0 +1,16 @@
+.reviewDetail {
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: var(--color-bg-light);
+  color: var(--color-black);
+  padding: 15px;
+  width: 100%;
+  height: 100vh;
+  gap: 20px;
+}
+
+@media (min-width: 481px) {
+  .reviewDetail {
+    align-items: center;
+  }
+}
