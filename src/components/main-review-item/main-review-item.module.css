@@ -106,7 +106,8 @@
       gap: 4px;
 
       svg {
-        color: #1ed534;
+        color: var(--color-green);
+        fill: var(--color-green);
       }
     }
   }

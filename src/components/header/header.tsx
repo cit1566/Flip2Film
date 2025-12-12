@@ -33,45 +33,45 @@ export default function Header({ className }: HeaderProps) {
 
   return (
     <header
-      role="banner"
-      aria-label="메인 헤더"
       aria-hidden={!show}
       className={`${styles.header} ${className} ${show ? styles.show : styles.hide}`}
     >
-      {/* Logo */}
-      <Link href="/" className={styles.logo} aria-label="메인 페이지로 이동">
-        <Image
-          src="/logo/logo.svg"
-          alt="Flip2Film 로고"
-          width={40}
-          height={40}
-          priority
-        />
-      </Link>
-
-      {/* Right Area: Search + Login */}
-      <div className={styles.searchBox}>
-        <button
-          type="button"
-          className={styles.searchButton}
-          aria-label="검색 열기"
-          aria-expanded={isSearchOpen}
-          aria-controls="search-panel"
-          onClick={() => {
-            setSearchOpen(bool => !bool)
-          }}
-        >
-          <Search aria-hidden="true" />
-        </button>
-
-        <Link
-          href="/auth/login"
-          role="link"
-          className={styles.loginLink}
-          aria-label="로그인 페이지로 이동"
-        >
-          로그인
+      <div className={styles.headerInner}>
+        {/* Logo */}
+        <Link href="/" className={styles.logo} aria-label="메인 페이지로 이동">
+          <Image
+            src="/logo/logo.svg"
+            alt="Flip2Film 로고"
+            width={40}
+            height={40}
+            priority
+          />
         </Link>
+
+        {/* Right Area: Search + Login */}
+        <div className={styles.searchBox}>
+          <button
+            type="button"
+            className={styles.searchButton}
+            aria-label="검색 열기"
+            aria-expanded={isSearchOpen}
+            aria-controls="search-panel"
+            onClick={() => {
+              setSearchOpen(bool => !bool)
+            }}
+          >
+            <Search aria-hidden="true" />
+          </button>
+
+          <Link
+            href="/auth/login"
+            role="link"
+            className={styles.loginLink}
+            aria-label="로그인 페이지로 이동"
+          >
+            로그인
+          </Link>
+        </div>
       </div>
     </header>
   )

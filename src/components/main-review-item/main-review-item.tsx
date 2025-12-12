@@ -1,4 +1,4 @@
-import { ThumbsUp } from "lucide-react"
+import { Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import type { Review } from "../../libs/supabase/types"
@@ -73,8 +73,9 @@ export default function MainReviewItem({
           </Link>
 
           {/* 좋아요 수 */}
-          <span className={styles.likes} aria-label={`좋아요 ${like}개`}>
-            <ThumbsUp size={20} aria-hidden="true" />
+          <span className={styles.likes}>
+            <span className="sr-only">{`좋아요 ${like}개`}</span>
+            <Heart aria-hidden="true" />
             <span aria-hidden="true">{like}</span>
           </span>
         </div>
