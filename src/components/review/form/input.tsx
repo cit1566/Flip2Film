@@ -1,5 +1,5 @@
-import Label from "./label"
 import styles from "./input.module.css"
+import Label from "./label"
 
 type InputProps = {
   labelText: string

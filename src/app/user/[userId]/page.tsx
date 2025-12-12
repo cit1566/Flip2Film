@@ -1,6 +1,6 @@
 import UserInfo from "@/components/user/feed-profile"
-import styles from "./page.module.css"
 import FeedTaps from "../../../components/feed-taps/feed-taps"
+import styles from "./page.module.css"
 
 export default function UserPage() {
   return (

@@ -8,6 +8,7 @@ import Input from "./input"
 import ReviewContentBox from "@/components/review/review-content-box"
 import styles from "./review-create-form.module.css"
 import Label from "./label"
+import styles from "./review-create-form.module.css"
 import StarRating from "./star-rating"
 
 export default function ReviewCreateForm() {
