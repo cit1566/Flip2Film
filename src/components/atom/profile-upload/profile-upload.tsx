@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import styles from "./profile-upload.module.css"
 
 interface ProfileUploadProps {
@@ -12,13 +12,15 @@ interface ProfileUploadProps {
 export default function ProfileUpload({ onChange }: ProfileUploadProps) {
   const [previewImage, setPreviewImage] = useState<string | null>(null)
 
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null
     onChange?.(file)
 
     if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setPreviewImage(imageUrl)
+      const url = URL.createObjectURL(file)
+      setPreviewImage(url)
     }
   }
 
@@ -33,18 +35,19 @@ export default function ProfileUpload({ onChange }: ProfileUploadProps) {
           className={styles.profileImage}
         />
 
-        <label
-          htmlFor="profileUploadInput"
+        <button
+          type="button"
           className={styles.profileUploadButton}
-          aria-label="프로필 이미지 추가"
+          onClick={() => inputRef.current?.click()}
+          aria-label="프로필 이미지 업로드"
         >
           <Plus aria-hidden="true" />
-        </label>
+        </button>
 
         <input
-          id="profileUploadInput"
+          ref={inputRef}
           type="file"
-          accept="image/png, image/jpeg"
+          accept="image/*"
           onChange={handleImageChange}
           className={styles.hiddenInput}
         />

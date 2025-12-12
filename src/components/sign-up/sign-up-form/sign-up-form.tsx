@@ -2,7 +2,7 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import ProfileUpload from "@/components/sign-up/profile-upload/profile-upload"
+import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
 import { useState } from "react"
 
