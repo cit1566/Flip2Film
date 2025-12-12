@@ -1,0 +1,23 @@
+.mainPageBox {
+  width: 100%;
+  max-width: 1279px;
+  display: flex;
+  flex-flow: nowrap column;
+  align-items: center;
+  padding-inline: 15px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .mainPageBox {
+    max-width: 768px;
+  }
+}
+
+/* Desktop responsive */
+@media (min-width: 1279px) {
+  .mainPageBox {
+    max-width: 1279px;
+    padding-inline: 15px;
+  }
+}
