@@ -4,9 +4,18 @@ import type { UserInsert } from "../../supabase/types"
 interface Props {
   email: UserInsert["email"]
   password: string
+  bio: UserInsert["bio"]
+  nickname: UserInsert["nickname"]
+  profile_image: UserInsert["profile_image"]
 }
 
-export default async function createUser({ email, password }: Props) {
+export default async function createUser({
+  email,
+  password,
+  bio,
+  nickname,
+  profile_image,
+}: Props) {
   const supabase = await createClient()
   if (!email) return
 
@@ -21,29 +30,11 @@ export default async function createUser({ email, password }: Props) {
 
   const userId = auth.user.id
 
-  // const { error: profileError } = await supabase
-  //   .from("user")
-  //   .insert({ email, bio, nickname, profile_image, id: userId })
+  const { error: profileError } = await supabase
+    .from("user")
+    .insert({ email, bio, nickname, profile_image, id: userId })
 
-  // if (profileError) {
-  //   throw new Error(profileError.message)
-  // }
-
-  return userId
-}
-
-export async function createUserInfo(userInfo: UserInsert) {
-  try {
-    const supabase = await createClient()
-
-    const { error } = await supabase.from("user").insert({
-      ...userInfo,
-    })
-
-    if (error) {
-      throw new Error(`사용자 추가 에러 발생 : ${error.message}`)
-    }
-  } catch (error) {
-    return error
+  if (profileError) {
+    throw new Error(profileError.message)
   }
 }
