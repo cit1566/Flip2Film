@@ -5,7 +5,7 @@
   flex-direction: column;
 }
 
-/* 로그인 버튼 */
+/* 로그인 폼 버튼 */
 .loginFormSubmitButton {
   width: 100%;
   padding: 12px;
@@ -16,16 +16,6 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-
-  background-color: var(--color-green);
-  color: white;
-
-  transition: background-color 0.15s ease-in-out;
-}
-
-.loginFormSubmitButton:hover,
-.loginFormSubmitButton:focus {
-  background-color: #18c02f;
 }
 
 .loginFormBottomLinks {
@@ -33,22 +23,22 @@
   justify-content: flex-end;
   align-items: center;
   padding-block: 12px 26px;
-
-  font-size: 0.9rem;
-  color: var(--color-gray);
 }
 
 .loginFormLink {
-  color: var(--color-gray);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.loginFormLink:hover {
+  font-size: 0.9rem;
   color: var(--color-black);
+  text-decoration: none;
 }
 
 .loginFormSeparator {
   padding-inline: 6px;
   opacity: 0.5;
+}
+
+.errorMessage {
+  margin-block: 0;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--color-border-red);
 }

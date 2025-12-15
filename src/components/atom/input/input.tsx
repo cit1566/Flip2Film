@@ -9,6 +9,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   status?: "default" | "error" | "disabled" | "success"
   clearable?: boolean
   togglePassword?: boolean
+  onClear?: () => void
 }
 
 export default function Input({
@@ -20,11 +21,11 @@ export default function Input({
   disabled,
   value,
   onChange,
+  onClear,
   id,
   ...props
 }: InputProps) {
   const inputId = id ?? `input-${label?.replace(/\s+/g, "").toLowerCase()}`
-
   const isPassword = type === "password"
   const isEmail = type === "email"
 
@@ -46,11 +47,11 @@ export default function Input({
 
       <span className={styles.inputBox}>
         <input
-          autoComplete="off"
           {...props}
+          autoComplete="off"
           id={inputId}
           type={actualType}
-          value={value}
+          value={value ?? ""}
           onChange={onChange}
           disabled={status === "disabled" ? true : disabled}
           className={`${styles.inputField} ${statusClass}`}
@@ -60,11 +61,9 @@ export default function Input({
           <button
             type="button"
             className={styles.iconButton}
-            onClick={() =>
-              onChange?.({
-                target: { value: "" },
-              } as React.ChangeEvent<HTMLInputElement>)
-            }
+            onClick={() => {
+              onClear?.()
+            }}
             aria-label="입력 내용 지우기"
           >
             <X />
