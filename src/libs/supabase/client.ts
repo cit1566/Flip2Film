@@ -1,8 +1,8 @@
 import { createBrowserClient } from "@supabase/ssr"
 import supabaseInfo from "./info"
 
-const { supabaseKey, supabaseUrl } = supabaseInfo
+const { supabaseUrl, supabaseKey } = supabaseInfo
 
-export function createClient() {
-  return createBrowserClient(supabaseKey, supabaseUrl)
+export default function createClient() {
+  return createBrowserClient(supabaseUrl, supabaseKey)
 }
