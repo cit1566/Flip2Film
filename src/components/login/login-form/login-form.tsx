@@ -28,8 +28,19 @@ export default function LoginForm() {
   const isAnyFilled =
     emailValue.trim().length > 0 || passwordValue.trim().length > 0
 
+  const getStatus = (field: "email" | "password") => {
+    const inputValue = field === "email" ? emailValue : passwordValue
+    const hasError = errors[field]
+    const hasValue = inputValue.trim().length > 0
+
+    if (hasError) return "error"
+    if (hasValue) return "success"
+
+    return "default"
+  }
+
   const onSubmit = (_data: LoginFormValues) => {
-    // console.log("로그인 요청:", data)
+    // 로그인 데이터
   }
 
   return (
@@ -51,7 +62,7 @@ export default function LoginForm() {
           setValue("email", e.target.value, { shouldValidate: true })
         }
         onClear={() => setValue("email", "", { shouldValidate: true })}
-        status={errors.email ? "error" : "default"}
+        status={getStatus("email")}
       />
 
       {errors.email && (
@@ -75,7 +86,7 @@ export default function LoginForm() {
         onChange={e =>
           setValue("password", e.target.value, { shouldValidate: true })
         }
-        status={errors.password ? "error" : "default"}
+        status={getStatus("password")}
       />
 
       {errors.password && (
