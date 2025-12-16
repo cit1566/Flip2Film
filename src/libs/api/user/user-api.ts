@@ -1,6 +1,7 @@
-import { toast } from "sonner"
 import createClient from "../../supabase/client"
 import type { UserInsert } from "../../supabase/types"
+
+const supabase = createClient()
 
 interface Props {
   email: UserInsert["email"]
@@ -10,6 +11,7 @@ interface Props {
   profile_image: UserInsert["profile_image"]
 }
 
+// SignUp => Auth 사용자 등록
 export default async function createUser({
   email,
   password,
@@ -17,7 +19,6 @@ export default async function createUser({
   nickname,
   profile_image,
 }: Props) {
-  const supabase = await createClient()
   if (!email) return
 
   const { data: auth, error: authError } = await supabase.auth.signUp({
@@ -36,42 +37,29 @@ export default async function createUser({
     throw authError ?? new Error("회원가입 실패")
   }
 
-  console.log(auth.user)
-  console.log(auth.session)
-  // const userId = auth.user.id
-
-  // const { error: profileError } = await supabase
-  //   .from("user")
-  //   .insert({ email, bio, nickname, profile_image, user_id: userId })
-
-  // if (profileError) {
-  //   throw new Error(profileError.message)
-  // }
-
-  // return auth.user
+  return auth.user
 }
 
+// 사용자 토큰 발행
 export async function login(email: string, password: string) {
-  const supabase = await createClient()
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (!data) {
-      throw new Error(`로그인 에러 발생!${error}`)
-    }
-  } catch (err) {
-    toast(`로그인 에러가 발생하였습니다.${err}`)
+  const supabase = createClient()
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+  if (!data) {
+    throw new Error(`로그인 에러 발생!${error}`)
   }
+
+  return data
 }
 
+// User Table Create
 export async function insertUser() {
-  const supabase = await createClient()
+  const supabase = createClient()
   const myData = await supabase.auth.getSession()
   const metadata = myData.data.session?.user.user_metadata
-  console.log(metadata)
+
   if (!metadata) return
   const { error } = await supabase.from("user").insert({
     email: metadata.email,
@@ -81,7 +69,11 @@ export async function insertUser() {
     id: metadata.sub,
   })
 
-  console.log(error)
+  if (error) {
+    throw new Error(
+      `에러 발생! 사용자의 정보를 추가하지 못하였습니다! : ${error.message} `
+    )
+  }
 }
 
 export function logOut() {
