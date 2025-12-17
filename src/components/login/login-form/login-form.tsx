@@ -3,7 +3,7 @@
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import Link from "next/link"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import styles from "./login-form.module.css"
 
 interface LoginFormValues {
@@ -13,83 +13,93 @@ interface LoginFormValues {
 
 export default function LoginForm() {
   const {
-    register,
+    control,
     handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<LoginFormValues>({
-    mode: "onChange",
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   })
 
-  const emailValue = watch("email") ?? ""
-  const passwordValue = watch("password") ?? ""
-
-  const isAnyFilled =
-    emailValue.trim().length > 0 || passwordValue.trim().length > 0
-
-  const getStatus = (field: "email" | "password") => {
-    const inputValue = field === "email" ? emailValue : passwordValue
-    const hasError = errors[field]
-    const hasValue = inputValue.trim().length > 0
-
+  function getStatus(isTouched: boolean, hasError: boolean, value: string) {
     if (hasError) return "error"
-    if (hasValue) return "success"
-
+    if (isTouched && value.trim().length > 0) return "success"
     return "default"
   }
 
-  const onSubmit = (_data: LoginFormValues) => {
-    // 로그인 데이터
+  async function onSubmit(_data: LoginFormValues) {
+    //
   }
 
   return (
     <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        label="이메일"
-        type="email"
-        placeholder="example@example.com"
-        clearable
-        {...register("email", {
+      <Controller
+        name="email"
+        control={control}
+        rules={{
           required: "이메일을 입력해주세요",
           pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             message: "올바른 이메일 형식이 아닙니다",
           },
-        })}
-        value={emailValue}
-        onChange={e =>
-          setValue("email", e.target.value, { shouldValidate: true })
-        }
-        onClear={() => setValue("email", "", { shouldValidate: true })}
-        status={getStatus("email")}
+        }}
+        render={({ field, fieldState }) => (
+          <Input
+            label="이메일"
+            type="email"
+            placeholder="example@example.com"
+            clearable
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            onClear={() => field.onChange("")}
+            status={getStatus(
+              fieldState.isTouched,
+              Boolean(fieldState.error),
+              field.value ?? ""
+            )}
+          />
+        )}
       />
 
-      {errors.email && (
+      {isSubmitted && errors.email && (
         <p className={styles.errorMessage}>{errors.email.message}</p>
       )}
 
-      <Input
-        label="비밀번호"
-        type="password"
-        placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
-        togglePassword
-        {...register("password", {
+      <Controller
+        name="password"
+        control={control}
+        rules={{
           required: "비밀번호를 입력해주세요",
           pattern: {
             value:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?]).{8,}$/,
             message: "영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다",
           },
-        })}
-        value={passwordValue}
-        onChange={e =>
-          setValue("password", e.target.value, { shouldValidate: true })
-        }
-        status={getStatus("password")}
+        }}
+        render={({ field, fieldState }) => (
+          <Input
+            label="비밀번호"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
+            togglePassword
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            status={getStatus(
+              fieldState.isTouched,
+              Boolean(fieldState.error),
+              field.value ?? ""
+            )}
+          />
+        )}
       />
 
-      {errors.password && (
+      {isSubmitted && errors.password && (
         <p className={styles.errorMessage}>{errors.password.message}</p>
       )}
 
@@ -97,7 +107,7 @@ export default function LoginForm() {
         variant="green"
         title={isSubmitting ? "로그인 중..." : "로그인"}
         type="submit"
-        disabled={!isAnyFilled || isSubmitting}
+        disabled={!errors || isSubmitting}
         className={styles.loginFormSubmitButton}
       />
 

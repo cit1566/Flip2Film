@@ -5,7 +5,7 @@ import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import styles from "./sign-up-form.module.css"
 
 interface SignUpFormValues {
@@ -17,162 +17,181 @@ interface SignUpFormValues {
 }
 
 export default function SignUpForm() {
-  const [profileImage, setProfileImage] = useState<File | null>(null)
+  const [_profileImage, setProfileImage] = useState<File | null>(null)
 
   const {
-    register,
+    control,
     handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
+    getValues,
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<SignUpFormValues>({
-    mode: "onChange",
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+      passwordCheck: "",
+      nickname: "",
+      bio: "",
+    },
   })
 
-  const emailValue = watch("email") ?? ""
-  const passwordValue = watch("password") ?? ""
-  const passwordCheckValue = watch("passwordCheck") ?? ""
-  const nicknameValue = watch("nickname") ?? ""
-  const bioValue = watch("bio") ?? ""
-
-  const isAnyFilled =
-    emailValue ||
-    passwordValue ||
-    passwordCheckValue ||
-    nicknameValue ||
-    bioValue
-
-  const getStatus = (
-    field: keyof SignUpFormValues,
-    isValidCondition?: boolean
-  ) => {
-    const value = watch(field)
-    const hasError = errors[field]
-
+  function getInputStatus(
+    isTouched: boolean,
+    hasError: boolean,
+    value: string
+  ) {
     if (hasError) return "error"
-    if (value && isValidCondition) return "success"
-
+    if (isTouched && value.trim().length > 0) return "success"
     return "default"
   }
 
-  const onSubmit = async (_data: SignUpFormValues) => {
-    // console.log("회원가입 요청:", data)
+  async function onSubmit(_data: SignUpFormValues) {
+    //
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ProfileUpload onChange={setProfileImage} />
 
-      <Input
-        label="이메일"
-        type="email"
-        placeholder="이메일을 입력하세요"
-        clearable
-        {...register("email", {
+      <Controller
+        name="email"
+        control={control}
+        rules={{
           required: "이메일을 입력해주세요",
           pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             message: "올바른 이메일 형식이 아닙니다",
           },
-        })}
-        value={emailValue}
-        onChange={e =>
-          setValue("email", e.target.value, { shouldValidate: true })
-        }
-        onClear={() => setValue("email", "", { shouldValidate: true })}
-        status={getStatus(
-          "email",
-          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)
+        }}
+        render={({ field, fieldState }) => (
+          <Input
+            label="이메일"
+            type="email"
+            placeholder="이메일을 입력하세요"
+            clearable
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            onClear={() => field.onChange("")}
+            status={getInputStatus(
+              fieldState.isTouched,
+              Boolean(fieldState.error),
+              field.value ?? ""
+            )}
+          />
         )}
       />
 
-      {errors.email && (
+      {isSubmitted && errors.email && (
         <p className={styles.errorMessage}>{errors.email.message}</p>
       )}
 
-      <Input
-        label="비밀번호"
-        type="password"
-        placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
-        togglePassword
-        {...register("password", {
+      <Controller
+        name="password"
+        control={control}
+        rules={{
           required: "비밀번호를 입력해주세요",
           pattern: {
             value:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?]).{8,}$/,
             message: "영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다",
           },
-        })}
-        value={passwordValue}
-        onChange={e =>
-          setValue("password", e.target.value, { shouldValidate: true })
-        }
-        status={getStatus(
-          "password",
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?]).{8,}$/.test(
-            passwordValue
-          )
+        }}
+        render={({ field, fieldState }) => (
+          <Input
+            label="비밀번호"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
+            togglePassword
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            status={getInputStatus(
+              fieldState.isTouched,
+              Boolean(fieldState.error),
+              field.value ?? ""
+            )}
+          />
         )}
       />
 
-      {errors.password && (
+      {isSubmitted && errors.password && (
         <p className={styles.errorMessage}>{errors.password.message}</p>
       )}
 
-      <Input
-        label="비밀번호 재입력"
-        type="password"
-        placeholder="비밀번호를 다시 입력해주세요"
-        togglePassword
-        {...register("passwordCheck", {
+      <Controller
+        name="passwordCheck"
+        control={control}
+        rules={{
           required: "비밀번호 확인을 입력해주세요",
           validate: value =>
-            value === passwordValue || "비밀번호가 일치하지 않습니다",
-        })}
-        value={passwordCheckValue}
-        onChange={e =>
-          setValue("passwordCheck", e.target.value, { shouldValidate: true })
-        }
-        status={getStatus(
-          "passwordCheck",
-          passwordCheckValue === passwordValue
+            value === getValues("password") || "비밀번호가 일치하지 않습니다",
+        }}
+        render={({ field, fieldState }) => (
+          <Input
+            label="비밀번호 재입력"
+            type="password"
+            placeholder="비밀번호를 다시 입력해주세요"
+            togglePassword
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            status={getInputStatus(
+              fieldState.isTouched,
+              Boolean(fieldState.error),
+              field.value ?? ""
+            )}
+          />
         )}
       />
 
-      {errors.passwordCheck && (
+      {isSubmitted && errors.passwordCheck && (
         <p className={styles.errorMessage}>{errors.passwordCheck.message}</p>
       )}
 
-      <Input
-        label="닉네임"
-        type="text"
-        placeholder="최소 2자, 최대 6자"
-        {...register("nickname", {
+      <Controller
+        name="nickname"
+        control={control}
+        rules={{
           required: "닉네임을 입력해주세요",
           minLength: { value: 2, message: "닉네임은 최소 2자입니다" },
           maxLength: { value: 6, message: "닉네임은 최대 6자입니다" },
-        })}
-        value={nicknameValue}
-        onChange={e =>
-          setValue("nickname", e.target.value, { shouldValidate: true })
-        }
-        status={getStatus(
-          "nickname",
-          nicknameValue.length >= 2 && nicknameValue.length <= 6
+        }}
+        render={({ field, fieldState }) => (
+          <Input
+            label="닉네임"
+            type="text"
+            placeholder="최소 2자, 최대 6자"
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            status={getInputStatus(
+              fieldState.isTouched,
+              Boolean(fieldState.error),
+              field.value ?? ""
+            )}
+          />
         )}
       />
 
-      {errors.nickname && (
+      {isSubmitted && errors.nickname && (
         <p className={styles.errorMessage}>{errors.nickname.message}</p>
       )}
 
-      <Input
-        label="Bio"
-        type="text"
-        placeholder="자기소개를 입력해주세요"
-        {...register("bio")}
-        value={bioValue}
-        onChange={e => setValue("bio", e.target.value)}
+      <Controller
+        name="bio"
+        control={control}
+        render={({ field }) => (
+          <Input
+            label="Bio"
+            type="text"
+            placeholder="자기소개를 입력해주세요"
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+          />
+        )}
       />
 
       <TermsText />
@@ -181,7 +200,7 @@ export default function SignUpForm() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={!isAnyFilled || isSubmitting}
+        disabled={!errors || isSubmitting}
       />
     </form>
   )
