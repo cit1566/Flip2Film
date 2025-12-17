@@ -2,9 +2,9 @@ import "@/styles/main.css"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import type { PropsWithChildren } from "react"
+import { Toaster } from "sonner"
 import Header from "../components/header/header"
 import PageTransition from "../components/page-transition/page-transition"
-import { Toaster } from "sonner"
 import styles from "./layout.module.css"
 
 export const metadata: Metadata = {
