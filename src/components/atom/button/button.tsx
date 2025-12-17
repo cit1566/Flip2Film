@@ -7,6 +7,7 @@ interface ButtonProps extends PropsWithChildren {
   title: string
   className?: string | undefined
   type?: "button" | "submit" | "reset"
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export default function Button({
@@ -16,6 +17,7 @@ export default function Button({
   className,
   type = "button",
   children,
+  onClick,
 }: ButtonProps) {
   const variantClass = {
     base: styles.buttonTypeBase,
@@ -28,6 +30,7 @@ export default function Button({
       type={type ?? "button"}
       className={`${styles.buttonBase} ${variantClass} ${className}`}
       disabled={disabled}
+      onClick={onClick}
     >
       {title}
       {children}
