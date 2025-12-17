@@ -32,7 +32,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <footer className={styles.footer}>
             © Flip2Film All rights reserved. @GitHub
           </footer>
-          {children}
         </Providers>
       </body>
     </html>
