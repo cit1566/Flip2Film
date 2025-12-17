@@ -1,39 +1,54 @@
+import { forwardRef } from "react"
 import styles from "./input.module.css"
 import Label from "./label"
 
 type InputProps = {
   labelText: string
   id: string
-  name: string
-  type?: string
   mandatory?: boolean
   secondInput?: boolean
+  currentLength?: number
+  maxLength?: number
+  error?: string | undefined
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export default function Input({
-  labelText,
-  id,
-  name,
-  type = "text",
-  mandatory = false,
-  secondInput = false,
-  ...props
-}: InputProps) {
-  return (
-    <>
-      <Label
-        labelText={labelText}
-        id={id}
-        mandatory={mandatory}
-        secondInput={secondInput}
-      />
-      <input
-        id={id}
-        name={name}
-        type={type}
-        className={styles.inputBox}
-        {...props}
-      />
-    </>
-  )
-}
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      labelText,
+      id,
+      mandatory = false,
+      secondInput = false,
+      error,
+      currentLength,
+      maxLength,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <>
+        <Label
+          labelText={labelText}
+          id={id}
+          mandatory={mandatory}
+          secondInput={secondInput}
+        />
+        <input ref={ref} id={id} className={styles.inputBox} {...props} />
+        <div className={styles.subMessagesWrapper}>
+          {error && <p className={styles.error}>{error}</p>}
+          {typeof currentLength === "number" &&
+            typeof maxLength === "number" && (
+              <p className={styles.letterLimit}>
+                {currentLength} / {maxLength}
+              </p>
+            )}
+        </div>
+      </>
+    )
+  }
+)
+
+Input.displayName = "Input"
+
+export default Input
