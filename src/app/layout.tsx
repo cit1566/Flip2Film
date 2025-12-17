@@ -4,6 +4,7 @@ import localFont from "next/font/local"
 import type { PropsWithChildren } from "react"
 import Header from "../components/header/header"
 import PageTransition from "../components/page-transition/page-transition"
+import { Toaster } from "sonner"
 import styles from "./layout.module.css"
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <Header className={styles.header}></Header>
         {/* 메인 page.tsx */}
         <PageTransition className={styles.container}>{children}</PageTransition>
+        <Toaster position="top-center" richColors />
         <footer className={styles.footer}>
           © Flip2Film All rights reserved. @GitHub
         </footer>
