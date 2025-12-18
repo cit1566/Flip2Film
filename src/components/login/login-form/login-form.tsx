@@ -18,7 +18,7 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitted, isValid },
   } = useForm<LoginFormValues>({
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
       email: "",
@@ -37,7 +37,7 @@ export default function LoginForm() {
   }
 
   async function onSubmit(_data: LoginFormValues) {
-    //
+    // 로그인 데이터
   }
 
   return (
@@ -68,7 +68,7 @@ export default function LoginForm() {
         )}
       />
 
-      {isSubmitted && errors.email && (
+      {errors.email && (
         <p className={styles.errorMessage}>{errors.email.message}</p>
       )}
 
@@ -97,7 +97,7 @@ export default function LoginForm() {
         )}
       />
 
-      {isSubmitted && errors.password && (
+      {errors.password && (
         <p className={styles.errorMessage}>{errors.password.message}</p>
       )}
 

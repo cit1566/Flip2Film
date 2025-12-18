@@ -26,7 +26,7 @@ export default function SignUpForm() {
     getValues,
     formState: { errors, isSubmitting, isSubmitted, isValid },
   } = useForm<SignUpFormValues>({
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
       email: "",
@@ -48,7 +48,7 @@ export default function SignUpForm() {
   }
 
   async function onSubmit(_data: SignUpFormValues) {
-    //
+    // 회원가입 데이터
   }
 
   return (
@@ -81,7 +81,7 @@ export default function SignUpForm() {
         )}
       />
 
-      {isSubmitted && errors.email && (
+      {errors.email && (
         <p className={styles.errorMessage}>{errors.email.message}</p>
       )}
 
@@ -110,7 +110,7 @@ export default function SignUpForm() {
         )}
       />
 
-      {isSubmitted && errors.password && (
+      {errors.password && (
         <p className={styles.errorMessage}>{errors.password.message}</p>
       )}
 
@@ -140,7 +140,7 @@ export default function SignUpForm() {
         )}
       />
 
-      {isSubmitted && errors.passwordCheck && (
+      {errors.passwordCheck && (
         <p className={styles.errorMessage}>{errors.passwordCheck.message}</p>
       )}
 
@@ -169,7 +169,7 @@ export default function SignUpForm() {
         )}
       />
 
-      {isSubmitted && errors.nickname && (
+      {errors.nickname && (
         <p className={styles.errorMessage}>{errors.nickname.message}</p>
       )}
 
