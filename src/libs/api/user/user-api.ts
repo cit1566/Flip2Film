@@ -8,7 +8,7 @@ interface Props {
   password: string
   bio: UserInsert["bio"]
   nickname: UserInsert["nickname"]
-  profile_image: UserInsert["profile_image"]
+  profile_image: UserInsert["profile_image"] | File
 }
 
 // SignUp => Auth 사용자 등록
@@ -76,6 +76,7 @@ export async function insertUser() {
   }
 }
 
+// logout function
 export function logOut() {
   const supabase = createClient()
   supabase.auth.signOut()

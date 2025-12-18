@@ -4,7 +4,8 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import createUser from "../../../libs/api/user/user-api"
 
 export default function SignUpForm() {
   const [_profileImage, setProfileImage] = useState<File | null>(null)
@@ -17,6 +18,22 @@ export default function SignUpForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
+
+  useEffect(() => {
+    const handleFunction = async () => {
+      const userInfo = {
+        email: "cit1566@naver.com",
+        password: "qwer1234!",
+        bio: "안녕하세요",
+        nickname: "말랑콩떡",
+        profile_image: "",
+      }
+      const userData = await createUser(userInfo)
+      console.log(userData)
+    }
+
+    handleFunction()
+  }, [])
 
   return (
     <form onSubmit={handleSubmit}>
