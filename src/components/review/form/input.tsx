@@ -34,9 +34,20 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           mandatory={mandatory}
           secondInput={secondInput}
         />
-        <input ref={ref} id={id} className={styles.inputBox} {...props} />
+        <input
+          ref={ref}
+          id={id}
+          className={styles.inputBox}
+          aria-invalid={error ? "true" : "false"}
+          aria-describedby={error ? `${id}-error` : undefined}
+          {...props}
+        />
         <div className={styles.subMessagesWrapper}>
-          {error && <p className={styles.error}>{error}</p>}
+          {error && (
+            <p id={`${id}-error`} className={styles.error} role="alert">
+              {error}
+            </p>
+          )}
           {typeof currentLength === "number" &&
             typeof maxLength === "number" && (
               <p className={styles.letterLimit}>
