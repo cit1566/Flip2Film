@@ -23,6 +23,8 @@ export default function ReviewCreateForm() {
     watch,
     formState: { errors, isSubmitting },
   } = useForm<ReviewFormData>({
+    mode: "onChange",
+    reValidateMode: "onChange",
     defaultValues: {
       category: "movie",
       rating: 5,
