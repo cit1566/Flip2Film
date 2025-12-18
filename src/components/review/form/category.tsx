@@ -1,7 +1,6 @@
 import Button from "@/components/atom/button/button"
 import ReviewContentBox from "@/components/review/review-content-box"
 import styles from "./category.module.css"
-import Label from "./label"
 
 interface ReviewCategoryProps {
   value: string
@@ -16,7 +15,9 @@ export default function ReviewCategory({
 }: ReviewCategoryProps) {
   return (
     <ReviewContentBox>
-      <Label labelText="카테고리" id="category" mandatory={true} />
+      <div className={styles.heading}>
+        카테고리 <span className={styles.mandatory}>*</span>
+      </div>
       <div className={styles.categoryButtonsContainer}>
         <Button
           title="영화"
