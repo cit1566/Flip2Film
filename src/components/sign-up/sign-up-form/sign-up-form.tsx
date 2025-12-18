@@ -4,6 +4,7 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
+import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import styles from "./sign-up-form.module.css"
@@ -23,7 +24,7 @@ export default function SignUpForm() {
     control,
     handleSubmit,
     getValues,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting, isSubmitted, isValid },
   } = useForm<SignUpFormValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -59,10 +60,7 @@ export default function SignUpForm() {
         control={control}
         rules={{
           required: "이메일을 입력해주세요",
-          pattern: {
-            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: "올바른 이메일 형식이 아닙니다",
-          },
+          pattern: VALIDATION_PATTERNS.email,
         }}
         render={({ field, fieldState }) => (
           <Input
@@ -71,7 +69,7 @@ export default function SignUpForm() {
             placeholder="이메일을 입력하세요"
             clearable
             value={field.value ?? ""}
-            onChange={field.onChange}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             onClear={() => field.onChange("")}
             status={getInputStatus(
@@ -92,11 +90,7 @@ export default function SignUpForm() {
         control={control}
         rules={{
           required: "비밀번호를 입력해주세요",
-          pattern: {
-            value:
-              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?]).{8,}$/,
-            message: "영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다",
-          },
+          pattern: VALIDATION_PATTERNS.password,
         }}
         render={({ field, fieldState }) => (
           <Input
@@ -105,7 +99,7 @@ export default function SignUpForm() {
             placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
             togglePassword
             value={field.value ?? ""}
-            onChange={field.onChange}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             status={getInputStatus(
               fieldState.isTouched,
@@ -135,7 +129,7 @@ export default function SignUpForm() {
             placeholder="비밀번호를 다시 입력해주세요"
             togglePassword
             value={field.value ?? ""}
-            onChange={field.onChange}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             status={getInputStatus(
               fieldState.isTouched,
@@ -200,7 +194,7 @@ export default function SignUpForm() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={!errors || isSubmitting}
+        disabled={(isSubmitted && !isValid) || isSubmitting}
       />
     </form>
   )

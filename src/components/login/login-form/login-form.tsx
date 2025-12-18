@@ -2,6 +2,7 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
+import { VALIDATION_PATTERNS } from "@/utils/validation"
 import Link from "next/link"
 import { Controller, useForm } from "react-hook-form"
 import styles from "./login-form.module.css"
@@ -15,7 +16,7 @@ export default function LoginForm() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting, isSubmitted, isValid },
   } = useForm<LoginFormValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -25,7 +26,11 @@ export default function LoginForm() {
     },
   })
 
-  function getStatus(isTouched: boolean, hasError: boolean, value: string) {
+  function getInputStatus(
+    isTouched: boolean,
+    hasError: boolean,
+    value: string
+  ) {
     if (hasError) return "error"
     if (isTouched && value.trim().length > 0) return "success"
     return "default"
@@ -42,10 +47,7 @@ export default function LoginForm() {
         control={control}
         rules={{
           required: "이메일을 입력해주세요",
-          pattern: {
-            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: "올바른 이메일 형식이 아닙니다",
-          },
+          pattern: VALIDATION_PATTERNS.email,
         }}
         render={({ field, fieldState }) => (
           <Input
@@ -54,10 +56,10 @@ export default function LoginForm() {
             placeholder="example@example.com"
             clearable
             value={field.value ?? ""}
-            onChange={field.onChange}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             onClear={() => field.onChange("")}
-            status={getStatus(
+            status={getInputStatus(
               fieldState.isTouched,
               Boolean(fieldState.error),
               field.value ?? ""
@@ -75,11 +77,7 @@ export default function LoginForm() {
         control={control}
         rules={{
           required: "비밀번호를 입력해주세요",
-          pattern: {
-            value:
-              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?]).{8,}$/,
-            message: "영문, 숫자, 특수문자 포함 8자리 이상이어야 합니다",
-          },
+          pattern: VALIDATION_PATTERNS.password,
         }}
         render={({ field, fieldState }) => (
           <Input
@@ -88,9 +86,9 @@ export default function LoginForm() {
             placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
             togglePassword
             value={field.value ?? ""}
-            onChange={field.onChange}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
-            status={getStatus(
+            status={getInputStatus(
               fieldState.isTouched,
               Boolean(fieldState.error),
               field.value ?? ""
@@ -107,7 +105,7 @@ export default function LoginForm() {
         variant="green"
         title={isSubmitting ? "로그인 중..." : "로그인"}
         type="submit"
-        disabled={!errors || isSubmitting}
+        disabled={(isSubmitted && !isValid) || isSubmitting}
         className={styles.loginFormSubmitButton}
       />
 
