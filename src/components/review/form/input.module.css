@@ -3,6 +3,25 @@
   border-radius: 5px;
   height: 40px;
   padding: 0 20px;
-
   font-size: 0.875rem;
+}
+
+.subMessagesWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.error,
+.letterLimit {
+  font-size: 0.875rem;
+  margin: 4px 0;
+}
+
+.error {
+  color: var(--color-red);
+}
+
+.letterLimit {
+  color: var(--color-gray);
+  margin-left: auto;
 }

@@ -6,13 +6,6 @@
   width: 100%;
 }
 
-.letterLimit {
-  font-size: 1rem;
-  color: var(--color-gray);
-  align-self: self-end;
-  margin: 10px 0;
-}
-
 .toggleContainer {
   display: flex;
   flex-flow: row nowrap;
