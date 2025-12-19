@@ -8,8 +8,25 @@
   box-shadow: 0 2px 4px var(--color-gray-light-2);
 }
 
+.heading {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+
+  .mandatory {
+    color: var(--color-red);
+    margin-left: 3px;
+  }
+}
+
 .categoryButtonsContainer {
   display: flex;
   flex-flow: row nowrap;
   gap: 20px;
+}
+
+.error {
+  color: var(--color-red);
+  font-size: 0.875rem;
+  margin: 4px 0;
 }
