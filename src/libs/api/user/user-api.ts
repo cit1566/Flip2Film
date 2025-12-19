@@ -79,7 +79,7 @@ export async function updateUser(updateData: UserUpdate) {
 }
 
 // 사용자 토큰 발행
-export async function login(email: string, password: string) {
+export async function logIn(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -93,6 +93,5 @@ export async function login(email: string, password: string) {
 
 // logout function
 export function logOut() {
-  const supabase = createClient()
   supabase.auth.signOut()
 }
