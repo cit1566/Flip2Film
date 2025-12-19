@@ -1,6 +1,6 @@
 import { fileToBase64 } from "../../../utils/fileToBase64"
 import createClient from "../../supabase/client"
-import type { UserInsert } from "../../supabase/types"
+import type { UserInsert, UserUpdate } from "../../supabase/types"
 
 const supabase = createClient()
 
@@ -55,9 +55,31 @@ export default async function createUser({
   return data.user
 }
 
+// 사용자 id에 해당하는 user 데이터 가져오기
+export async function getUser(id: string) {
+  const { data, error } = await supabase
+    .from("user")
+    .select("*")
+    .eq("id", id)
+    .single()
+  if (error) throw error
+
+  return data
+}
+
+export async function updateUser(updateData: UserUpdate) {
+  const { data, error } = await supabase
+    .from("user")
+    .update(updateData)
+    .eq("id", updateData.id)
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 // 사용자 토큰 발행
 export async function login(email: string, password: string) {
-  const supabase = createClient()
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
