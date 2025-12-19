@@ -2,15 +2,13 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
+import supabase from "@/libs/supabase/client"
+import type { LoginFormValues } from "@/types/forms/auth"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import Link from "next/link"
+import router from "next/router"
 import { Controller, useForm } from "react-hook-form"
 import styles from "./login-form.module.css"
-
-interface LoginFormValues {
-  email: string
-  password: string
-}
 
 export default function LoginForm() {
   const {
@@ -36,8 +34,24 @@ export default function LoginForm() {
     return "default"
   }
 
-  async function onSubmit(_data: LoginFormValues) {
-    // 로그인 데이터
+  async function onSubmit(data: LoginFormValues) {
+    const { email, password } = data
+    const client = supabase()
+
+    if (typeof email !== "string") {
+      return
+    }
+
+    const { error } = await client.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) {
+      return
+    }
+
+    router.push("/")
   }
 
   return (

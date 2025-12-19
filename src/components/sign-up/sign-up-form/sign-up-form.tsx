@@ -4,22 +4,15 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
+import supabase from "@/libs/supabase/client"
+import type { SignUpFormValues } from "@/types/forms/auth.ts"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
-import { useState } from "react"
+import router from "next/router"
 import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import styles from "./sign-up-form.module.css"
 
-interface SignUpFormValues {
-  email: string
-  password: string
-  passwordCheck: string
-  nickname: string
-  bio: string
-}
-
 export default function SignUpForm() {
-  const [_profileImage, setProfileImage] = useState<File | null>(null)
-
   const {
     control,
     handleSubmit,
@@ -34,6 +27,7 @@ export default function SignUpForm() {
       passwordCheck: "",
       nickname: "",
       bio: "",
+      profile_image: null,
     },
   })
 
@@ -47,13 +41,68 @@ export default function SignUpForm() {
     return "default"
   }
 
-  async function onSubmit(_data: SignUpFormValues) {
-    // 회원가입 데이터
+  async function onSubmit(data: SignUpFormValues) {
+    const { password, email, nickname, bio } = data
+    const client = supabase()
+
+    if (typeof email !== "string") {
+      return
+    }
+
+    const { data: authData, error: authError } = await client.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          nickname,
+          bio,
+        },
+      },
+    })
+
+    if (authError) {
+      if (authError.message.includes("already")) {
+        toast.error("이미 가입된 이메일입니다")
+      } else {
+        toast.error("회원가입에 실패했습니다")
+      }
+      return
+    }
+
+    const userId = authData.user?.id
+    if (!userId) {
+      toast.error("회원가입 처리 중 오류가 발생했습니다")
+      return
+    }
+
+    const { error: insertError } = await client.from("user").insert({
+      id: userId,
+      email,
+      nickname,
+      bio,
+    })
+
+    if (insertError) {
+      toast.error("회원 정보 저장에 실패했습니다")
+      return
+    }
+
+    toast.success("회원가입이 완료되었습니다")
+    router.push("/auth/login")
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <ProfileUpload onChange={setProfileImage} />
+      <Controller
+        name="profile_image"
+        control={control}
+        render={({ field }) => (
+          <ProfileUpload
+            onChange={file => field.onChange(file)}
+            value={field.value}
+          />
+        )}
+      />
 
       <Controller
         name="email"
@@ -194,7 +243,7 @@ export default function SignUpForm() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={(isSubmitted && !isValid) || isSubmitting}
+        disabled={isSubmitting || (isSubmitted && !isValid)}
       />
     </form>
   )
