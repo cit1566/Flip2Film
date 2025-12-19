@@ -1,43 +1,58 @@
+import { fileToBase64 } from "../../../utils/fileToBase64"
 import createClient from "../../supabase/client"
 import type { UserInsert } from "../../supabase/types"
 
 const supabase = createClient()
 
-interface Props {
+interface createUserProps {
   email: UserInsert["email"]
   password: string
   bio: UserInsert["bio"]
   nickname: UserInsert["nickname"]
-  profile_image: UserInsert["profile_image"] | File
+  profile_image: File | null
 }
 
-// SignUp => Auth 사용자 등록
+/**
+ * 회원가입 (Auth 사용자 생성)
+ * - auth.users 생성
+ * - 트리거에 의해 public.user 자동 생성
+ * - UI 단에서 validation이 완료되었다는 전제
+ */
 export default async function createUser({
   email,
   password,
   bio,
   nickname,
   profile_image,
-}: Props) {
+}: createUserProps) {
   if (!email) return
 
-  const { data: auth, error: authError } = await supabase.auth.signUp({
+  // profile_image가 있으면 base64 변환, 없으면 null
+  const profileImageBase64 = profile_image
+    ? await fileToBase64(profile_image)
+    : null
+
+  // Auth metadata (트리거에서 사용됨)
+  const metadata = {
+    nickname,
+    bio,
+    profile_image: profileImageBase64,
+  }
+
+  // Supabase Auth 회원가입
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: {
-        nickname,
-        bio,
-        profile_image: profile_image ?? null,
-      },
+      data: metadata,
     },
   })
 
-  if (authError || !auth.user) {
-    throw authError ?? new Error("회원가입 실패")
+  if (error || !data.user) {
+    throw error ?? new Error("회원가입 실패")
   }
 
-  return auth.user
+  return data.user
 }
 
 // 사용자 토큰 발행
@@ -52,28 +67,6 @@ export async function login(email: string, password: string) {
   }
 
   return data
-}
-
-// User Table Create
-export async function insertUser() {
-  const supabase = createClient()
-  const myData = await supabase.auth.getSession()
-  const metadata = myData.data.session?.user.user_metadata
-
-  if (!metadata) return
-  const { error } = await supabase.from("user").insert({
-    email: metadata.email,
-    nickname: metadata.nickname,
-    bio: metadata.bio,
-    profile_image: metadata.profile_image,
-    id: metadata.sub,
-  })
-
-  if (error) {
-    throw new Error(
-      `에러 발생! 사용자의 정보를 추가하지 못하였습니다! : ${error.message} `
-    )
-  }
 }
 
 // logout function
