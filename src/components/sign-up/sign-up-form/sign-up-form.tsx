@@ -5,20 +5,27 @@ import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
 import supabase from "@/libs/supabase/client"
-import type { SignUpFormValues } from "@/types/forms/auth.ts"
+import type { UserInsert } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
-import router from "next/router"
+import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./sign-up-form.module.css"
 
+type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
+  password: string
+  passwordCheck: string
+  profile_image: File | null
+}
+
 export default function SignUpForm() {
+  const router = useRouter()
   const {
     control,
     handleSubmit,
     getValues,
     formState: { errors, isSubmitting, isSubmitted, isValid },
-  } = useForm<SignUpFormValues>({
+  } = useForm<SignUpFormData>({
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
@@ -41,13 +48,11 @@ export default function SignUpForm() {
     return "default"
   }
 
-  async function onSubmit(data: SignUpFormValues) {
-    const { password, email, nickname, bio } = data
+  async function onSubmit(data: SignUpFormData) {
+    const { email, password, nickname, bio } = data
     const client = supabase()
 
-    if (typeof email !== "string") {
-      return
-    }
+    if (typeof email !== "string") return
 
     const { data: authData, error: authError } = await client.auth.signUp({
       email,
@@ -75,19 +80,18 @@ export default function SignUpForm() {
       return
     }
 
-    const { error: insertError } = await client.from("user").insert({
-      id: userId,
+    await client.auth.signUp({
       email,
-      nickname,
-      bio,
+      password,
+      options: {
+        data: {
+          nickname,
+          bio,
+        },
+      },
     })
 
-    if (insertError) {
-      toast.error("회원 정보 저장에 실패했습니다")
-      return
-    }
-
-    toast.success("회원가입이 완료되었습니다")
+    toast("회원가입이 완료되었습니다")
     router.push("/auth/login")
   }
 
@@ -243,7 +247,7 @@ export default function SignUpForm() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={isSubmitting || (isSubmitted && !isValid)}
+        disabled={(isSubmitted && !isValid) || isSubmitting}
       />
     </form>
   )

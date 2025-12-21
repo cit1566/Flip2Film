@@ -3,19 +3,25 @@
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import supabase from "@/libs/supabase/client"
-import type { LoginFormValues } from "@/types/forms/auth"
+import type { User } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import Link from "next/link"
-import router from "next/router"
+import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import styles from "./login-form.module.css"
 
+type LoginFormData = Pick<User, "email"> & {
+  password: string
+}
+
 export default function LoginForm() {
+  const router = useRouter()
+
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitted, isValid },
-  } = useForm<LoginFormValues>({
+  } = useForm<LoginFormData>({
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
@@ -34,11 +40,11 @@ export default function LoginForm() {
     return "default"
   }
 
-  async function onSubmit(data: LoginFormValues) {
+  async function onSubmit(data: LoginFormData) {
     const { email, password } = data
     const client = supabase()
 
-    if (typeof email !== "string") {
+    if (!email || !password) {
       return
     }
 
@@ -47,9 +53,7 @@ export default function LoginForm() {
       password,
     })
 
-    if (error) {
-      return
-    }
+    if (error) return
 
     router.push("/")
   }
