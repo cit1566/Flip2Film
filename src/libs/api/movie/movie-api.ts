@@ -1,6 +1,12 @@
 // .env에 저장된 TMDB API Key 가져오기 (Bearer 토큰 방식)
 const TMDB_READ_ACCESS_API_KEY = process.env.TMDB_READ_ACCESS_API_KEY
 
+if (!TMDB_READ_ACCESS_API_KEY) {
+  throw new Error(
+    "TMDB_READ_ACCESS_API_KEY is not defined in environment variables"
+  )
+}
+
 // TMDB API의 기본 URL
 const BASE_URL = "https://api.themoviedb.org/3"
 
