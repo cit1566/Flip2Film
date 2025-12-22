@@ -11,17 +11,19 @@ interface userStoreProps {
   reset: () => void
 }
 
+const initialUserData: User = {
+  bio: null,
+  email: null,
+  id: "",
+  nickname: "",
+  profile_image: null,
+}
+
 // 사용자 상태 저장소
 export const useUserStore = create<userStoreProps>(set => ({
   // state
   userId: null,
-  userData: {
-    bio: null,
-    email: null,
-    id: "",
-    nickname: "",
-    profile_image: null,
-  },
+  userData: initialUserData,
 
   // action
   setUserId: (userId: string) => set({ userId }),
@@ -31,13 +33,7 @@ export const useUserStore = create<userStoreProps>(set => ({
   reset: () => {
     set({
       userId: null,
-      userData: {
-        bio: null,
-        email: null,
-        id: "",
-        nickname: "",
-        profile_image: null,
-      },
+      userData: initialUserData,
     })
   },
 }))
