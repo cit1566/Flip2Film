@@ -1,14 +1,16 @@
 "use client"
 
 import { LucideStar } from "lucide-react"
-import { useState } from "react"
 import styles from "./star-rating.module.css"
 
 const STARS = [1, 2, 3, 4, 5]
 
-export default function StarRating() {
-  const [rating, setRating] = useState(5)
+interface StarRatingProps {
+  value: number
+  onChange: (value: number) => void
+}
 
+export default function StarRating({ value, onChange }: StarRatingProps) {
   return (
     <>
       <div className={styles.StarsWrapper}>
@@ -19,10 +21,11 @@ export default function StarRating() {
               name="rating"
               className={styles.radioButton}
               value={star}
-              onChange={() => setRating(star)}
+              checked={value === star}
+              onChange={() => onChange(star)}
             />
             <LucideStar
-              className={`${styles.star} ${star <= rating ? styles.active : ""}`}
+              className={`${styles.star} ${star <= value ? styles.active : ""}`}
             />
           </label>
         ))}
