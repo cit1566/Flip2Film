@@ -30,6 +30,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <PageTransition className={styles.container}>
             {children}
           </PageTransition>
+          <Toaster position="top-center" richColors />
           <footer className={styles.footer}>
             © Flip2Film All rights reserved. @GitHub
           </footer>
