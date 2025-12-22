@@ -6,6 +6,7 @@ import { Toaster } from "sonner"
 import Header from "../components/header/header"
 import PageTransition from "../components/page-transition/page-transition"
 import styles from "./layout.module.css"
+import Providers from "./providers"
 
 export const metadata: Metadata = {
   title: "Next.js 프로젝트 템플릿",
@@ -22,14 +23,18 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="ko-KR">
       <body className={pretendard.className}>
-        {/* 헤더 컴포넌트 */}
-        <Header className={styles.header}></Header>
-        {/* 메인 page.tsx */}
-        <PageTransition className={styles.container}>{children}</PageTransition>
-        <Toaster position="top-center" richColors />
-        <footer className={styles.footer}>
-          © Flip2Film All rights reserved. @GitHub
-        </footer>
+        <Providers>
+          {/* 헤더 컴포넌트 */}
+          <Header className={styles.header}></Header>
+          {/* 메인 page.tsx */}
+          <PageTransition className={styles.container}>
+            {children}
+          </PageTransition>
+          <Toaster position="top-center" richColors />
+          <footer className={styles.footer}>
+            © Flip2Film All rights reserved. @GitHub
+          </footer>
+        </Providers>
       </body>
     </html>
   )
