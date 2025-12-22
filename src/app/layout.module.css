@@ -8,13 +8,18 @@ body {
   transition: transform 0.1s ease;
 }
 
-.container {
-  min-width: 363px;
-  box-sizing: border-box;
+.mainBody {
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  padding-inline: 15px;
+  overflow: hidden;
+}
+
+.container {
+  min-width: 363px;
+  width: 100%;
 }
 
 .footer {
@@ -24,4 +29,22 @@ body {
   justify-content: center;
   align-items: center;
   border-top: 1px solid var(--color-border-d0);
+}
+
+/* ------------------------------- */
+@media (min-width: 1279px) {
+  .container {
+    max-width: 1279px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1279) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
 }
