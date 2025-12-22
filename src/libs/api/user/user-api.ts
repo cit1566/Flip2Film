@@ -29,6 +29,10 @@ export default async function createUser({
     throw new Error("이메일은 필수 항목입니다.")
   }
 
+  if (!password || password.length < 8) {
+    throw new Error("비밀번호는 최소 8자 이상이어야 합니다.")
+  }
+
   // profile_image가 있으면 base64 변환, 없으면 null
   const profileImageBase64 = profile_image
     ? await fileToBase64(profile_image)
@@ -69,15 +73,18 @@ export async function getUser(id: string) {
   return data
 }
 
-export async function updateUser(updateData: UserUpdate) {
-  if (!updateData.id) {
+export async function updateUser(
+  id: string,
+  updateData: Omit<UserUpdate, "id">
+) {
+  if (!id) {
     throw new Error("사용자 ID는 필수 항목입니다.")
   }
 
   const { data, error } = await supabase
     .from("user")
     .update(updateData)
-    .eq("id", updateData.id)
+    .eq("id", id)
     .single()
 
   if (error) throw error
@@ -90,8 +97,8 @@ export async function logIn(email: string, password: string) {
     email,
     password,
   })
-  if (!data || error) {
-    throw new Error(`로그인 에러 발생!${error ?? null}`)
+  if (error) {
+    throw new Error(`로그인 에러 발생!${error.message}`)
   }
 
   return data

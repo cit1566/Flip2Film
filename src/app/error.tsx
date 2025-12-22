@@ -1,7 +1,6 @@
 "use client"
 
 import { TriangleAlert, RotateCcw } from "lucide-react"
-import { useEffect } from "react"
 import styles from "./errorBoundary.module.css"
 
 export default function ErrorBoundary({
@@ -11,11 +10,6 @@ export default function ErrorBoundary({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    // Log error to monitoring service
-    // console.error(error)
-  }, [error])
-
   return (
     <div className={styles.container}>
       <div role="alert" className={styles.errorBoundary}>

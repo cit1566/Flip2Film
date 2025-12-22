@@ -25,7 +25,7 @@ const options = {
  * - endpoint만 넣으면 자동으로 BASE_URL과 옵션을 적용하여 fetch 실행
  * - 공통적으로 에러 처리 및 JSON 변환 처리
  */
-async function request(endpoint: string) {
+async function request<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`, options)
 
   // 네트워크는 문제 없지만 API 자체가 실패한 경우
@@ -34,7 +34,7 @@ async function request(endpoint: string) {
   }
 
   // 정상 응답을 JSON으로 변환해 반환
-  return res.json()
+  return res.json() as Promise<T>
 }
 
 /**
