@@ -70,6 +70,10 @@ export async function getUser(id: string) {
 }
 
 export async function updateUser(updateData: UserUpdate) {
+  if (!updateData.id) {
+    throw new Error("사용자 ID는 필수 항목입니다.")
+  }
+
   const { data, error } = await supabase
     .from("user")
     .update(updateData)
@@ -86,8 +90,8 @@ export async function logIn(email: string, password: string) {
     email,
     password,
   })
-  if (!data) {
-    throw new Error(`로그인 에러 발생!${error}`)
+  if (!data || error) {
+    throw new Error(`로그인 에러 발생!${error ?? null}`)
   }
 
   return data

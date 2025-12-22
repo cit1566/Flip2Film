@@ -33,7 +33,7 @@ export default function ErrorBoundary({
             </p>
             <p className={styles.baseMessageInEnglish}>
               A system error occurred while processing your request. We
-              apologize for the inconvenience. Please check URL and try a gain.
+              apologize for the inconvenience. Please check URL and try again.
             </p>
           </div>
 
