@@ -25,7 +25,9 @@ export default async function createUser({
   nickname,
   profile_image,
 }: createUserProps) {
-  if (!email) return
+  if (!email) {
+    throw new Error("이메일은 필수 항목입니다.")
+  }
 
   // profile_image가 있으면 base64 변환, 없으면 null
   const profileImageBase64 = profile_image
@@ -92,6 +94,9 @@ export async function logIn(email: string, password: string) {
 }
 
 // logout function
-export function logOut() {
-  supabase.auth.signOut()
+export async function logOut() {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    throw new Error(`로그아웃 실패 : ${error.message}`)
+  }
 }
