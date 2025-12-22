@@ -4,7 +4,7 @@ import styles from "./social-login.module.css"
 export default function SocialLogin() {
   return (
     <div className={styles.socialContainer}>
-      <p className="text-label">간편 로그인으로 시작하기</p>
+      <p className={styles.textLabel}>간편 로그인으로 시작하기</p>
 
       <div className={styles.iconRow}>
         <button type="button" className={styles.kakaoBtn}>

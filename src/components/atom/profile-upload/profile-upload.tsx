@@ -2,26 +2,46 @@
 
 import { Plus } from "lucide-react"
 import Image from "next/image"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "./profile-upload.module.css"
 
 interface ProfileUploadProps {
-  onChange?: (file: File | null) => void
+  value?: File | null
+  onChange: (file: File | null) => void
 }
 
-export default function ProfileUpload({ onChange }: ProfileUploadProps) {
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
-
+export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [isInvalidType, setIsInvalidType] = useState(false)
+
+  useEffect(() => {
+    if (!value) {
+      setPreviewImage(null)
+      return
+    }
+
+    const url = URL.createObjectURL(value)
+    setPreviewImage(url)
+
+    return () => {
+      URL.revokeObjectURL(url)
+    }
+  }, [value])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null
-    onChange?.(file)
+    const file = e.target.files?.[0]
+    if (!file) return
 
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setPreviewImage(url)
+    if (!["image/png", "image/jpeg"].includes(file.type)) {
+      e.target.value = ""
+      onChange(null)
+      setIsInvalidType(true)
+      return
     }
+
+    setIsInvalidType(false)
+    onChange(file)
   }
 
   return (
@@ -29,29 +49,41 @@ export default function ProfileUpload({ onChange }: ProfileUploadProps) {
       <div className={styles.profileImageBox}>
         <Image
           src={previewImage ?? "/profile/default-profile.png"}
-          alt="프로필 이미지"
+          alt="프로필 이미지 미리보기"
           width={90}
           height={90}
           className={styles.profileImage}
         />
 
-        <button
-          type="button"
+        <label
+          htmlFor="profile-upload"
           className={styles.profileUploadButton}
-          onClick={() => inputRef.current?.click()}
           aria-label="프로필 이미지 업로드"
         >
           <Plus aria-hidden="true" />
-        </button>
+        </label>
 
         <input
+          id="profile-upload"
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept="image/png, image/jpeg"
           onChange={handleImageChange}
+          aria-describedby="profile-upload-help"
           className={styles.hiddenInput}
         />
       </div>
+
+      {isInvalidType && (
+        <p
+          id="profile-upload-help"
+          className={styles.profileHelpText}
+          aria-live="polite"
+        >
+          PNG 또는 JPEG 형식의 이미지만
+          <br /> 업로드할 수 있습니다
+        </p>
+      )}
     </div>
   )
 }
