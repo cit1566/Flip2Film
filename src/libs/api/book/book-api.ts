@@ -3,10 +3,16 @@
  */
 const ALADDIN_OPEN_API_KEY = process.env.ALADDIN_OPEN_API_KEY
 
+if (!ALADDIN_OPEN_API_KEY) {
+  throw new Error(
+    "ALADDIN_OPEN_API_KEY is not defined in environment variables"
+  )
+}
+
 /**
  * 알라딘 Open API 기본 URL
  */
-const ALADDIN_API_BASE_URL = "http://www.aladin.co.kr/ttb/api"
+const ALADDIN_API_BASE_URL = "https://www.aladin.co.kr/ttb/api"
 
 /**
  * 알라딘 API 공통 Query 파라미터
