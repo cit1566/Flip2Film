@@ -2,15 +2,16 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import supabase from "@/libs/supabase/client"
-import type { User } from "@/libs/supabase/types"
+import { logIn } from "@/libs/api/user/user-api"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import styles from "./login-form.module.css"
 
-type LoginFormData = Pick<User, "email"> & {
+interface LoginFormData {
+  email: string
   password: string
 }
 
@@ -41,21 +42,21 @@ export default function LoginForm() {
   }
 
   async function onSubmit(data: LoginFormData) {
-    const { email, password } = data
-    const client = supabase()
+    try {
+      const { email, password } = data
 
-    if (!email || !password) {
-      return
+      await logIn(email, password)
+
+      toast("로그인에 성공했습니다")
+      router.push("/")
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+        return
+      }
+
+      toast.error("로그인에 실패했습니다")
     }
-
-    const { error } = await client.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) return
-
-    router.push("/")
   }
 
   return (
@@ -73,14 +74,14 @@ export default function LoginForm() {
             type="email"
             placeholder="example@example.com"
             clearable
-            value={field.value ?? ""}
+            value={field.value}
             onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             onClear={() => field.onChange("")}
             status={getInputStatus(
               fieldState.isTouched,
               Boolean(fieldState.error),
-              field.value ?? ""
+              field.value
             )}
           />
         )}
@@ -103,13 +104,13 @@ export default function LoginForm() {
             type="password"
             placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
             togglePassword
-            value={field.value ?? ""}
+            value={field.value}
             onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             status={getInputStatus(
               fieldState.isTouched,
               Boolean(fieldState.error),
-              field.value ?? ""
+              field.value
             )}
           />
         )}

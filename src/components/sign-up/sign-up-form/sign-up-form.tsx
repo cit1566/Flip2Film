@@ -4,7 +4,7 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
-import supabase from "@/libs/supabase/client"
+import createUser from "@/libs/api/user/user-api"
 import type { UserInsert } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { useRouter } from "next/navigation"
@@ -20,6 +20,7 @@ type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
 
 export default function SignUpForm() {
   const router = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -49,50 +50,29 @@ export default function SignUpForm() {
   }
 
   async function onSubmit(data: SignUpFormData) {
-    const { email, password, nickname, bio } = data
-    const client = supabase()
+    try {
+      const { email, password, nickname, bio, profile_image } = data
 
-    if (typeof email !== "string") return
+      await createUser({
+        email,
+        password,
+        nickname,
+        bio,
+        profile_image,
+      })
 
-    const { data: authData, error: authError } = await client.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          nickname,
-          bio,
-        },
-      },
-    })
-
-    if (authError) {
-      if (authError.message.includes("already")) {
-        toast.error("이미 가입된 이메일입니다")
-      } else {
-        toast.error("회원가입에 실패했습니다")
+      toast("회원가입이 완료되었습니다")
+      router.push("/auth/login")
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes("already")) {
+          toast.error("이미 가입된 이메일입니다")
+          return
+        }
       }
-      return
+
+      toast.error("회원가입에 실패했습니다")
     }
-
-    const userId = authData.user?.id
-    if (!userId) {
-      toast.error("회원가입 처리 중 오류가 발생했습니다")
-      return
-    }
-
-    await client.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          nickname,
-          bio,
-        },
-      },
-    })
-
-    toast("회원가입이 완료되었습니다")
-    router.push("/auth/login")
   }
 
   return (
