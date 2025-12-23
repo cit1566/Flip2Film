@@ -1,14 +1,10 @@
-import { Suspense } from "react"
-import LoadingPage from "../components/loading/loading"
 import Home from "../components/main-body/home/home"
 import styles from "./page.module.css"
 
 export default function HomePage() {
   return (
     <section className={styles.mainPageBox}>
-      <Suspense fallback={<LoadingPage />}>
-        <Home></Home>
-      </Suspense>
+      <Home></Home>
     </section>
   )
 }
