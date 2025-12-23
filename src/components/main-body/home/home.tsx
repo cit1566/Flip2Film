@@ -1,7 +1,10 @@
 "use client"
 
+import { Suspense } from "react"
+import LoadingPage from "../../loading/loading"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
+import MainReviewItemSkeleton from "../../main-review-item/main-review-item-skeleton"
 import Carousel from "./carousel/carousel"
 import styles from "./home.module.css"
 
@@ -46,13 +49,15 @@ export default function Home() {
             ) => {
               return (
                 <li key={id + index}>
-                  <MainReviewItem
-                    title={title}
-                    category={category}
-                    content={content}
-                    like={liked}
-                    userId={review_owner_id}
-                  />
+                  <Suspense fallback={<MainReviewItemSkeleton />}>
+                    <MainReviewItem
+                      title={title}
+                      category={category}
+                      content={content}
+                      like={liked}
+                      userId={review_owner_id}
+                    />
+                  </Suspense>
                 </li>
               )
             }
@@ -72,13 +77,15 @@ export default function Home() {
               index
             ) => (
               <li key={id + index}>
-                <MainReviewItem
-                  title={title}
-                  category={category}
-                  content={content}
-                  like={liked}
-                  userId={review_owner_id}
-                />
+                <Suspense fallback={<MainReviewItemSkeleton />}>
+                  <MainReviewItem
+                    title={title}
+                    category={category}
+                    content={content}
+                    like={liked}
+                    userId={review_owner_id}
+                  />
+                </Suspense>
               </li>
             )
           )}
@@ -97,14 +104,16 @@ export default function Home() {
               index
             ) => (
               <li key={id + index}>
-                <MainReviewItem
-                  key={id + index}
-                  title={title}
-                  category={category}
-                  content={content}
-                  like={liked}
-                  userId={review_owner_id}
-                />
+                <Suspense fallback={<MainReviewItemSkeleton />}>
+                  <MainReviewItem
+                    key={id + index}
+                    title={title}
+                    category={category}
+                    content={content}
+                    like={liked}
+                    userId={review_owner_id}
+                  />
+                </Suspense>
               </li>
             )
           )}
