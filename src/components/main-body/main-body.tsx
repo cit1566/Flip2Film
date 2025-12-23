@@ -8,13 +8,11 @@ import MainReviewItemSkeleton from "../main-review-item/main-review-item-skeleto
 import styles from "./main-body.module.css"
 
 interface MainBodyProps {
-  category: "Home" | "Movie" | "Book"
+  category: "home" | "movie" | "book"
 }
 
 export default function MainBody({ category }: MainBodyProps) {
-  const filterList = itemListDummy.filter(
-    item => item.category === category.toLowerCase()
-  )
+  const filterList = itemListDummy.filter(item => item.category === category)
 
   function handleClickPageUp() {
     const scrollY = window.scrollY

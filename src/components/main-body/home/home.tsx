@@ -1,7 +1,6 @@
 "use client"
 
 import { Suspense } from "react"
-import LoadingPage from "../../loading/loading"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
 import MainReviewItemSkeleton from "../../main-review-item/main-review-item-skeleton"
