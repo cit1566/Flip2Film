@@ -42,6 +42,14 @@ async function request<T>(endpoint: string): Promise<T> {
  * - 영화 검색, 최신 영화 조회 등 기능별로 API 메서드를 제공
  */
 export const TMDB = {
+  posterURL: {
+    secure_base_url: "https://image.tmdb.org/t/p/",
+    backdrop_sizes: ["w300", "w780", "w1280", "original"],
+    logo_sizes: ["w45", "w92", "w154", "w185", "w300", "w500", "original"],
+    poster_sizes: ["w92", "w154", "w185", "w342", "w500", "w780", "original"],
+    profile_sizes: ["w45", "w185", "h632", "original"],
+    still_sizes: ["w92", "w185", "w300", "original"],
+  },
   /**
    * 영화 검색 API
    * @param input 검색어(문자열 또는 숫자)
