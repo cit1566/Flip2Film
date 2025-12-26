@@ -58,7 +58,9 @@ type GetAladdinParams = KeywordSearchParams | ItemNewSpecialParams
  * @param cover - 표지 이미지 크기
  * @returns 알라딘 API 응답 JSON
  */
-export async function getAladdin(params: GetAladdinParams) {
+export async function getAladdin(
+  params: GetAladdinParams
+): Promise<ThisWeekBest> {
   const { type, maxNum = 5, cover = "Mid" } = params
 
   // 사용할 API URL 결정
@@ -68,7 +70,7 @@ export async function getAladdin(params: GetAladdinParams) {
   let QueryType = "Keyword"
 
   if (type === "List") {
-    QueryType = "ItemNewSpecial"
+    QueryType = "Bestseller"
   }
 
   // 사용자 입력 데이터
@@ -95,3 +97,48 @@ export async function getAladdin(params: GetAladdinParams) {
 
   return response.json()
 }
+
+// -------------------------------------------------------------------------
+// 이번주 베스트 셀러 도서 API type
+export interface ThisWeekBest {
+  version: string
+  logo: string
+  title: string
+  link: string
+  pubDate: string
+  totalResults: number
+  startIndex: number
+  itemsPerPage: number
+  query: string
+  searchCategoryId: number
+  searchCategoryName: string
+  item: BookItemProps[]
+}
+
+export interface BookItemProps {
+  title: string
+  link: string
+  author: string
+  pubDate: string
+  description: string
+  isbn: string
+  isbn13: string
+  itemId: number
+  priceSales: number
+  priceStandard: number
+  mallType: string
+  stockStatus: string
+  mileage: number
+  cover: string
+  categoryId: number
+  categoryName: string
+  publisher: string
+  salesPoint: number
+  adult: boolean
+  fixedPrice: boolean
+  customerReviewRank: number
+  bestDuration: string
+  bestRank: number
+  subInfo: {}
+}
+// -------------------------------------------------------------------------

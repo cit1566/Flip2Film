@@ -1,11 +1,11 @@
 // .env에 저장된 TMDB API Key 가져오기 (Bearer 토큰 방식)
 const TMDB_READ_ACCESS_API_KEY = process.env.TMDB_READ_ACCESS_API_KEY
 
-if (!TMDB_READ_ACCESS_API_KEY) {
-  throw new Error(
-    "TMDB_READ_ACCESS_API_KEY is not defined in environment variables"
-  )
-}
+// if (!TMDB_READ_ACCESS_API_KEY) {
+//   throw new Error(
+//     "TMDB_READ_ACCESS_API_KEY is not defined in environment variables"
+//   )
+// }
 
 // TMDB API의 기본 URL
 const BASE_URL = "https://api.themoviedb.org/3"
@@ -44,7 +44,12 @@ async function request<T>(endpoint: string): Promise<T> {
 export const TMDB = {
   posterURL: {
     secure_base_url: "https://image.tmdb.org/t/p/",
-    backdrop_sizes: ["w300", "w780", "w1280", "original"],
+    backdrop_sizes: {
+      w300: "w300",
+      w780: "w780",
+      w1280: "w1280",
+      original: "original",
+    },
     logo_sizes: ["w45", "w92", "w154", "w185", "w300", "w500", "original"],
     poster_sizes: ["w92", "w154", "w185", "w342", "w500", "w780", "original"],
     profile_sizes: ["w45", "w185", "h632", "original"],
@@ -55,7 +60,7 @@ export const TMDB = {
    * @param input 검색어(문자열 또는 숫자)
    * @returns 검색 결과 JSON
    */
-  getMovies(input: string | number) {
+  getMovies(input: string | number): Promise<MoviewRoot> {
     return request(
       `/search/movie?query=${encodeURIComponent(
         input
@@ -67,7 +72,34 @@ export const TMDB = {
    * 최신 영화 정보 조회
    * @returns 현재 상영 중인 영화 목록 JSON
    */
-  getRecentMovies() {
+  getRecentMovies(): Promise<MoviewRoot> {
     return request("/movie/now_playing?language=ko-KR&page=1")
   },
 }
+
+// -------------------------------------------------------------------------
+// 영화 API 반환 type
+export interface MoviewRoot {
+  page: number
+  results: movieItemProps[]
+  total_pages: number
+  total_results: number
+}
+
+export interface movieItemProps {
+  adult: boolean
+  backdrop_path: string
+  genre_ids: number[]
+  id: number
+  original_language: string
+  original_title: string
+  overview: string
+  popularity: number
+  poster_path: string
+  release_date: string
+  title: string
+  video: boolean
+  vote_average: number
+  vote_count: number
+}
+// -------------------------------------------------------------------------

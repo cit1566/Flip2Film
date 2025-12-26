@@ -18,8 +18,10 @@
   --color-border-red: #f53232; /* 인풋 보더 바텀(에러) */
   --color-red: #ff5b5b;
   --color-yellow: #ffdc2e;
-
   --color-btn-gray: #eeeeee; /* 버튼 회색 */
+
+  --color-backdrop-gray: #6e6f6e56;
+  --color-backdrop-green: #1ed533b0;
   /* Spacing */
   --inline-spacing: 15px;
   --element-gap: 10px;

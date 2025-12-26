@@ -1,5 +1,7 @@
 "use client"
 
+import type { BookItemProps } from "@/libs/api/book/book-api"
+import type { movieItemProps } from "@/libs/api/movie/movie-api"
 import { Suspense } from "react"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
@@ -7,7 +9,16 @@ import MainReviewItemSkeleton from "../../main-review-item/main-review-item-skel
 import Carousel from "./carousel/carousel"
 import styles from "./home.module.css"
 
-export default function Home() {
+interface HomeProps {
+  posterList: PosterListProps
+}
+
+export interface PosterListProps {
+  book: BookItemProps[]
+  movie: movieItemProps[]
+}
+
+export default function Home({ posterList }: HomeProps) {
   // 영화 목록 리스트
   const movieList = listItemDummyData.filter(item => item.category === "movie")
   // 도서 목록 리스트
@@ -33,7 +44,7 @@ export default function Home() {
 
   return (
     <div className={styles.homeBox}>
-      <Carousel></Carousel>
+      <Carousel posterList={posterList}></Carousel>
 
       {/* 최다 좋아요 */}
       <section className={styles.mostLike} aria-labelledby="mostLikeTitle">
