@@ -4,6 +4,7 @@
   --carousel-border-radius: 20px;
   --carousel-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   --carousel-transition: transform 0.3s ease-in-out;
+  --carousel-navButton-color: rgba(83, 83, 83, 0.3);
 
   /* 책 그림자 */
   --book-shadow:
@@ -11,10 +12,64 @@
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 
+.carouselContainer {
+  position: relative;
+}
+
+/* ==================== 캐러셀 래퍼 (네비게이션 버튼 포함) ==================== */
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ==================== 네비게이션 버튼 ==================== */
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  background: var(--carousel-navButton-color);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+}
+
+.navButton:hover {
+  background: rgba(0, 0, 0, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.navButtonPrev {
+  left: 10px;
+}
+
+.navButtonNext {
+  right: 10px;
+}
+
 /* ==================== 메인 캐러셀 컨테이너 ==================== */
 .carousel {
   width: 100%;
   height: var(--image-box-size);
+  overflow-x: hidden;
   overflow-y: hidden;
   border-radius: var(--carousel-border-radius);
   box-shadow: var(--carousel-shadow);
@@ -22,6 +77,7 @@
 }
 
 .scrollInner {
+  display: flex;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -32,6 +88,7 @@
 
 /* ==================== 포스터 리스트 공통 ==================== */
 .posterList {
+  flex-shrink: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -43,7 +100,7 @@
 }
 
 .movieList .poster {
-  /* width: 100%; */
+  width: 100%;
   height: var(--image-box-size);
   object-fit: cover;
   object-position: center;
@@ -61,9 +118,7 @@
 .movieList .posterTitle {
   order: 2;
   padding-left: 10px;
-  text-shadow:
-    /* 0px 0px 3px rgb(127, 134, 125), */ 5px -5px 10px
-    rgba(0, 0, 0, 0.6);
+  text-shadow: 5px -5px 10px rgba(0, 0, 0, 0.6);
 }
 
 .movieList .posterTitle .korean {
@@ -81,8 +136,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
-  /* common */
   order: 1;
   width: max-content;
   margin-bottom: 5px;
@@ -90,41 +143,41 @@
 }
 
 .movieList .releaseDate {
-  background: rgba(18, 137, 3, 0.5);
-  box-shadow: 5px -5px 5px rgba(0, 0, 0, 0.5);
+  background: rgba(111, 111, 111, 0.5);
+  box-shadow: 5px -5px 5px rgba(0, 0, 0, 0.3);
   border-radius: 30px;
-  font-size: calc(var(--title-font-size) * 0.5);
+  font-size: calc(var(--title-font-size) * 0.3);
   color: var(--color-gray-light);
-  font-weight: bold;
+  font-weight: normal;
   backdrop-filter: blur(2px);
   padding: 3px 8px;
   margin: 0px;
 }
 
 .movieList .voteAverage {
-  background: rgba(18, 137, 3, 0.5);
-  box-shadow: 5px -5px 5px rgba(0, 0, 0, 0.5);
+  background: rgba(111, 111, 111, 0.5);
+  box-shadow: 5px -5px 5px rgba(0, 0, 0, 0.3);
   border-radius: 30px;
-  font-size: calc(var(--title-font-size) * 0.5);
+  font-size: calc(var(--title-font-size) * 0.3);
   color: var(--color-gray-light);
-  font-weight: bold;
+  font-weight: normal;
   backdrop-filter: blur(2px);
   padding: 3px 8px;
   margin: 0px;
-
   display: flex;
   align-items: center;
   gap: 3px;
+}
 
-  svg {
-    width: calc(var(--title-font-size) * 0.5);
-    height: calc(var(--title-font-size) * 0.5);
-    aspect-ratio: 1;
-  }
+.movieList .voteAverage svg {
+  width: calc(var(--title-font-size) * 0.3);
+  height: calc(var(--title-font-size) * 0.3);
+  /* aspect-ratio: 1; */
 }
 
 /* ==================== 도서 포스터 ==================== */
 .posterList.bookList {
+  background: white;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -152,7 +205,6 @@
 .bookList .descriptionBox h2 {
   margin: 0;
   font-size: var(--book-font-size);
-  /* height: 20px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -160,36 +212,29 @@
 
 .bookList .descriptionBox p {
   margin: 0;
-  font-size: calc(var(--book-font-size) * 0.8);
-  /* height: 20px; */
+  font-size: calc(var(--book-font-size) * 0.5);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ==================== 캐러셀 인디케이터 ==================== */
+/* ==================== 캐러셀 인디케이터 (하단 중앙) ==================== */
 .imageNumberBox {
-  position: absolute;
-  top: 0;
-  right: 15px;
+  /* position: absolute;
+  bottom: 30px; */
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  width: 30px;
-  height: var(--image-box-size);
-  color: var(--color-text-gray-2);
-  font-size: var(--image-box-font-size);
-  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .imageNumber {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 5%;
-  width: 15px;
-  height: 100%;
+  gap: 10px;
 }
 
 .imageNumber button {
@@ -197,8 +242,6 @@
   padding: 0;
   background: none;
   border: none;
-  color: inherit;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -207,14 +250,14 @@
   width: 10px;
   height: 10px;
   background: rgba(34, 34, 34, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.417);
   border-radius: 50%;
   backdrop-filter: blur(5px);
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .imageNumber button.activeImagePageNum .circle {
-  transform: scale(1.5);
+  width: 30px;
+  border-radius: 5px;
   background: var(--color-green);
 }
 
@@ -224,24 +267,34 @@
     --image-box-size: 200px;
   }
 
+  .navButton {
+    display: none;
+    width: 35px;
+    height: 35px;
+  }
+
+  .navButton svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .bookList {
-    --book-font-size: 0.8rem;
+    --book-font-size: 1rem;
     --book-innerItemBox-width: 90px;
-    --book-width: 70px;
-    --book-height: 100px;
+    --book-width: 80px;
+    --book-height: 110px;
     --movie-title-top-m: 10px;
   }
 
   .posterList.movieList {
-    --descriptionBox-left: 20px;
+    --descriptionBox-left: 50px;
     --descriptionBox-bottom: 20px;
-
     --title-font-size: 1.5rem;
   }
 
-  .imageNumberBox {
-    --image-box-size: 200px;
-    --image-box-font-size: 1rem;
+  .imageNumber .circle {
+    width: 7px;
+    height: 7px;
   }
 }
 
@@ -252,7 +305,7 @@
   }
 
   .bookList {
-    --book-font-size: 1rem;
+    --book-font-size: 1.5rem;
     --book-innerItemBox-width: 150px;
     --book-width: 130px;
     --book-height: 200px;
@@ -264,16 +317,9 @@
   }
 
   .posterList.movieList {
-    --descriptionBox-left: 100px;
+    --descriptionBox-left: 50px;
     --descriptionBox-bottom: 20px;
-
     --title-font-size: 2.5rem;
-  }
-
-  .imageNumberBox {
-    --image-box-size: 300px;
-    --image-box-font-size: 1.125rem;
-    right: 20px;
   }
 }
 
@@ -292,25 +338,8 @@
   }
 
   .posterList.movieList {
-    --descriptionBox-left: 150px;
+    --descriptionBox-left: 100px;
     --descriptionBox-bottom: 30px;
-
     --title-font-size: 3.5rem;
-  }
-
-  .imageNumberBox {
-    --image-box-size: 400px;
-    --image-box-font-size: 24px;
-    right: 30px;
-  }
-}
-
-/* ==================== 애니메이션 (필요시 사용) ==================== */
-@keyframes scrollVertical {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-100%);
   }
 }
