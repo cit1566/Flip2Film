@@ -7,6 +7,7 @@ import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
 import MainReviewItemSkeleton from "../../main-review-item/main-review-item-skeleton"
 import Carousel from "./carousel/carousel"
+import CarouselSkeleton from "./carousel/skeleton/carousel-skeleton"
 import styles from "./home.module.css"
 
 interface HomeProps {
@@ -44,7 +45,11 @@ export default function Home({ posterList }: HomeProps) {
 
   return (
     <div className={styles.homeBox}>
-      <Carousel posterList={posterList}></Carousel>
+      <Suspense fallback={<CarouselSkeleton />}>
+        <Carousel posterList={posterList}></Carousel>
+      </Suspense>
+      {/* 중단 선 */}
+      <div className={styles.breackLine}></div>
 
       {/* 최다 좋아요 */}
       <section className={styles.mostLike} aria-labelledby="mostLikeTitle">
@@ -75,6 +80,9 @@ export default function Home({ posterList }: HomeProps) {
         </ul>
       </section>
 
+      {/* 중단 선 */}
+      <div className={styles.breackLine}></div>
+
       {/* 최신 목록 */}
       <section className={styles.latestList} aria-labelledby="latestListMovie">
         <h2 id="latestListMovie" className={styles.latestListTitle}>
@@ -101,6 +109,9 @@ export default function Home({ posterList }: HomeProps) {
           )}
         </ul>
       </section>
+
+      {/* 중단 선 */}
+      <div className={styles.breackLine}></div>
 
       {/* 최신 목록 */}
       <section className={styles.latestList} aria-labelledby="latestListBook">
