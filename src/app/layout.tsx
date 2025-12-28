@@ -29,10 +29,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <Header className={styles.header}></Header>
           {/* 메인 page.tsx */}
           <div className={styles.mainBody}>
-            <PageTransition className={styles.container}>
+            <div className={styles.container}>
               <NavLink></NavLink>
-              {children}
-            </PageTransition>
+              <PageTransition>{children}</PageTransition>
+            </div>
           </div>
           <Toaster position="top-center" richColors />
           <footer className={styles.footer}>

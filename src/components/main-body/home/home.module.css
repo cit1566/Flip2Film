@@ -72,6 +72,13 @@
   }
 }
 
+/* 중단 선 */
+.breackLine {
+  width: 100%;
+  height: 1px;
+  background: var(--color-breackLine-gray);
+}
+
 @media (min-width: 1279px) {
   .mostLikeItems article {
     min-width: 400px;

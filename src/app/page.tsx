@@ -1,3 +1,5 @@
+"server client"
+
 import Home from "../components/main-body/home/home"
 import { getAladdin } from "../libs/api/book/book-api"
 import { TMDB } from "../libs/api/movie/movie-api"
