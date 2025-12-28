@@ -22,7 +22,7 @@
 
   --color-backdrop-gray: #6e6f6e56;
   --color-backdrop-green: #1ed533b0;
-  /* Spacing */
+  --color-breackLine-gray: rgb(237, 237, 237); /* Spacing */
   --inline-spacing: 15px;
   --element-gap: 10px;
   --component-gap: 20px;
