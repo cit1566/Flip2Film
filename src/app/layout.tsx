@@ -1,8 +1,11 @@
+"server client"
+
 import "@/styles/main.css"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import type { PropsWithChildren } from "react"
 import { Toaster } from "sonner"
+import Footer from "../components/footer/footer"
 import Header from "../components/header/header"
 import NavLink from "../components/nav-link/nav-link"
 import PageTransition from "../components/page-transition/page-transition"
@@ -34,11 +37,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
               <PageTransition>{children}</PageTransition>
             </div>
           </div>
-          <Toaster position="top-center" richColors />
-          <footer className={styles.footer}>
-            © Flip2Film All rights reserved. @GitHub
-          </footer>
         </Providers>
+        <Footer></Footer>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   )

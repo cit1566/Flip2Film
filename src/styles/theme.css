@@ -1,31 +1,106 @@
 :root {
-  /* Colors */
-  --color-green: #1ed534; /* 기본 초록 */
-  --color-black: #1a1a1a; /* 기본 검정 */
-  --color-gray-light: #fdfdfd; /* 기본 하양 */
-  --color-gray-light-2: #e4e4e4;
-  --color-label: #535353; /* 라벨 제목 */
-  --color-placeholder: #bdbdbd; /* 인풋 placeholder */
-  --color-gray: #8c8c8c;
-  --color-bg-light: #f8f9fa; /* 배경 하양 */
-  --color-bg-dark: #f2f2f2;
-  --color-text-gray: #667085;
-  --color-text-gray-2: #9ca3af;
-  --color-text-purple: #6941c6;
-  --color-border-4: #ebebeb;
-  --color-border-d0: #d0d0d0; /* 인풋 보더 바텀(기본) */
-  --color-border-85: #858585; /* 인풋 보더 바텀(입력) */
-  --color-border-red: #f53232; /* 인풋 보더 바텀(에러) */
-  --color-red: #ff5b5b;
-  --color-yellow: #ffdc2e;
-  --color-btn-gray: #eeeeee; /* 버튼 회색 */
+  /* =========================
+   * Base Colors (원본 값 유지)
+   * - 아래 Base 토큰만 "실제 색상값"을 가진다
+   * - 이후 기존 변수들은 Base 토큰을 참조한다
+   * ========================= */
+  --base-green: #1ed534;
+  --base-black: #1a1a1a;
 
-  --color-backdrop-gray: #6e6f6e56;
-  --color-backdrop-green: #1ed533b0;
-  --color-breackLine-gray: rgb(237, 237, 237); /* Spacing */
-  --inline-spacing: 15px;
-  --element-gap: 10px;
-  --component-gap: 20px;
+  --base-gray-50: #fdfdfd;
+  --base-gray-100: #f8f9fa;
+  --base-gray-200: #f2f2f2;
+  --base-gray-250: #eeeeee;
+  --base-gray-300: #ebebeb;
+  --base-gray-400: #e4e4e4;
+  --base-gray-500: #d0d0d0;
+  --base-gray-600: #bdbdbd;
+  --base-gray-700: #9ca3af;
+  --base-gray-800: #8c8c8c;
+  --base-gray-850: #858585;
+  --base-gray-900: #667085;
+  --base-gray-950: #535353;
+
+  --base-black-50: #f5f5f5; /* 거의 화이트 */
+  --base-black-100: #e5e5e5;
+  --base-black-200: #d4d4d4;
+  --base-black-300: #a3a3a3;
+  --base-black-400: #737373;
+  --base-black-500: #525252;
+  --base-black-600: #404040;
+  --base-black-700: #262626;
+  --base-black-800: #1f1f1f;
+  --base-black-900: #1a1a1a; /* 기존 color-black */
+
+  --base-purple: #6941c6;
+
+  --base-red-500: #ff5b5b;
+  --base-red-600: #f53232;
+
+  --base-yellow: #ffdc2e;
+
+  /* Overlay/Backdrop Base */
+  --base-backdrop-gray: rgba(110, 111, 110, 0.34); /* #6e6f6e56 */
+  --base-backdrop-green: rgba(30, 213, 51, 0.69); /* #1ed533b0 */
+
+  /* =========================
+   * Brand / Core
+   * ========================= */
+  --color-green: var(--base-green); /* 기본 초록 */
+  --color-black: var(--base-black); /* 기본 검정 */
+
+  /* =========================
+   * Background
+   * ========================= */
+  --color-gray-light: var(--base-gray-50); /* 기본 하양 */
+  --color-bg-light: var(--base-gray-100); /* 배경 하양 */
+  --color-bg-dark: var(--base-gray-200);
+  --color-bg-dark-2: var(--base-black-600);
+  /* =========================
+   * Text
+   * ========================= */
+  --color-label: var(--base-gray-950); /* 라벨 제목 */
+  --color-placeholder: var(--base-gray-600); /* 인풋 placeholder */
+  --color-gray: var(--base-gray-800);
+  --color-text-gray: var(--base-gray-900);
+  --color-text-gray-2: var(--base-gray-700);
+  --color-text-purple: var(--base-purple);
+  --color-text-light: var(--base-gray-50);
+
+  /* =========================
+   * Border / Divider
+   * ========================= */
+  --color-border-4: var(--base-gray-300);
+  --color-border-d0: var(--base-gray-500); /* 인풋 보더 바텀(기본) */
+  --color-border-85: var(--base-gray-850); /* 인풋 보더 바텀(입력) */
+  --color-border-red: var(--base-red-600); /* 인풋 보더 바텀(에러) */
+
+  /* =========================
+   * Status
+   * ========================= */
+  --color-red: var(--base-red-500);
+  --color-yellow: var(--base-yellow);
+
+  /* =========================
+   * Button
+   * ========================= */
+  --color-btn-gray: var(--base-gray-250); /* 버튼 회색 */
+
+  /* =========================
+   * Backdrop / Overlay
+   * ========================= */
+  --color-backdrop-gray: var(--base-backdrop-gray);
+  --color-backdrop-green: var(--base-backdrop-green);
+
+  /* =========================
+   * Spacing / Divider (기존 변수명 유지)
+   * ========================= */
+  --color-breackLine-gray: var(--base-gray-300); /* Spacing */
+
+  /* =========================
+   * Alias (기존 변수를 유지하면서 값 연결)
+   * ========================= */
+  --color-gray-light-2: var(--base-gray-400);
 }
 
 /* Utilities */
