@@ -28,6 +28,7 @@ export default function Input({
   const inputId = id ?? `input-${label?.replace(/\s+/g, "").toLowerCase()}`
   const isPassword = type === "password"
   const isEmail = type === "email"
+  const isText = type === "text"
 
   const [showPassword, setShowPassword] = useState(false)
   const actualType = isPassword && showPassword ? "text" : type
@@ -57,7 +58,7 @@ export default function Input({
           className={`${styles.inputField} ${statusClass}`}
         />
 
-        {clearable && isEmail && value && (
+        {clearable && (isEmail || isText) && value && (
           <button
             type="button"
             className={styles.iconButton}

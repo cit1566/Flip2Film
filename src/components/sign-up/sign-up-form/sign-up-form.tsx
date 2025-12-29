@@ -246,8 +246,10 @@ export default function SignUpForm() {
             <Input
               label="닉네임"
               placeholder="최소 2자, 최대 6자"
+              clearable
               value={field.value ?? ""}
               onChange={e => field.onChange(e.target.value)}
+              onClear={() => field.onChange("")}
               onBlur={field.onBlur}
               status={handleInputStatus(
                 fieldState.isTouched,
@@ -269,8 +271,10 @@ export default function SignUpForm() {
           <Input
             label="Bio"
             placeholder="자기소개를 입력해주세요"
+            clearable
             value={field.value ?? ""}
             onChange={e => field.onChange(e.target.value)}
+            onClear={() => field.onChange("")}
             onBlur={field.onBlur}
           />
         )}
