@@ -1,11 +1,9 @@
 "use client"
 
-import type { BookItemProps } from "@/libs/api/book/book-api"
-import type {
-  movieItemProps,
-  PosterPathProps,
-} from "@/libs/api/movie/movie-api"
-import { Suspense } from "react"
+import type { PosterPathProps } from "@/libs/api/movie/movie-api"
+import { Suspense, useEffect } from "react"
+import { toast } from "sonner"
+import type { PosterListProps } from "../../../app/page"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
 import MainReviewItemSkeleton from "../../main-review-item/main-review-item-skeleton"
@@ -16,14 +14,14 @@ import styles from "./home.module.css"
 interface HomeProps {
   posterList: PosterListProps
   TMDBPosterUrl: PosterPathProps
+  errors: string[]
 }
 
-export interface PosterListProps {
-  book: BookItemProps[]
-  movie: movieItemProps[]
-}
-
-export default function Home({ posterList, TMDBPosterUrl }: HomeProps) {
+export default function Home({
+  posterList,
+  TMDBPosterUrl,
+  errors = [],
+}: HomeProps) {
   // 영화 목록 리스트
   const movieList = listItemDummyData.filter(item => item.category === "movie")
   // 도서 목록 리스트
@@ -47,9 +45,16 @@ export default function Home({ posterList, TMDBPosterUrl }: HomeProps) {
     )
     .slice(0, 5)
 
+  const hasAny =
+    (posterList.book?.length ?? 0) > 0 || (posterList.movie?.length ?? 0) > 0
+
+  useEffect(() => {
+    errors.forEach(msg => toast.error(msg))
+  }, [errors])
+
   return (
     <div className={styles.homeBox}>
-      {posterList ? (
+      {hasAny ? (
         <Carousel
           posterList={posterList}
           TMDBPosterUrl={TMDBPosterUrl}

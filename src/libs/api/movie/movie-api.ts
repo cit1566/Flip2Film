@@ -20,8 +20,7 @@ const options = {
     // TMDB는 Bearer Token(읽기 전용 Access Token)으로 인증해야 함
     Authorization: `Bearer ${TMDB_READ_ACCESS_API}`,
   },
-  chach: "no-store",
-  next: { revalidate: 60 },
+  next: { revalidate: 300 },
 }
 
 /**

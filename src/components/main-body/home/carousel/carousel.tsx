@@ -1,9 +1,9 @@
 import { useDebounceCallback } from "@/hooks/useDebounceCallback"
 import type { PosterPathProps } from "@/libs/api/movie/movie-api"
-import { Star, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useId, useRef, useState, useCallback, useMemo } from "react"
-import type { PosterListProps } from "../home"
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
+import type { PosterListProps } from "../../../../app/page"
 import styles from "./carousel.module.css"
 
 interface CarouselProps {
@@ -102,6 +102,7 @@ export default function Carousel({ posterList, TMDBPosterUrl }: CarouselProps) {
   // 자동 슬라이드
   useEffect(() => {
     const interval = setInterval(() => {
+      if (totalSlides === 0) return
       setCurrentImageNum(num => (num >= totalSlides - 1 ? 0 : num + 1))
     }, 6000)
     return () => clearInterval(interval)
