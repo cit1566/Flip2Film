@@ -1,4 +1,4 @@
-import { fileToBase64 } from "../../../utils/fileToBase64"
+import { fileToBase64 } from "@/utils"
 import createClient from "../../supabase/client"
 import type { UserInsert, UserUpdate } from "../../supabase/types"
 

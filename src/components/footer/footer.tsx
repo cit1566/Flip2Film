@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import styles from "./footer.module.css"
 
 export default function Footer() {
@@ -7,7 +8,7 @@ export default function Footer() {
       <div className={styles.footerInner}>
         {/* 브렌드 / 카피라이트 */}
         <div className={styles.footerBrand}>
-          <a href="/" className={styles.brandLogo}>
+          <Link href="/" className={styles.brandLogo}>
             <Image
               src="/logo/logo.svg"
               alt="Flip2Film"
@@ -15,7 +16,7 @@ export default function Footer() {
               height={40}
             />
             <span>Flip2Film</span>
-          </a>
+          </Link>
           <p className={styles.footerCopy}>
             Copyright © 2025 Flip2Film. All right reserved
           </p>
@@ -27,10 +28,12 @@ export default function Footer() {
             <h2 className={styles.footerNavTitle}>Contact</h2>
             <ul className={styles.footerNavList}>
               <li>
-                <a href="mailto:cit1566@gmail.com">cit1566@gmail.com</a>
+                <Link href="mailto:cit1566@gmail.com">cit1566@gmail.com</Link>
               </li>
               <li>
-                <a href="mailto:tldhs123e@gmail.com">tldhs123e@gmail.com</a>
+                <Link href="mailto:tldhs123e@gmail.com">
+                  tldhs123e@gmail.com
+                </Link>
               </li>
             </ul>
           </div>
@@ -39,10 +42,22 @@ export default function Footer() {
             <h2 className={styles.footerNavTitle}>Socials</h2>
             <ul className={styles.footerNavList}>
               <li>
-                <a href="https://velog.io/@cit1566/posts">Velog</a>
+                <Link
+                  href="https://velog.io/@cit1566/posts"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Velog
+                </Link>
               </li>
               <li>
-                <a href="https://github.com/cit1566/Flip2Film">Github</a>
+                <Link
+                  href="https://github.com/cit1566/Flip2Film"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Github
+                </Link>
               </li>
             </ul>
           </div>
@@ -51,10 +66,10 @@ export default function Footer() {
             <h2 className={styles.footerNavTitle}>Etc</h2>
             <ul className={styles.footerNavList}>
               <li>
-                <a href="/team">팀 소개</a>
+                <Link href="/team">팀 소개</Link>
               </li>
               <li>
-                <a href="/feedback">서비스 피드백</a>
+                <Link href="/feedback">서비스 피드백</Link>
               </li>
             </ul>
           </div>

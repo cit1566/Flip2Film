@@ -1,23 +1,15 @@
+import type { PosterListProps } from "@/app/page"
 import { useDebounceCallback } from "@/hooks/useDebounceCallback"
 import type { PosterPathProps } from "@/libs/api/movie/movie-api"
+import chunkArray from "@/utils/chunkArray"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import Image from "next/image"
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
-import type { PosterListProps } from "../../../../app/page"
 import styles from "./carousel.module.css"
 
 interface CarouselProps {
   posterList: PosterListProps
   TMDBPosterUrl: PosterPathProps
-}
-
-// 유틸리티 함수: 배열을 N개씩 묶기
-const chunkArray = <T,>(array: T[], size: number): T[][] => {
-  const result: T[][] = []
-  for (let i = 0; i < array?.length; i += size) {
-    result.push(array.slice(i, i + size))
-  }
-  return result
 }
 
 // 유틸리티 함수: Transform offset 계산

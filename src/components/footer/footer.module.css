@@ -21,7 +21,7 @@
   justify-content: space-between;
 }
 
-/* Brand  / Capyright*/
+/* Brand  / Copyright*/
 .footerBrand {
   width: 100%;
   height: 100%;
@@ -45,7 +45,7 @@
     }
   }
 
-  /* Capyright */
+  /* Copyright */
   .footerCopy {
     color: var(--color-text-gray-2);
     font-size: 1.2rem;
@@ -61,7 +61,6 @@
   align-items: center;
 }
 
-/*  */
 .footerNavGroup {
   min-width: 80px;
   max-width: max-content;

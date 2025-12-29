@@ -1,4 +1,4 @@
-export function extractImageSrcList(html: string): string[] {
+export default function extractImageSrcList(html: string): string[] {
   const regex = /<img[^>]*src=["']([^"']+)["'][^>]*>/g
   const result: string[] = []
   let match

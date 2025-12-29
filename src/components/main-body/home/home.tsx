@@ -1,12 +1,11 @@
 "use client"
 
 import type { PosterPathProps } from "@/libs/api/movie/movie-api"
-import { Suspense, useEffect } from "react"
+import { useEffect } from "react"
 import { toast } from "sonner"
 import type { PosterListProps } from "../../../app/page"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
-import MainReviewItemSkeleton from "../../main-review-item/main-review-item-skeleton"
 import Carousel from "./carousel/carousel"
 import CarouselSkeleton from "./carousel/skeleton/carousel-skeleton"
 import styles from "./home.module.css"
@@ -79,15 +78,15 @@ export default function Home({
             ) => {
               return (
                 <li key={id + index}>
-                  <Suspense fallback={<MainReviewItemSkeleton />}>
-                    <MainReviewItem
-                      title={title}
-                      category={category}
-                      content={content}
-                      like={liked}
-                      userId={review_owner_id}
-                    />
-                  </Suspense>
+                  {/* <Suspense fallback={<MainReviewItemSkeleton />}> */}
+                  <MainReviewItem
+                    title={title}
+                    category={category}
+                    content={content}
+                    like={liked}
+                    userId={review_owner_id}
+                  />
+                  {/* </Suspense> */}
                 </li>
               )
             }
@@ -110,15 +109,15 @@ export default function Home({
               index
             ) => (
               <li key={id + index}>
-                <Suspense fallback={<MainReviewItemSkeleton />}>
-                  <MainReviewItem
-                    title={title}
-                    category={category}
-                    content={content}
-                    like={liked}
-                    userId={review_owner_id}
-                  />
-                </Suspense>
+                {/* <Suspense fallback={<MainReviewItemSkeleton />}> */}
+                <MainReviewItem
+                  title={title}
+                  category={category}
+                  content={content}
+                  like={liked}
+                  userId={review_owner_id}
+                />
+                {/* </Suspense> */}
               </li>
             )
           )}
@@ -140,15 +139,15 @@ export default function Home({
               index
             ) => (
               <li key={id + index}>
-                <Suspense fallback={<MainReviewItemSkeleton />}>
-                  <MainReviewItem
-                    title={title}
-                    category={category}
-                    content={content}
-                    like={liked}
-                    userId={review_owner_id}
-                  />
-                </Suspense>
+                {/* <Suspense fallback={<MainReviewItemSkeleton />}> */}
+                <MainReviewItem
+                  title={title}
+                  category={category}
+                  content={content}
+                  like={liked}
+                  userId={review_owner_id}
+                />
+                {/* </Suspense> */}
               </li>
             )
           )}

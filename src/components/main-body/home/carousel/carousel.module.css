@@ -172,7 +172,6 @@
 .movieList .voteAverage svg {
   width: calc(var(--title-font-size) * 0.3);
   height: calc(var(--title-font-size) * 0.3);
-  /* aspect-ratio: 1; */
 }
 
 /* ==================== 도서 포스터 ==================== */
@@ -220,8 +219,6 @@
 
 /* ==================== 캐러셀 인디케이터 (하단 중앙) ==================== */
 .imageNumberBox {
-  /* position: absolute;
-  bottom: 30px; */
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,10 +1,10 @@
 import MainBody from "../../components/main-body/main-body"
 
-interface PageProps {
+interface CategoryPageProps {
   params: { id: "book" | "movie" }
 }
 
-export default async function PostPage({ params }: PageProps) {
-  const LinkParams = await params
-  return <MainBody category={LinkParams.id}></MainBody>
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { id } = await params
+  return <MainBody category={id}></MainBody>
 }
