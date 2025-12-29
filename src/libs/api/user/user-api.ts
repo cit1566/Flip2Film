@@ -15,7 +15,6 @@ interface createUserProps {
  * 회원가입 (Auth 사용자 생성)
  * - auth.users 생성
  * - 트리거에 의해 public.user 자동 생성
- * - UI 단에서 validation이 완료되었다는 전제
  */
 export default async function createUser({
   email,
@@ -32,7 +31,19 @@ export default async function createUser({
     throw new Error("비밀번호는 최소 8자 이상이어야 합니다.")
   }
 
-  const fileExtension = profile_image?.name.split(".").pop() ?? "png"
+  // 1. 파일 크기 검증 로직 추가 (5MB 제한)
+  const MAX_FILE_SIZE = 5 * 1024 * 1024
+  if (profile_image && profile_image.size > MAX_FILE_SIZE) {
+    throw new Error("업로드 가능한 파일 크기(5MB)를 초과했습니다")
+  }
+
+  const fileExtension =
+    profile_image?.name.split(".").pop()?.toLowerCase() ?? "png"
+  const allowedExtensions = ["png", "jpeg", "jpg"]
+
+  if (profile_image && !allowedExtensions.includes(fileExtension)) {
+    throw new Error("지원하지 않는 파일 형식입니다.")
+  }
 
   // Supabase Auth 회원가입
   const { data, error } = await supabase.auth.signUp({
@@ -42,6 +53,7 @@ export default async function createUser({
       data: {
         nickname,
         bio,
+        // 메타데이터에는 파일명만 저장
         profile_image: profile_image ? `profile.${fileExtension}` : null,
       },
     },
@@ -51,9 +63,10 @@ export default async function createUser({
     throw error ?? new Error("회원가입 실패")
   }
 
-  // 이미지가 있을 경우 스토리지 연동
+  // 2. 이미지가 있을 경우 스토리지 연동 (닉네임 기반 경로 반영)
   if (profile_image) {
-    const filePath = `${data.user.id}/profile.${fileExtension}`
+    const safeNickname = nickname ?? "anonymous"
+    const filePath = `${safeNickname}/profile.${fileExtension}`
 
     // 스토리지 업로드
     const { error: uploadError } = await supabase.storage

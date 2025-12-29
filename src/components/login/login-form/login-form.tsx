@@ -21,7 +21,7 @@ export default function LoginForm() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted, isValid },
+    formState: { errors, isSubmitting, isValidating, isValid },
   } = useForm<LoginFormData>({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -121,7 +121,7 @@ export default function LoginForm() {
         variant="green"
         title={isSubmitting ? "로그인 중..." : "로그인"}
         type="submit"
-        disabled={(isSubmitted && !isValid) || isSubmitting}
+        disabled={!isValid || isSubmitting || isValidating}
         className={styles.loginFormSubmitButton}
       />
 

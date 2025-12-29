@@ -25,7 +25,7 @@ export default function SocialPage() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted, isValid },
+    formState: { errors, isSubmitting, isValidating, isValid },
   } = useForm<socialSignUpFormData>({
     mode: "onChange",
     defaultValues: {
@@ -94,7 +94,7 @@ export default function SocialPage() {
       let imagePath = null
 
       if (profile_image instanceof File) {
-        const fileExt = profile_image.name.split(".").pop()
+        const fileExt = profile_image.name.split(".").pop() ?? "png"
         const filePath = `${user.id}/profile.${fileExt}`
         const { error: uploadError } = await supabaseClient.storage
           .from("profile_image")
@@ -181,7 +181,7 @@ export default function SocialPage() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={(isSubmitted && !isValid) || isSubmitting}
+        disabled={!isValid || isSubmitting || isValidating}
       />
     </form>
   )

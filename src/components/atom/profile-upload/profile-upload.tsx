@@ -3,6 +3,7 @@
 import { Plus } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { toast } from "sonner" // 토스트 메시지 추가
 import styles from "./profile-upload.module.css"
 
 interface ProfileUploadProps {
@@ -13,6 +14,8 @@ interface ProfileUploadProps {
 export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const [isInvalidType, setIsInvalidType] = useState(false)
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024
 
   useEffect(() => {
     if (!value) {
@@ -42,6 +45,13 @@ export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
       e.target.value = ""
       onChange(null)
       setIsInvalidType(true)
+      return
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      e.target.value = ""
+      onChange(null)
+      toast.error("업로드 가능한 파일 크기(5MB)를 초과했습니다")
       return
     }
 

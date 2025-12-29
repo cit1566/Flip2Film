@@ -32,7 +32,7 @@ export default function SignUpForm() {
     handleSubmit,
     getValues,
     setError,
-    formState: { errors, isSubmitting, isSubmitted, isValid },
+    formState: { errors, isSubmitting, isValidating, isValid },
   } = useForm<SignUpFormData>({
     mode: "onChange",
     defaultValues: {
@@ -290,7 +290,7 @@ export default function SignUpForm() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={(isSubmitted && !isValid) || isSubmitting}
+        disabled={!isValid || isSubmitting || isValidating}
       />
     </form>
   )
