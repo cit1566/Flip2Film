@@ -1,5 +1,5 @@
 import { useDebounceCallback } from "@/hooks/useDebounceCallback"
-import { TMDB } from "@/libs/api/movie/movie-api"
+import type { PosterPathProps } from "@/libs/api/movie/movie-api"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useId, useRef, useState, useCallback, useMemo } from "react"
@@ -8,6 +8,7 @@ import styles from "./carousel.module.css"
 
 interface CarouselProps {
   posterList: PosterListProps
+  TMDBPosterUrl: PosterPathProps
 }
 
 // 유틸리티 함수: 배열을 N개씩 묶기
@@ -27,7 +28,7 @@ const getTranslateXOffset = (
   return `translateX(${-(currentIndex * imageWidth)}px)`
 }
 
-export default function Carousel({ posterList }: CarouselProps) {
+export default function Carousel({ posterList, TMDBPosterUrl }: CarouselProps) {
   const [currentImageNum, setCurrentImageNum] = useState<number>(0)
   const [currentImageSize, setCurrentImageSize] = useState<number>(1280)
 
@@ -36,14 +37,13 @@ export default function Carousel({ posterList }: CarouselProps) {
 
   // TMDB 포스터 URL 생성
   const TMDB_POSTER_BASE_URL = useMemo(
-    () =>
-      TMDB.posterURL.secure_base_url + TMDB.posterURL.backdrop_sizes.original,
-    []
+    () => TMDBPosterUrl.secure_base_url + TMDBPosterUrl.backdrop_sizes.original,
+    [TMDBPosterUrl]
   )
 
   // 영화 데이터 (최대 3개)
   const movieList = useMemo(
-    () => posterList.movie.slice(0, 3),
+    () => posterList.movie.filter(m => m.backdrop_path).slice(0, 3),
     [posterList.movie]
   )
 

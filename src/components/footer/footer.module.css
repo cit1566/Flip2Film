@@ -36,7 +36,7 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    gap: 10;
+    gap: 10px;
 
     img {
       background: rgba(255, 255, 255, 0.133);

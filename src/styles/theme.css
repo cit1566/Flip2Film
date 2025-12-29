@@ -95,7 +95,7 @@
   /* =========================
    * Spacing / Divider (기존 변수명 유지)
    * ========================= */
-  --color-breackLine-gray: var(--base-gray-300); /* Spacing */
+  --color-breakLine-gray: var(--base-gray-300); /* Spacing */
 
   /* =========================
    * Alias (기존 변수를 유지하면서 값 연결)

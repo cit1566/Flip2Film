@@ -17,7 +17,7 @@ export default function Footer() {
             <span>Flip2Film</span>
           </a>
           <p className={styles.footerCopy}>
-            Capyright © 2025 Flip2Film. All right reserved
+            Copyright © 2025 Flip2Film. All right reserved
           </p>
         </div>
 

@@ -1,20 +1,33 @@
 "server client"
 
+import { toast } from "sonner"
 import Home from "../components/main-body/home/home"
-import { getAladdin } from "../libs/api/book/book-api"
-import { TMDB } from "../libs/api/movie/movie-api"
+import { type BookItemProps, getAladdin } from "../libs/api/book/book-api"
+import { type movieItemProps, TMDB } from "../libs/api/movie/movie-api"
 import styles from "./page.module.css"
 
 export default async function HomePage() {
-  // 알라딘 베스트 도서 리스트
-  const { item: bookBest } = await getAladdin({
-    type: "List",
-    maxNum: 12,
-    cover: "Big",
-  })
+  let bookBest: BookItemProps[] = []
+  let movieBest: movieItemProps[] = []
+  try {
+    // 알라딘 베스트 도서 리스트
+    const { item } = await getAladdin({
+      type: "List",
+      maxNum: 12,
+      cover: "Big",
+    })
+    bookBest = item
+  } catch (error) {
+    toast.error(`Error : ${error}`)
+  }
 
-  // 최신 인기 영화 리스트
-  const { results: movieBest } = await TMDB.getRecentMovies()
+  try {
+    // 최신 인기 영화 리스트
+    const { results } = await TMDB.getRecentMovies()
+    movieBest = results
+  } catch (error) {
+    toast.error(`Error : ${error}`)
+  }
 
   // 영화 도서 배열 묶음 객체
   const posterList = {
@@ -24,7 +37,7 @@ export default async function HomePage() {
 
   return (
     <section className={styles.mainPageBox}>
-      <Home posterList={posterList}></Home>
+      <Home posterList={posterList} TMDBPosterUrl={TMDB.posterURL}></Home>
     </section>
   )
 }

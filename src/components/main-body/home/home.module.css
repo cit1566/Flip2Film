@@ -73,10 +73,10 @@
 }
 
 /* 중단 선 */
-.breackLine {
+.breakLine {
   width: 100%;
   height: 1px;
-  background: var(--color-breackLine-gray);
+  background: var(--color-breakLine-gray);
 }
 
 @media (min-width: 1279px) {

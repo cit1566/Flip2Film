@@ -10,7 +10,7 @@
   font-size: 1.5rem;
   position: relative;
   padding: 20px 5px;
-  border-bottom: 1px double var(--color-breackLine-gray);
+  border-bottom: 1px double var(--color-breakLine-gray);
   margin-bottom: 20px;
 
   a {

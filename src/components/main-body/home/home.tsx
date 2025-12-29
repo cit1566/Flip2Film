@@ -1,7 +1,10 @@
 "use client"
 
 import type { BookItemProps } from "@/libs/api/book/book-api"
-import type { movieItemProps } from "@/libs/api/movie/movie-api"
+import type {
+  movieItemProps,
+  PosterPathProps,
+} from "@/libs/api/movie/movie-api"
 import { Suspense } from "react"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
@@ -12,6 +15,7 @@ import styles from "./home.module.css"
 
 interface HomeProps {
   posterList: PosterListProps
+  TMDBPosterUrl: PosterPathProps
 }
 
 export interface PosterListProps {
@@ -19,7 +23,7 @@ export interface PosterListProps {
   movie: movieItemProps[]
 }
 
-export default function Home({ posterList }: HomeProps) {
+export default function Home({ posterList, TMDBPosterUrl }: HomeProps) {
   // 영화 목록 리스트
   const movieList = listItemDummyData.filter(item => item.category === "movie")
   // 도서 목록 리스트
@@ -45,11 +49,17 @@ export default function Home({ posterList }: HomeProps) {
 
   return (
     <div className={styles.homeBox}>
-      <Suspense fallback={<CarouselSkeleton />}>
-        <Carousel posterList={posterList}></Carousel>
-      </Suspense>
+      {posterList ? (
+        <Carousel
+          posterList={posterList}
+          TMDBPosterUrl={TMDBPosterUrl}
+        ></Carousel>
+      ) : (
+        <CarouselSkeleton />
+      )}
+
       {/* 중단 선 */}
-      <div className={styles.breackLine}></div>
+      <div className={styles.breakLine}></div>
 
       {/* 최다 좋아요 */}
       <section className={styles.mostLike} aria-labelledby="mostLikeTitle">
@@ -81,7 +91,7 @@ export default function Home({ posterList }: HomeProps) {
       </section>
 
       {/* 중단 선 */}
-      <div className={styles.breackLine}></div>
+      <div className={styles.breakLine}></div>
 
       {/* 최신 목록 */}
       <section className={styles.latestList} aria-labelledby="latestListMovie">
@@ -111,7 +121,7 @@ export default function Home({ posterList }: HomeProps) {
       </section>
 
       {/* 중단 선 */}
-      <div className={styles.breackLine}></div>
+      <div className={styles.breakLine}></div>
 
       {/* 최신 목록 */}
       <section className={styles.latestList} aria-labelledby="latestListBook">
@@ -127,7 +137,6 @@ export default function Home({ posterList }: HomeProps) {
               <li key={id + index}>
                 <Suspense fallback={<MainReviewItemSkeleton />}>
                   <MainReviewItem
-                    key={id + index}
                     title={title}
                     category={category}
                     content={content}

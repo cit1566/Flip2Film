@@ -12,7 +12,7 @@ interface HeaderProps {
 
 export default function Header({ className }: HeaderProps) {
   const [show, setShow] = useState(true)
-  const [lastScroll, setLastScroll] = useState(0)
+  const lastScroll = useRef(0)
   const [isSearchOpen, setSearchOpen] = useState(false)
   const ticking = useRef(false)
 
@@ -28,25 +28,28 @@ export default function Header({ className }: HeaderProps) {
           // 최상단에서는 항상 표시
           if (currentScroll <= SCROLL_THRESHOLD) {
             setShow(true)
-            setLastScroll(currentScroll)
+            lastScroll.current = currentScroll
             ticking.current = false
             return
           }
 
           // 변화량이 작으면 무시
-          if (Math.abs(currentScroll - lastScroll) < SCROLL_DELTA) {
+          if (Math.abs(currentScroll - lastScroll.current) < SCROLL_DELTA) {
             ticking.current = false
             return
           }
 
           // 방향에 따라 표시/숨김
-          if (currentScroll > lastScroll && currentScroll > SCROLL_THRESHOLD) {
+          if (
+            currentScroll > lastScroll.current &&
+            currentScroll > SCROLL_THRESHOLD
+          ) {
             setShow(false)
-          } else if (currentScroll < lastScroll) {
+          } else if (currentScroll < lastScroll.current) {
             setShow(true)
           }
 
-          setLastScroll(currentScroll)
+          lastScroll.current = currentScroll
           ticking.current = false
         })
 
@@ -56,7 +59,7 @@ export default function Header({ className }: HeaderProps) {
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScroll])
+  }, [])
 
   return (
     <header

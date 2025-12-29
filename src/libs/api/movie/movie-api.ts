@@ -1,11 +1,13 @@
-// .env에 저장된 TMDB API Key 가져오기 (Bearer 토큰 방식)
-const TMDB_READ_ACCESS_API_KEY = process.env.TMDB_READ_ACCESS_API_KEY
+import "server-only"
 
-// if (!TMDB_READ_ACCESS_API_KEY) {
-//   throw new Error(
-//     "TMDB_READ_ACCESS_API_KEY is not defined in environment variables"
-//   )
-// }
+// .env에 저장된 TMDB API Key 가져오기 (Bearer 토큰 방식)
+const TMDB_READ_ACCESS_API = process.env.TMDB_READ_ACCESS_API_KEY
+
+if (!TMDB_READ_ACCESS_API) {
+  throw new Error(
+    "TMDB_READ_ACCESS_API_KEY is not defined in environment variables"
+  )
+}
 
 // TMDB API의 기본 URL
 const BASE_URL = "https://api.themoviedb.org/3"
@@ -16,8 +18,10 @@ const options = {
   headers: {
     accept: "application/json",
     // TMDB는 Bearer Token(읽기 전용 Access Token)으로 인증해야 함
-    Authorization: `Bearer ${TMDB_READ_ACCESS_API_KEY}`,
+    Authorization: `Bearer ${TMDB_READ_ACCESS_API}`,
   },
+  chach: "no-store",
+  next: { revalidate: 60 },
 }
 
 /**
@@ -37,11 +41,17 @@ async function request<T>(endpoint: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
+export interface TMDBProps {
+  posterURL: PosterPathProps
+  getMovies: (input: string | number) => Promise<MovieRoot>
+  getRecentMovies: () => Promise<MovieRoot>
+}
+
 /**
  * TMDB API 묶음 객체
  * - 영화 검색, 최신 영화 조회 등 기능별로 API 메서드를 제공
  */
-export const TMDB = {
+export const TMDB: TMDBProps = {
   posterURL: {
     secure_base_url: "https://image.tmdb.org/t/p/",
     backdrop_sizes: {
@@ -60,7 +70,7 @@ export const TMDB = {
    * @param input 검색어(문자열 또는 숫자)
    * @returns 검색 결과 JSON
    */
-  getMovies(input: string | number): Promise<MoviewRoot> {
+  getMovies(input) {
     return request(
       `/search/movie?query=${encodeURIComponent(
         input
@@ -72,14 +82,16 @@ export const TMDB = {
    * 최신 영화 정보 조회
    * @returns 현재 상영 중인 영화 목록 JSON
    */
-  getRecentMovies(): Promise<MoviewRoot> {
+  getRecentMovies() {
     return request("/movie/now_playing?language=ko-KR&page=1")
   },
 }
 
 // -------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------
 // 영화 API 반환 type
-export interface MoviewRoot {
+export interface MovieRoot {
   page: number
   results: movieItemProps[]
   total_pages: number
@@ -88,7 +100,7 @@ export interface MoviewRoot {
 
 export interface movieItemProps {
   adult: boolean
-  backdrop_path: string
+  backdrop_path: string | null
   genre_ids: number[]
   id: number
   original_language: string
@@ -102,4 +114,19 @@ export interface movieItemProps {
   vote_average: number
   vote_count: number
 }
+
 // -------------------------------------------------------------------------
+// posterURL type 정의
+export interface PosterPathProps {
+  secure_base_url: string
+  backdrop_sizes: {
+    w300: "w300"
+    w780: "w780"
+    w1280: "w1280"
+    original: "original"
+  }
+  logo_sizes: string[]
+  poster_sizes: string[]
+  profile_sizes: string[]
+  still_sizes: string[]
+}
