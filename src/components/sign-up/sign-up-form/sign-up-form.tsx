@@ -119,7 +119,7 @@ export default function SignUpForm() {
       } else {
         toast.error(error.message ?? "회원가입에 실패했습니다")
       }
-
+    } finally {
       isSubmittingRef.current = false
     }
   }
