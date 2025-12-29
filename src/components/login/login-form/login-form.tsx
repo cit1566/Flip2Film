@@ -41,20 +41,17 @@ export default function LoginForm() {
     return "default"
   }
 
-  async function onSubmit(data: LoginFormData) {
+  async function onSubmit({ email, password }: LoginFormData) {
     try {
-      const { email, password } = data
-
       await logIn(email, password)
 
-      toast("로그인에 성공했습니다")
+      toast.success("로그인에 성공했습니다")
       router.push("/")
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
         return
       }
-
       toast.error("로그인에 실패했습니다")
     }
   }

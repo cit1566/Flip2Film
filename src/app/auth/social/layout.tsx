@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "로그인 | Flip2Film",
-  description: "로그인 페이지",
+  title: "간편 회원가입 | Flip2Film",
+  description: "간편 회원가입 페이지",
 }
 
 export default function SignUpLayout({

@@ -1,4 +1,3 @@
-import { fileToBase64 } from "../../../utils/fileToBase64"
 import createClient from "../../supabase/client"
 import type { UserInsert, UserUpdate } from "../../supabase/types"
 
@@ -33,29 +32,40 @@ export default async function createUser({
     throw new Error("비밀번호는 최소 8자 이상이어야 합니다.")
   }
 
-  // profile_image가 있으면 base64 변환, 없으면 null
-  const profileImageBase64 = profile_image
-    ? await fileToBase64(profile_image)
-    : null
-
-  // Auth metadata (트리거에서 사용됨)
-  const metadata = {
-    nickname,
-    bio,
-    profile_image: profileImageBase64,
-  }
+  const fileExtension = profile_image?.name.split(".").pop() ?? "png"
 
   // Supabase Auth 회원가입
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: metadata,
+      data: {
+        nickname,
+        bio,
+        profile_image: profile_image ? `profile.${fileExtension}` : null,
+      },
     },
   })
 
   if (error || !data.user) {
     throw error ?? new Error("회원가입 실패")
+  }
+
+  // 이미지가 있을 경우 스토리지 연동
+  if (profile_image) {
+    const filePath = `${data.user.id}/profile.${fileExtension}`
+
+    // 스토리지 업로드
+    const { error: uploadError } = await supabase.storage
+      .from("profile_image")
+      .upload(filePath, profile_image, {
+        upsert: true,
+        contentType: profile_image.type,
+      })
+
+    if (uploadError) {
+      throw new Error(`이미지 업로드 에러 : ${uploadError.message}`)
+    }
   }
 
   return data.user
@@ -69,7 +79,6 @@ export async function getUser(id: string) {
     .eq("id", id)
     .single()
   if (error) throw error
-
   return data
 }
 
@@ -77,16 +86,12 @@ export async function updateUser(
   id: string,
   updateData: Omit<UserUpdate, "id">
 ) {
-  if (!id) {
-    throw new Error("사용자 ID는 필수 항목입니다.")
-  }
-
+  if (!id) throw new Error("사용자 ID는 필수 항목입니다.")
   const { data, error } = await supabase
     .from("user")
     .update(updateData)
     .eq("id", id)
     .single()
-
   if (error) throw error
   return data
 }
@@ -97,17 +102,12 @@ export async function logIn(email: string, password: string) {
     email,
     password,
   })
-  if (error) {
-    throw new Error(`로그인 에러 발생!${error.message}`)
-  }
-
+  if (error) throw new Error(`로그인 에러 발생!${error.message}`)
   return data
 }
 
 // logout function
 export async function logOut() {
   const { error } = await supabase.auth.signOut()
-  if (error) {
-    throw new Error(`로그아웃 실패 : ${error.message}`)
-  }
+  if (error) throw new Error(`로그아웃 실패 : ${error.message}`)
 }

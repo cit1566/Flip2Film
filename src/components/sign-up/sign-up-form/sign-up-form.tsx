@@ -4,10 +4,15 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
+import {
+  checkEmailValidate,
+  checkNicknameValidate,
+} from "@/libs/api/auth/auth-api"
 import createUser from "@/libs/api/user/user-api"
 import type { UserInsert } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { useRouter } from "next/navigation"
+import { useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./sign-up-form.module.css"
@@ -20,15 +25,16 @@ type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
 
 export default function SignUpForm() {
   const router = useRouter()
+  const isSubmittingRef = useRef(false)
 
   const {
     control,
     handleSubmit,
     getValues,
+    setError,
     formState: { errors, isSubmitting, isSubmitted, isValid },
   } = useForm<SignUpFormData>({
     mode: "onChange",
-    reValidateMode: "onChange",
     defaultValues: {
       email: "",
       password: "",
@@ -39,18 +45,42 @@ export default function SignUpForm() {
     },
   })
 
-  function getInputStatus(
+  const handleInputStatus = (
     isTouched: boolean,
     hasError: boolean,
     value: string
-  ) {
+  ) => {
     if (hasError) return "error"
     if (isTouched && value.trim().length > 0) return "success"
     return "default"
   }
 
-  async function onSubmit(data: SignUpFormData) {
+  const checkEmailDuplicate = async (value: string | null | undefined) => {
+    if (!value || !VALIDATION_PATTERNS.email.value.test(value)) return true
+
     try {
+      const isExists = await checkEmailValidate(value)
+      return isExists ? "이미 존재하는 사용자 입니다" : true
+    } catch {
+      return "이메일 확인 중 오류가 발생했습니다"
+    }
+  }
+
+  const checkNicknameDuplicate = async (value: string | null | undefined) => {
+    if (!value || value.length < 2) return true
+    try {
+      const isExists = await checkNicknameValidate(value)
+      return isExists ? "이미 사용 중인 닉네임입니다" : true
+    } catch {
+      return "닉네임 확인 중 오류가 발생했습니다"
+    }
+  }
+
+  const handleSignUpSubmit = async (data: SignUpFormData) => {
+    if (isSubmittingRef.current) return
+
+    try {
+      isSubmittingRef.current = true
       const { email, password, nickname, bio, profile_image } = data
 
       await createUser({
@@ -61,29 +91,56 @@ export default function SignUpForm() {
         profile_image,
       })
 
-      toast("회원가입이 완료되었습니다")
+      toast.success("회원가입 완료! 이메일 인증 후 로그인해주세요")
       router.push("/auth/login")
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message.includes("already")) {
-          toast.error("이미 가입된 이메일입니다")
+        const message = error.message.toLowerCase()
+
+        if (
+          message.includes("email") &&
+          (message.includes("already") || message.includes("registered"))
+        ) {
+          setError(
+            "email",
+            { type: "manual", message: "이미 존재하는 사용자 입니다" },
+            { shouldFocus: true }
+          )
+          isSubmittingRef.current = false
           return
         }
-      }
 
-      toast.error("회원가입에 실패했습니다")
+        if (
+          message.includes("nickname") &&
+          (message.includes("already") ||
+            message.includes("exists") ||
+            message.includes("unique"))
+        ) {
+          setError(
+            "nickname",
+            { type: "manual", message: "이미 사용 중인 닉네임입니다" },
+            { shouldFocus: true }
+          )
+          isSubmittingRef.current = false
+          return
+        }
+        toast.error(error.message)
+      } else {
+        toast.error("회원가입에 실패했습니다")
+      }
+      isSubmittingRef.current = false
     }
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleSignUpSubmit)}>
       <Controller
         name="profile_image"
         control={control}
         render={({ field }) => (
           <ProfileUpload
-            onChange={file => field.onChange(file)}
             value={field.value}
+            onChange={(file: File | null) => field.onChange(file)}
           />
         )}
       />
@@ -94,29 +151,31 @@ export default function SignUpForm() {
         rules={{
           required: "이메일을 입력해주세요",
           pattern: VALIDATION_PATTERNS.email,
+          validate: checkEmailDuplicate,
         }}
         render={({ field, fieldState }) => (
-          <Input
-            label="이메일"
-            type="email"
-            placeholder="이메일을 입력하세요"
-            clearable
-            value={field.value ?? ""}
-            onChange={e => field.onChange(e.target.value)}
-            onBlur={field.onBlur}
-            onClear={() => field.onChange("")}
-            status={getInputStatus(
-              fieldState.isTouched,
-              Boolean(fieldState.error),
-              field.value ?? ""
+          <div>
+            <Input
+              label="이메일"
+              type="email"
+              placeholder="이메일을 입력하세요"
+              clearable
+              value={field.value ?? ""}
+              onChange={e => field.onChange(e.target.value)}
+              onBlur={field.onBlur}
+              onClear={() => field.onChange("")}
+              status={handleInputStatus(
+                fieldState.isTouched,
+                Boolean(fieldState.error),
+                field.value ?? ""
+              )}
+            />
+            {errors.email && (
+              <p className={styles.errorMessage}>{errors.email.message}</p>
             )}
-          />
+          </div>
         )}
       />
-
-      {errors.email && (
-        <p className={styles.errorMessage}>{errors.email.message}</p>
-      )}
 
       <Controller
         name="password"
@@ -126,26 +185,27 @@ export default function SignUpForm() {
           pattern: VALIDATION_PATTERNS.password,
         }}
         render={({ field, fieldState }) => (
-          <Input
-            label="비밀번호"
-            type="password"
-            placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
-            togglePassword
-            value={field.value ?? ""}
-            onChange={e => field.onChange(e.target.value)}
-            onBlur={field.onBlur}
-            status={getInputStatus(
-              fieldState.isTouched,
-              Boolean(fieldState.error),
-              field.value ?? ""
+          <div>
+            <Input
+              label="비밀번호"
+              type="password"
+              placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
+              togglePassword
+              value={field.value ?? ""}
+              onChange={e => field.onChange(e.target.value)}
+              onBlur={field.onBlur}
+              status={handleInputStatus(
+                fieldState.isTouched,
+                Boolean(fieldState.error),
+                field.value ?? ""
+              )}
+            />
+            {errors.password && (
+              <p className={styles.errorMessage}>{errors.password.message}</p>
             )}
-          />
+          </div>
         )}
       />
-
-      {errors.password && (
-        <p className={styles.errorMessage}>{errors.password.message}</p>
-      )}
 
       <Controller
         name="passwordCheck"
@@ -156,26 +216,29 @@ export default function SignUpForm() {
             value === getValues("password") || "비밀번호가 일치하지 않습니다",
         }}
         render={({ field, fieldState }) => (
-          <Input
-            label="비밀번호 재입력"
-            type="password"
-            placeholder="비밀번호를 다시 입력해주세요"
-            togglePassword
-            value={field.value ?? ""}
-            onChange={e => field.onChange(e.target.value)}
-            onBlur={field.onBlur}
-            status={getInputStatus(
-              fieldState.isTouched,
-              Boolean(fieldState.error),
-              field.value ?? ""
+          <div>
+            <Input
+              label="비밀번호 재입력"
+              type="password"
+              placeholder="비밀번호를 다시 입력해주세요"
+              togglePassword
+              value={field.value ?? ""}
+              onChange={e => field.onChange(e.target.value)}
+              onBlur={field.onBlur}
+              status={handleInputStatus(
+                fieldState.isTouched,
+                Boolean(fieldState.error),
+                field.value ?? ""
+              )}
+            />
+            {errors.passwordCheck && (
+              <p className={styles.errorMessage}>
+                {errors.passwordCheck.message}
+              </p>
             )}
-          />
+          </div>
         )}
       />
-
-      {errors.passwordCheck && (
-        <p className={styles.errorMessage}>{errors.passwordCheck.message}</p>
-      )}
 
       <Controller
         name="nickname"
@@ -184,27 +247,28 @@ export default function SignUpForm() {
           required: "닉네임을 입력해주세요",
           minLength: { value: 2, message: "닉네임은 최소 2자입니다" },
           maxLength: { value: 6, message: "닉네임은 최대 6자입니다" },
+          validate: checkNicknameDuplicate,
         }}
         render={({ field, fieldState }) => (
-          <Input
-            label="닉네임"
-            type="text"
-            placeholder="최소 2자, 최대 6자"
-            value={field.value ?? ""}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            status={getInputStatus(
-              fieldState.isTouched,
-              Boolean(fieldState.error),
-              field.value ?? ""
+          <div>
+            <Input
+              label="닉네임"
+              placeholder="최소 2자, 최대 6자"
+              value={field.value ?? ""}
+              onChange={e => field.onChange(e.target.value)}
+              onBlur={field.onBlur}
+              status={handleInputStatus(
+                fieldState.isTouched,
+                Boolean(fieldState.error),
+                field.value ?? ""
+              )}
+            />
+            {errors.nickname && (
+              <p className={styles.errorMessage}>{errors.nickname.message}</p>
             )}
-          />
+          </div>
         )}
       />
-
-      {errors.nickname && (
-        <p className={styles.errorMessage}>{errors.nickname.message}</p>
-      )}
 
       <Controller
         name="bio"
@@ -212,10 +276,9 @@ export default function SignUpForm() {
         render={({ field }) => (
           <Input
             label="Bio"
-            type="text"
             placeholder="자기소개를 입력해주세요"
             value={field.value ?? ""}
-            onChange={field.onChange}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
           />
         )}
