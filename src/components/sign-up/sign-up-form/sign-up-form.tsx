@@ -17,6 +17,12 @@ import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./sign-up-form.module.css"
 
+interface AuthError {
+  code?: string
+  status?: number
+  message: string
+}
+
 type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
   password: string
   passwordCheck: string
@@ -70,7 +76,7 @@ export default function SignUpForm() {
     if (!value || value.length < 2) return true
     try {
       const isExists = await checkNicknameValidate(value)
-      return isExists ? "이미 사용 중인 닉네임입니다" : true
+      return isExists ? "이미 사용 중인 닉네임 입니다" : true
     } catch {
       return "닉네임 확인 중 오류가 발생했습니다"
     }
@@ -93,41 +99,27 @@ export default function SignUpForm() {
 
       toast.success("회원가입 완료! 이메일 인증 후 로그인해주세요")
       router.push("/auth/login")
-    } catch (error) {
-      if (error instanceof Error) {
-        const message = error.message.toLowerCase()
+    } catch (err: unknown) {
+      const error = err as AuthError
+      const errorCode = error?.code
+      const errorMessage = error?.message?.toLowerCase() ?? ""
 
-        if (
-          message.includes("email") &&
-          (message.includes("already") || message.includes("registered"))
-        ) {
-          setError(
-            "email",
-            { type: "manual", message: "이미 존재하는 사용자 입니다" },
-            { shouldFocus: true }
-          )
-          isSubmittingRef.current = false
-          return
-        }
-
-        if (
-          message.includes("nickname") &&
-          (message.includes("already") ||
-            message.includes("exists") ||
-            message.includes("unique"))
-        ) {
-          setError(
-            "nickname",
-            { type: "manual", message: "이미 사용 중인 닉네임입니다" },
-            { shouldFocus: true }
-          )
-          isSubmittingRef.current = false
-          return
-        }
-        toast.error(error.message)
+      if (errorCode === "23505" || errorMessage.includes("email")) {
+        setError(
+          "email",
+          { type: "manual", message: "이미 존재하는 사용자 입니다" },
+          { shouldFocus: true }
+        )
+      } else if (errorMessage.includes("nickname")) {
+        setError(
+          "nickname",
+          { type: "manual", message: "이미 사용 중인 닉네임 입니다" },
+          { shouldFocus: true }
+        )
       } else {
-        toast.error("회원가입에 실패했습니다")
+        toast.error(error.message ?? "회원가입에 실패했습니다")
       }
+
       isSubmittingRef.current = false
     }
   }
