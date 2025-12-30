@@ -1,31 +1,34 @@
+"use client"
+
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import styles from "./nav-link.module.css"
 
-interface NavLinkProps {
-  category: "Home" | "Movie" | "Book"
-}
-export default function NavLink({ category }: NavLinkProps) {
-  const activeLineKey = `active${category}`
+export default function NavLink() {
+  const pathname = usePathname()
 
+  const isHome = pathname === "/"
+  const isMovie = pathname.startsWith("/movie")
+  const isBook = pathname.startsWith("/book")
+
+  const activeLineKey = isHome
+    ? "activeHome"
+    : isMovie
+      ? "activeMovie"
+      : "activeBook"
   return (
     <div className={styles.navLinkBox}>
-      <Link href="/" className={`${category === "Home" && styles.isActive}`}>
+      <Link href="/" className={isHome ? styles.isActive : ""}>
         홈
       </Link>
-      <Link
-        href="./movie"
-        className={`${category === "Movie" && styles.isActive}`}
-      >
+      <Link href="/movie" className={isMovie ? styles.isActive : ""}>
         영화
       </Link>
-      <Link
-        href="./book"
-        className={`${category === "Book" && styles.isActive}`}
-      >
+      <Link href="/book" className={isBook ? styles.isActive : ""}>
         도서
       </Link>
-      {/* 활성화 탭 밑줄 */}
-      <div className={`${styles.activeLine} ${styles[activeLineKey]}`}></div>
+
+      <div className={`${styles.activeLine} ${styles[activeLineKey]}`} />
     </div>
   )
 }

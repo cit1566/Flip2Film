@@ -1,9 +1,8 @@
+import type { Review } from "@/libs/supabase/types"
+import { extractImageSrcList, removeImageTags } from "@/utils"
 import { Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import type { Review } from "../../libs/supabase/types"
-import { extractImageSrcList } from "../../utils/extractImageSrcList"
-import removeImageTags from "../../utils/removeImageTag"
 import styles from "./main-review-item.module.css"
 
 interface MainReviewItemProps {

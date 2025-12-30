@@ -16,7 +16,7 @@ interface HeaderProps {
 
 export default function Header({ className }: HeaderProps) {
   const [show, setShow] = useState(true)
-  const [lastScroll, setLastScroll] = useState(0)
+  const lastScroll = useRef(0)
   const [isSearchOpen, setSearchOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -50,7 +50,7 @@ export default function Header({ className }: HeaderProps) {
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScroll])
+  }, [])
 
   const handleLogOut = async () => {
     try {

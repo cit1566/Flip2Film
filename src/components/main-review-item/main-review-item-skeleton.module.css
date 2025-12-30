@@ -1,0 +1,94 @@
+@import "../../styles/animation.css";
+/* 전체 레이아웃은 실제 컴포넌트와 동일하게 유지 */
+.mainReviewItem {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ---------- 공통 ---------- */
+.posterSkeleton,
+.titleSkeleton,
+.lineFull,
+.lineMedium,
+.lineShort,
+.categorySkeleton,
+.userSkeleton,
+.likeSkeleton {
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ---------- 포스터 ---------- */
+.posterWrapper {
+  flex-shrink: 0;
+}
+
+.posterSkeleton {
+  width: 200px;
+  height: 300px;
+}
+
+/* ---------- 텍스트 영역 ---------- */
+.textBox {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.linkArea {
+  margin-bottom: 0.5rem;
+}
+
+.titleSkeleton {
+  width: 60%;
+  height: 1.5em;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- 본문 ---------- */
+.plot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.lineFull {
+  width: 100%;
+  height: 1em;
+}
+
+.lineMedium {
+  width: 90%;
+  height: 1em;
+}
+
+.lineShort {
+  width: 70%;
+  height: 1em;
+}
+
+/* ---------- 카테고리 ---------- */
+.categorySkeleton {
+  width: 40%;
+  height: 1em;
+  margin-top: 0.5rem;
+}
+
+/* ---------- 작성자 + 좋아요 ---------- */
+.idWithLike {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.userSkeleton {
+  width: 30%;
+  height: 1em;
+}
+
+.likeSkeleton {
+  width: 50px;
+  height: 1em;
+}

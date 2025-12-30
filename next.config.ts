@@ -24,6 +24,16 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/**", // 위 저장소의 데이터에만 접근할 수 있도록 범위를 좁혀서 보안성을 높임
       },
+      {
+        protocol: "https",
+        hostname: "image.aladin.co.kr",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        pathname: "/t/p/**",
+      },
     ],
   },
 }

@@ -10,6 +10,8 @@
   font-size: 1.5rem;
   position: relative;
   padding: 20px 5px;
+  border-bottom: 1px double var(--color-breakLine-gray);
+  margin-bottom: 20px;
 
   a {
     color: var(--color-text-gray-2);
@@ -23,8 +25,8 @@
 
   .activeLine {
     position: absolute;
-    bottom: 21;
-    left: 4.5;
+    bottom: 21px;
+    left: 4.5px;
     border-bottom: 2px solid var(--color-green);
     transition: all 0.3s ease;
 
