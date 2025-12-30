@@ -2,13 +2,15 @@ import Image from "next/image"
 import Link from "next/link"
 import testMovieImage from "../../../public/movie-poster.webp"
 import styles from "./feed-card.module.css"
+import type { CardItem } from "./feed-taps"
 
 const IMAGE_SIZE = {
   width: 250,
   height: 371,
 }
 
-export default function FeedCard(item) {
+export default function FeedCard({ id, title, description }: CardItem) {
+  console.log(id, title, description)
   return (
     <Link href="/" className={styles.reviewLink}>
       <Image

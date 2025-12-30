@@ -1,0 +1,38 @@
+.header {
+  position: sticky;
+  top: 0;
+  transition: transform 0.1s ease;
+}
+
+.mainBody {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  padding-inline: 15px;
+  overflow: hidden;
+}
+
+.container {
+  min-width: 363px;
+  width: 100%;
+  padding-bottom: 100px;
+}
+
+/* ------------------------------- */
+@media (min-width: 1279px) {
+  .container {
+    max-width: 1279px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1279px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}

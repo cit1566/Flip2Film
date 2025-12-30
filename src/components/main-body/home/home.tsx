@@ -3,7 +3,7 @@
 import type { PosterPathProps } from "@/libs/api/movie/movie-api"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
-import type { PosterListProps } from "../../../app/page"
+import type { PosterListProps } from "../../../app/(with-nav)/page"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
 import Carousel from "./carousel/carousel"

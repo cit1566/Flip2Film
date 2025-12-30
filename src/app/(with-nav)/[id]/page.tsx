@@ -1,4 +1,4 @@
-import MainBody from "../../components/main-body/main-body"
+import MainBody from "../../../components/main-body/main-body"
 
 interface CategoryPageProps {
   params: { id: "book" | "movie" }

@@ -1,6 +1,6 @@
-import Home from "../components/main-body/home/home"
-import { type BookItemProps, getAladdin } from "../libs/api/book/book-api"
-import { type movieItemProps, TMDB } from "../libs/api/movie/movie-api"
+import Home from "../../components/main-body/home/home"
+import { type BookItemProps, getAladdin } from "../../libs/api/book/book-api"
+import { type movieItemProps, TMDB } from "../../libs/api/movie/movie-api"
 import styles from "./page.module.css"
 
 export interface PosterListProps {
