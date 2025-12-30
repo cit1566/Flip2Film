@@ -6,8 +6,9 @@ import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import { checkNicknameValidate } from "@/libs/api/auth/auth-api"
 import { updateUser, getUser, supabase } from "@/libs/api/user/user-api"
 import type { UserUpdate } from "@/libs/supabase/types"
+import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./page.module.css"
@@ -19,6 +20,8 @@ type SocialProfileFormData = Pick<UserUpdate, "nickname" | "bio"> & {
 export default function SocialProfilePage() {
   const router = useRouter()
   const isSubmittingRef = useRef(false)
+  const [isChecking, setIsChecking] = useState(true)
+  const queryClient = useQueryClient()
 
   const {
     control,
@@ -35,24 +38,32 @@ export default function SocialProfilePage() {
 
   useEffect(() => {
     const checkUserStatus = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (!user) return
-
       try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+
+        if (!user) {
+          router.replace("/auth/login")
+          return
+        }
+
         const userData = await getUser(user.id)
         if (userData?.nickname && userData.nickname !== "익명") {
           toast.success("로그인이 성공했습니다")
           router.replace("/")
+          return
         }
+        setIsChecking(false)
       } catch (err: unknown) {
         const error = err as { code?: string; message?: string }
-        if (error.code !== "PGRST116") {
+        if (error.code === "PGRST116") {
+          setIsChecking(false)
+        } else {
           toast.error(
             error.message ?? "사용자 정보를 확인하는 중 오류가 발생했습니다"
           )
+          router.replace("/auth/login")
         }
       }
     }
@@ -121,6 +132,8 @@ export default function SocialProfilePage() {
         profile_image: imagePath,
       })
 
+      await queryClient.invalidateQueries({ queryKey: ["user-profile"] })
+
       toast.success("간편 회원가입이 완료되었습니다")
       router.replace("/")
     } catch {
@@ -129,6 +142,8 @@ export default function SocialProfilePage() {
       isSubmittingRef.current = false
     }
   }
+
+  if (isChecking) return null
 
   return (
     <form
