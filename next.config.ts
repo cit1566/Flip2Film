@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        pathname: "/t/p/**",
+      },
+      {
+        protocol: "https",
+        hostname: "image.aladin.co.kr",
+        pathname: "/**",
+      },
     ],
   },
 }

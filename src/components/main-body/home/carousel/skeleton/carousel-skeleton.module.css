@@ -1,0 +1,246 @@
+/* carousel-skeleton.module.css */
+
+/* ✅ 흰 배경 고정 */
+.carouselContainer {
+  width: 100%;
+  background: #fff;
+  padding: 12px 0;
+}
+
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.carousel {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.scrollInner {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  transform: translateX(0);
+  transition: transform 0.4s ease;
+  will-change: transform;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* 공통 슬라이드 */
+.posterList {
+  flex: 0 0 100%;
+  position: relative;
+}
+
+/* Movie slide layout */
+.movieList {
+  height: 400px; /* 원본 Image height에 맞춤 */
+}
+
+/* Book slide layout */
+.bookList {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  padding: 22px;
+  min-height: 400px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+}
+
+/* 네비 버튼 */
+.navButton {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  display: grid;
+  place-items: center;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.navButtonPrev {
+  margin-right: 10px;
+}
+
+.navButtonNext {
+  margin-left: 10px;
+}
+
+/* Movie poster skeleton */
+.moviePoster {
+  width: 100%;
+  height: 400px;
+  border-radius: 16px;
+}
+
+/* 설명 박스(원본 구조 따라가기) */
+.descriptionBox {
+  position: absolute;
+  left: 24px;
+  bottom: 20px;
+  width: min(560px, 86%);
+  padding: 14px 14px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.titleBlock {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.titleLine {
+  height: 18px;
+  width: 70%;
+  border-radius: 8px;
+}
+
+.titleLine2 {
+  height: 22px;
+  width: 55%;
+  border-radius: 8px;
+}
+
+.categoryDivBox {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.metaChip {
+  height: 16px;
+  width: 120px;
+  border-radius: 999px;
+}
+
+/* Book items */
+.innerBookItem {
+  display: grid;
+  gap: 10px;
+}
+
+.bookCover {
+  width: 100%;
+  aspect-ratio: 200 / 290;
+  border-radius: 12px;
+}
+
+.bookText {
+  display: grid;
+  gap: 8px;
+}
+
+.bookTitle {
+  height: 16px;
+  width: 90%;
+  border-radius: 8px;
+}
+
+.bookAuthor {
+  height: 14px;
+  width: 60%;
+  border-radius: 8px;
+}
+
+/* 인디케이터 */
+.imageNumberBox {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.imageNumber {
+  display: flex;
+  gap: 8px;
+}
+
+.indicator {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.circle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.2);
+}
+
+/* ✅ Skeleton shimmer */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+/* shimmer gradient */
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.25s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 접근성: 모션 줄이기 */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}
+
+/* 반응형: 책 4열 -> 2열 -> 1열 */
+@media (max-width: 900px) {
+  .bookList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .bookList {
+    grid-template-columns: 1fr;
+  }
+  .movieList,
+  .moviePoster {
+    height: 320px;
+  }
+  .descriptionBox {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: auto;
+  }
+}

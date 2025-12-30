@@ -3,7 +3,7 @@
 import { Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import styles from "./header.module.css"
 
 interface HeaderProps {
@@ -12,24 +12,54 @@ interface HeaderProps {
 
 export default function Header({ className }: HeaderProps) {
   const [show, setShow] = useState(true)
-  const [lastScroll, setLastScroll] = useState(0)
+  const lastScroll = useRef(0)
   const [isSearchOpen, setSearchOpen] = useState(false)
+  const ticking = useRef(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      const current = window.scrollY
-      if (current > lastScroll) {
-        setShow(false)
-      } else {
-        setShow(true)
-      }
+    const SCROLL_THRESHOLD = 50
+    const SCROLL_DELTA = 5
 
-      setLastScroll(current)
+    const handleScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const currentScroll = window.scrollY
+
+          // 최상단에서는 항상 표시
+          if (currentScroll <= SCROLL_THRESHOLD) {
+            setShow(true)
+            lastScroll.current = currentScroll
+            ticking.current = false
+            return
+          }
+
+          // 변화량이 작으면 무시
+          if (Math.abs(currentScroll - lastScroll.current) < SCROLL_DELTA) {
+            ticking.current = false
+            return
+          }
+
+          // 방향에 따라 표시/숨김
+          if (
+            currentScroll > lastScroll.current &&
+            currentScroll > SCROLL_THRESHOLD
+          ) {
+            setShow(false)
+          } else if (currentScroll < lastScroll.current) {
+            setShow(true)
+          }
+
+          lastScroll.current = currentScroll
+          ticking.current = false
+        })
+
+        ticking.current = true
+      }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScroll])
+  }, [])
 
   return (
     <header
@@ -37,7 +67,6 @@ export default function Header({ className }: HeaderProps) {
       className={`${styles.header} ${className} ${show ? styles.show : styles.hide}`}
     >
       <div className={styles.headerInner}>
-        {/* Logo */}
         <Link href="/" className={styles.logo} aria-label="메인 페이지로 이동">
           <Image
             src="/logo/logo.svg"
@@ -48,7 +77,6 @@ export default function Header({ className }: HeaderProps) {
           />
         </Link>
 
-        {/* Right Area: Search + Login */}
         <div className={styles.searchBox}>
           <button
             type="button"

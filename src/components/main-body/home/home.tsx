@@ -1,15 +1,32 @@
 "use client"
 
+import type { PosterPathProps } from "@/libs/api/movie/movie-api"
+import { useEffect, useRef } from "react"
+import { toast } from "sonner"
+import type { PosterListProps } from "../../../app/page"
 import listItemDummyData from "../../main-review-item/dummy.json"
 import MainReviewItem from "../../main-review-item/main-review-item"
 import Carousel from "./carousel/carousel"
+import CarouselSkeleton from "./carousel/skeleton/carousel-skeleton"
 import styles from "./home.module.css"
 
-export default function Home() {
+interface HomeProps {
+  posterList: PosterListProps
+  TMDBPosterUrl: PosterPathProps
+  errors: string[]
+}
+
+export default function Home({
+  posterList,
+  TMDBPosterUrl,
+  errors = [],
+}: HomeProps) {
   // 영화 목록 리스트
   const movieList = listItemDummyData.filter(item => item.category === "movie")
   // 도서 목록 리스트
   const bookList = listItemDummyData.filter(item => item.category === "book")
+
+  const displayedErrorsRef = useRef<Set<string>>(new Set())
 
   const top5ToLiked = [...listItemDummyData]
     .sort((a, b) => b.liked - a.liked)
@@ -29,9 +46,31 @@ export default function Home() {
     )
     .slice(0, 5)
 
+  const hasAny =
+    (posterList.book?.length ?? 0) > 0 || (posterList.movie?.length ?? 0) > 0
+
+  useEffect(() => {
+    errors.forEach(msg => {
+      if (!displayedErrorsRef.current.has(msg)) {
+        toast.error(msg)
+        displayedErrorsRef.current.add(msg)
+      }
+    })
+  }, [errors])
+
   return (
     <div className={styles.homeBox}>
-      <Carousel></Carousel>
+      {hasAny ? (
+        <Carousel
+          posterList={posterList}
+          TMDBPosterUrl={TMDBPosterUrl}
+        ></Carousel>
+      ) : (
+        <CarouselSkeleton />
+      )}
+
+      {/* 중단 선 */}
+      <div className={styles.breakLine}></div>
 
       {/* 최다 좋아요 */}
       <section className={styles.mostLike} aria-labelledby="mostLikeTitle">
@@ -46,6 +85,7 @@ export default function Home() {
             ) => {
               return (
                 <li key={id + index}>
+                  {/* <Suspense fallback={<MainReviewItemSkeleton />}> */}
                   <MainReviewItem
                     title={title}
                     category={category}
@@ -53,12 +93,16 @@ export default function Home() {
                     like={liked}
                     userId={review_owner_id}
                   />
+                  {/* </Suspense> */}
                 </li>
               )
             }
           )}
         </ul>
       </section>
+
+      {/* 중단 선 */}
+      <div className={styles.breakLine}></div>
 
       {/* 최신 목록 */}
       <section className={styles.latestList} aria-labelledby="latestListMovie">
@@ -72,6 +116,7 @@ export default function Home() {
               index
             ) => (
               <li key={id + index}>
+                {/* <Suspense fallback={<MainReviewItemSkeleton />}> */}
                 <MainReviewItem
                   title={title}
                   category={category}
@@ -79,11 +124,15 @@ export default function Home() {
                   like={liked}
                   userId={review_owner_id}
                 />
+                {/* </Suspense> */}
               </li>
             )
           )}
         </ul>
       </section>
+
+      {/* 중단 선 */}
+      <div className={styles.breakLine}></div>
 
       {/* 최신 목록 */}
       <section className={styles.latestList} aria-labelledby="latestListBook">
@@ -97,14 +146,15 @@ export default function Home() {
               index
             ) => (
               <li key={id + index}>
+                {/* <Suspense fallback={<MainReviewItemSkeleton />}> */}
                 <MainReviewItem
-                  key={id + index}
                   title={title}
                   category={category}
                   content={content}
                   like={liked}
                   userId={review_owner_id}
                 />
+                {/* </Suspense> */}
               </li>
             )
           )}
