@@ -3,38 +3,33 @@
 import { useState } from "react"
 import FeedCard from "./feed-card"
 import styles from "./feed-taps.module.css"
+import DUMMYData from "./feed.json"
 import NoReviews from "./no-reviews"
+
+// -----------------------------------------------------------
+// 카드 아이템 타입
+export interface CardItem {
+  id: number
+  title: string
+  description: string
+}
+
+// 탭 타입
+export interface Tab {
+  id: string
+  label: string
+  items: CardItem[]
+}
+
+// 전체 데이터 타입
+export type TabsData = Tab[]
+
+// -----------------------------------------------------------
 
 export default function FeedTaps() {
   const [selectedTab, setSelectedTab] = useState(0)
 
-  // const tabs = [
-  //   {
-  //     id: "tab1",
-  //     label: "전체글",
-  //     items: [
-  //       { id: 1, title: "카드 1", description: "설명 1" },
-  //       { id: 2, title: "카드 2", description: "설명 2" },
-  //     ],
-  //   },
-  //   {
-  //     id: "tab2",
-  //     label: "영화",
-  //     items: [
-  //       { id: 3, title: "카드 3", description: "설명 3" },
-  //       { id: 4, title: "카드 4", description: "설명 4" },
-  //       { id: 5, title: "카드 4", description: "설명 4" },
-  //       { id: 6, title: "카드 4", description: "설명 4" },
-  //       { id: 7, title: "카드 4", description: "설명 4" },
-  //       { id: 8, title: "카드 4", description: "설명 4" },
-  //     ],
-  //   },
-  //   {
-  //     id: "tab3",
-  //     label: "도서",
-  //     items: [],
-  //   },
-  // ]
+  const tabs: TabsData = DUMMYData
 
   return (
     <section className={styles.feedTapsSection}>
