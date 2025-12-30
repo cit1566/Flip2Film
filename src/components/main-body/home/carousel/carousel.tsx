@@ -41,7 +41,11 @@ export default function Carousel({ posterList, TMDBPosterUrl }: CarouselProps) {
 
   // 책 데이터를 4개씩 묶기
   const bookSlides = useMemo(
-    () => chunkArray(posterList.book, 4),
+    () =>
+      chunkArray(
+        posterList.book.filter(book => book.cover),
+        4
+      ),
     [posterList.book]
   )
 
@@ -116,7 +120,7 @@ export default function Carousel({ posterList, TMDBPosterUrl }: CarouselProps) {
         <div className={styles.carousel}>
           <ul ref={scrollInner} className={styles.scrollInner}>
             {/* 영화 포스터 렌더링 */}
-            {movieList.map(movie => (
+            {movieList.map((movie, index) => (
               <li
                 className={`${styles.posterList} ${styles.movieList}`}
                 key={`movie-${movie.id}`}
@@ -127,7 +131,7 @@ export default function Carousel({ posterList, TMDBPosterUrl }: CarouselProps) {
                   alt={movie.title}
                   width={1280}
                   height={400}
-                  priority
+                  priority={index === 0}
                 />
                 <div className={styles.descriptionBox}>
                   <h2 className={styles.posterTitle}>

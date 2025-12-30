@@ -1,7 +1,7 @@
 "use client"
 
 import type { PosterPathProps } from "@/libs/api/movie/movie-api"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { toast } from "sonner"
 import type { PosterListProps } from "../../../app/page"
 import listItemDummyData from "../../main-review-item/dummy.json"
@@ -26,6 +26,8 @@ export default function Home({
   // 도서 목록 리스트
   const bookList = listItemDummyData.filter(item => item.category === "book")
 
+  const displayedErrorsRef = useRef<Set<string>>(new Set())
+
   const top5ToLiked = [...listItemDummyData]
     .sort((a, b) => b.liked - a.liked)
     .slice(0, 5)
@@ -48,7 +50,12 @@ export default function Home({
     (posterList.book?.length ?? 0) > 0 || (posterList.movie?.length ?? 0) > 0
 
   useEffect(() => {
-    errors.forEach(msg => toast.error(msg))
+    errors.forEach(msg => {
+      if (!displayedErrorsRef.current.has(msg)) {
+        toast.error(msg)
+        displayedErrorsRef.current.add(msg)
+      }
+    })
   }, [errors])
 
   return (
