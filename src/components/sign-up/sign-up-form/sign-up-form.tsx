@@ -33,6 +33,10 @@ export default function SignUpForm() {
   const router = useRouter()
   const isSubmittingRef = useRef(false)
 
+  const DB_ERROR_CODES = {
+    UNIQUE_VIOLATION: "23505",
+  }
+
   const {
     control,
     handleSubmit,
@@ -66,7 +70,7 @@ export default function SignUpForm() {
 
     try {
       const isExists = await checkEmailValidate(value)
-      return isExists ? "이미 존재하는 사용자 입니다" : true
+      return isExists ? "이미 가입된 사용자 입니다" : true
     } catch {
       return "이메일 확인 중 오류가 발생했습니다"
     }
@@ -101,24 +105,26 @@ export default function SignUpForm() {
       router.push("/auth/login")
     } catch (err: unknown) {
       const error = err as AuthError
-      const errorCode = error?.code
+      const errorCode = error?.code ?? ""
       const errorMessage = error?.message?.toLowerCase() ?? ""
 
-      if (errorCode === "23505" || errorMessage.includes("email")) {
-        setError(
-          "email",
-          { type: "manual", message: "이미 존재하는 사용자 입니다" },
-          { shouldFocus: true }
-        )
-      } else if (errorMessage.includes("nickname")) {
-        setError(
-          "nickname",
-          { type: "manual", message: "이미 사용 중인 닉네임 입니다" },
-          { shouldFocus: true }
-        )
-      } else {
-        toast.error(error.message ?? "회원가입에 실패했습니다")
+      if (errorCode === DB_ERROR_CODES.UNIQUE_VIOLATION) {
+        if (errorMessage.includes("email")) {
+          toast.info("이미 가입된 이메일입니다")
+          router.push("/auth/login")
+          return
+        }
+        if (errorMessage.includes("nickname")) {
+          setError(
+            "nickname",
+            { type: "manual", message: "이미 사용 중인 닉네임 입니다" },
+            { shouldFocus: true }
+          )
+          return
+        }
       }
+
+      toast.error(error.message ?? "회원가입에 실패했습니다")
     } finally {
       isSubmittingRef.current = false
     }

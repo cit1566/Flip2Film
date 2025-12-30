@@ -1,7 +1,7 @@
 import createClient from "../../supabase/client"
 import type { UserInsert, UserUpdate } from "../../supabase/types"
 
-const supabase = createClient()
+export const supabase = createClient()
 
 interface createUserProps {
   email: UserInsert["email"]
@@ -31,7 +31,7 @@ export default async function createUser({
     throw new Error("비밀번호는 최소 8자 이상이어야 합니다.")
   }
 
-  // 1. 파일 크기 검증 로직 추가 (5MB 제한)
+  // 파일 크기 검증 로직 (5MB 제한)
   const MAX_FILE_SIZE = 5 * 1024 * 1024
   if (profile_image && profile_image.size > MAX_FILE_SIZE) {
     throw new Error("업로드 가능한 파일 크기(5MB)를 초과했습니다")
@@ -39,7 +39,7 @@ export default async function createUser({
 
   const fileExtension =
     profile_image?.name.split(".").pop()?.toLowerCase() ?? "png"
-  const allowedExtensions = ["png", "jpeg", "jpg"]
+  const allowedExtensions = ["png", "jpeg"]
 
   if (profile_image && !allowedExtensions.includes(fileExtension)) {
     throw new Error("지원하지 않는 파일 형식입니다.")
@@ -53,7 +53,6 @@ export default async function createUser({
       data: {
         nickname,
         bio,
-        // 메타데이터에는 파일명만 저장
         profile_image: profile_image ? `profile.${fileExtension}` : null,
       },
     },
@@ -63,10 +62,8 @@ export default async function createUser({
     throw error ?? new Error("회원가입 실패")
   }
 
-  // 2. 이미지가 있을 경우 스토리지 연동 (닉네임 기반 경로 반영)
   if (profile_image) {
-    const safeNickname = nickname ?? "anonymous"
-    const filePath = `${safeNickname}/profile.${fileExtension}`
+    const filePath = `${data.user.id}/profile.${fileExtension}`
 
     // 스토리지 업로드
     const { error: uploadError } = await supabase.storage
@@ -115,12 +112,12 @@ export async function logIn(email: string, password: string) {
     email,
     password,
   })
-  if (error) throw new Error(`로그인 에러 발생!${error.message}`)
+  if (error) throw new Error(`로그인 에러 발생!${error.message ?? ""}`)
   return data
 }
 
 // logout function
 export async function logOut() {
   const { error } = await supabase.auth.signOut()
-  if (error) throw new Error(`로그아웃 실패 : ${error.message}`)
+  if (error) throw new Error(`로그아웃 실패 : ${error.message ?? ""}`)
 }

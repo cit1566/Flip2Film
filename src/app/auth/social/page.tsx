@@ -4,8 +4,7 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import { checkNicknameValidate } from "@/libs/api/auth/auth-api"
-import { updateUser, getUser } from "@/libs/api/user/user-api"
-import createClient from "@/libs/supabase/client"
+import { updateUser, getUser, supabase } from "@/libs/api/user/user-api"
 import type { UserUpdate } from "@/libs/supabase/types"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
@@ -13,20 +12,19 @@ import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./page.module.css"
 
-type socialSignUpFormData = Pick<UserUpdate, "nickname" | "bio"> & {
+type SocialProfileFormData = Pick<UserUpdate, "nickname" | "bio"> & {
   profile_image: File | null
 }
 
-export default function SocialPage() {
+export default function SocialProfilePage() {
   const router = useRouter()
   const isSubmittingRef = useRef(false)
-  const supabaseClient = createClient()
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValidating, isValid },
-  } = useForm<socialSignUpFormData>({
+    formState: { errors, isSubmitting, isSubmitted, isValid },
+  } = useForm<SocialProfileFormData>({
     mode: "onChange",
     defaultValues: {
       nickname: "",
@@ -39,22 +37,27 @@ export default function SocialPage() {
     const checkUserStatus = async () => {
       const {
         data: { user },
-      } = await supabaseClient.auth.getUser()
+      } = await supabase.auth.getUser()
 
       if (!user) return
 
       try {
         const userData = await getUser(user.id)
         if (userData?.nickname && userData.nickname !== "익명") {
-          toast.info("이미 존재하는 사용자 입니다")
+          toast.success("로그인이 성공했습니다")
           router.replace("/")
         }
-      } catch {
-        toast.error("인증 과정 중, 에러가 발생했습니다")
+      } catch (err: unknown) {
+        const error = err as { code?: string; message?: string }
+        if (error.code !== "PGRST116") {
+          toast.error(
+            error.message ?? "사용자 정보를 확인하는 중 오류가 발생했습니다"
+          )
+        }
       }
     }
     checkUserStatus()
-  }, [router, supabaseClient.auth])
+  }, [router])
 
   const handleInputStatus = (
     isTouched: boolean,
@@ -76,17 +79,24 @@ export default function SocialPage() {
     }
   }
 
-  const handleSignUpSubmit = async (data: socialSignUpFormData) => {
+  const handleSignuSubmit = async (data: SocialProfileFormData) => {
     if (isSubmittingRef.current) return
 
     try {
       isSubmittingRef.current = true
       const {
         data: { user },
-      } = await supabaseClient.auth.getUser()
+      } = await supabase.auth.getUser()
 
       if (!user) {
         toast.error("로그인 정보가 없습니다")
+        return
+      }
+
+      const existingUser = await getUser(user.id).catch(() => null)
+      if (existingUser?.nickname && existingUser.nickname !== "익명") {
+        toast.info("로그인이 성공했습니다")
+        router.replace("/")
         return
       }
 
@@ -96,9 +106,11 @@ export default function SocialPage() {
       if (profile_image instanceof File) {
         const fileExt = profile_image.name.split(".").pop() ?? "png"
         const filePath = `${user.id}/profile.${fileExt}`
-        const { error: uploadError } = await supabaseClient.storage
+
+        const { error: uploadError } = await supabase.storage
           .from("profile_image")
           .upload(filePath, profile_image, { upsert: true })
+
         if (uploadError) throw uploadError
         imagePath = filePath
       }
@@ -109,10 +121,10 @@ export default function SocialPage() {
         profile_image: imagePath,
       })
 
-      toast.success("프로필 설정이 완료되었습니다")
+      toast.success("간편 회원가입이 완료되었습니다")
       router.replace("/")
     } catch {
-      toast.error("프로필 저장에 실패했습니다")
+      toast.error("간편 회원가입에 실패했습니다")
     } finally {
       isSubmittingRef.current = false
     }
@@ -120,7 +132,7 @@ export default function SocialPage() {
 
   return (
     <form
-      onSubmit={handleSubmit(handleSignUpSubmit)}
+      onSubmit={handleSubmit(handleSignuSubmit)}
       className={styles.container}
     >
       <h1 className={styles.title}>간편 회원가입</h1>
@@ -147,10 +159,8 @@ export default function SocialPage() {
             <Input
               label="닉네임"
               placeholder="최소 2자, 최대 6자"
-              clearable
               value={field.value ?? ""}
               onChange={field.onChange}
-              onClear={() => field.onChange("")}
               onBlur={field.onBlur}
               status={handleInputStatus(
                 fieldState.isTouched,
@@ -172,10 +182,8 @@ export default function SocialPage() {
           <Input
             label="Bio"
             placeholder="자기소개를 입력해주세요"
-            clearable
             value={field.value ?? ""}
             onChange={field.onChange}
-            onClear={() => field.onChange("")}
             onBlur={field.onBlur}
           />
         )}
@@ -185,7 +193,7 @@ export default function SocialPage() {
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={!isValid || isSubmitting || isValidating}
+        disabled={(isSubmitted && !isValid) || isSubmitting}
       />
     </form>
   )
