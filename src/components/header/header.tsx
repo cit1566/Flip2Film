@@ -22,8 +22,6 @@ export default function Header({ className }: HeaderProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const user = useUserStore(state => state.user)
-  const clearUser = useUserStore(state => state.clearUser)
-
   const { isLoading } = useUserQuery()
 
   const isUserComplete = user?.nickname && user.nickname !== "익명"
@@ -37,9 +35,23 @@ export default function Header({ className }: HeaderProps) {
         setIsProfileOpen(false)
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" || event.code === "Escape") {
+        setIsProfileOpen(false)
+      }
+    }
+
+    if (isProfileOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("keydown", handleKeyDown)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [isProfileOpen])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,10 +66,10 @@ export default function Header({ className }: HeaderProps) {
 
   const handleLogOut = async () => {
     try {
-      await logOut()
-      clearUser()
       setIsProfileOpen(false)
       window.location.href = "/"
+
+      logOut()
     } catch {
       toast.error("로그아웃 에러가 발생했습니다")
     }
@@ -67,8 +79,6 @@ export default function Header({ className }: HeaderProps) {
     ? supabase.storage.from("profile_image").getPublicUrl(user.profile_image)
         .data.publicUrl
     : "/default-profile.png"
-
-  if (isLoading) return <div className={styles.headerPlaceholder} />
 
   return (
     <header
@@ -93,51 +103,52 @@ export default function Header({ className }: HeaderProps) {
             <Search />
           </button>
 
-          {isUserComplete ? (
-            <div className={styles.profileWrapper} ref={dropdownRef}>
-              <button
-                className={styles.profileImageButton}
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-              >
-                <Image
-                  src={profileImageUrl}
-                  alt="프로필"
-                  width={50}
-                  height={50}
-                  className={styles.profileImage}
-                />
-              </button>
+          {!isLoading &&
+            (isUserComplete ? (
+              <div className={styles.profileWrapper} ref={dropdownRef}>
+                <button
+                  className={styles.profileImageButton}
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                >
+                  <Image
+                    src={profileImageUrl}
+                    alt="프로필"
+                    width={50}
+                    height={50}
+                    className={styles.profileImage}
+                  />
+                </button>
 
-              {isProfileOpen && (
-                <div className={styles.dropdown}>
-                  <Link
-                    href="/my-posts"
-                    className={styles.dropdownItem}
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    나의 글
-                  </Link>
-                  <Link
-                    href="/settings"
-                    className={styles.dropdownItem}
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    설정
-                  </Link>
-                  <button
-                    className={styles.dropdownItem}
-                    onClick={handleLogOut}
-                  >
-                    로그아웃
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link href="/login" className={styles.loginLink}>
-              로그인
-            </Link>
-          )}
+                {isProfileOpen && (
+                  <div className={styles.dropdown}>
+                    <Link
+                      href="/my-posts"
+                      className={styles.dropdownItem}
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      나의 글
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className={styles.dropdownItem}
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      설정
+                    </Link>
+                    <button
+                      className={styles.dropdownItem}
+                      onClick={handleLogOut}
+                    >
+                      로그아웃
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link href="/login" className={styles.loginLink}>
+                로그인
+              </Link>
+            ))}
         </div>
       </div>
     </header>
