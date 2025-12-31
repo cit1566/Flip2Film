@@ -72,7 +72,7 @@ export const ForgotPasswordForm = () => {
       onSubmit={handleSubmit(handleForgotSubmit)}
     >
       <header className={styles.header}>
-        <Mail size={32} strokeWidth={2} className={styles.mailIcon} />
+        <Mail size={48} strokeWidth={1.5} className={styles.mailIcon} />
         <h2 className={styles.title}>
           기존에 가입한 이메일로
           <br /> 비밀번호를 찾아보세요
