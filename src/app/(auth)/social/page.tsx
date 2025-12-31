@@ -105,7 +105,6 @@ export default function SocialProfilePage() {
       }
 
       const existingUser = await getUser(user.id).catch(err => {
-        // PGRST116 = row not found (신규 소셜 가입자에게는 정상적인 상황)
         if (err?.code !== "PGRST116") {
           toast.error("Unexpected error fetching user:", err)
         }
