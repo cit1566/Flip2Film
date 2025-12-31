@@ -121,3 +121,43 @@ export async function logOut() {
   const { error } = await supabase.auth.signOut()
   if (error) throw new Error(`로그아웃 실패 : ${error.message ?? ""}`)
 }
+
+/**
+ * 소셜 로그인 (OAuth)
+ * 사용자가 소셜로 로그인(kakao, google)로 연결해서 가입할 때, 리다이렉트 주소로 이동
+ */
+export const signInWithSocial = async (provider: "kakao" | "google") => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${window.location.origin}/social`,
+      queryParams:
+        provider === "google"
+          ? { prompt: "consent select_account" }
+          : { prompt: "login" },
+    },
+  })
+
+  if (error) throw new Error(error.message)
+  return true
+}
+
+// user resetPassword(유저 비밀번호 재설정 리다이렉션)
+export const resetPasswordEmail = async (email: string) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/update-password`,
+  })
+
+  if (error) throw new Error(error.message)
+  return true
+}
+
+// new password update(user)
+export const updatePassword = async (newPassword: string) => {
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  })
+
+  if (error) throw new Error(error.message)
+  return true
+}

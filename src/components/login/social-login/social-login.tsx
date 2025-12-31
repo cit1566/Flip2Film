@@ -1,6 +1,6 @@
 "use client"
 
-import createClient from "@/libs/supabase/client"
+import { signInWithSocial } from "@/libs/api/user/user-api"
 import Image from "next/image"
 import { toast } from "sonner"
 import styles from "./social-login.module.css"
@@ -8,31 +8,16 @@ import styles from "./social-login.module.css"
 type Provider = "kakao" | "google"
 
 export default function SocialLogin() {
-  const supabase = createClient()
-
   const handleLogin = async (provider: Provider) => {
     try {
-      const redirectTo = `${window.location.origin}/social`
-
-      const params =
-        provider === "google"
-          ? { prompt: "consent select_account" }
-          : { prompt: "login" }
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo,
-          queryParams: params,
-        },
-      })
-
-      if (error) {
-        toast.error("소셜 로그인에 실패했습니다")
-        return
-      }
-    } catch {
-      toast.error("소셜 로그인 중 오류가 발생했습니다")
+      // 소셜로그인 API 함수 호출
+      await signInWithSocial(provider)
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "소셜 로그인 중 오류가 발생했습니다"
+      )
     }
   }
 
