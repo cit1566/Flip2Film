@@ -5,6 +5,7 @@
 }
 
 .mainBody {
+  background: var(--color-bg-light);
   width: 100%;
   display: flex;
   flex-flow: column nowrap;

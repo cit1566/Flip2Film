@@ -1,7 +1,7 @@
 .profilePictureWraper {
   margin: 0;
-  width: 75px;
   position: relative;
+  max-width: 120px;
 }
 
 .profilePicture {
@@ -11,14 +11,20 @@
   aspect-ratio: 1 / 1;
 }
 
-@media (min-width: 481px) {
+@media (max-width: 768px) {
   .profilePictureWraper {
-    width: 90px;
+    width: 80px;
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 769px) and (max-width: 1279px) {
   .profilePictureWraper {
-    width: 130px;
+    width: 100px;
+  }
+}
+
+@media (min-width: 1279px) {
+  .profilePictureWraper {
+    width: 120px;
   }
 }

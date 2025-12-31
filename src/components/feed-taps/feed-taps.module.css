@@ -1,5 +1,9 @@
 .feedTapsSection {
-  background-color: var(--color-gray-light);
+  background: white;
+  margin-block: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .tabs {

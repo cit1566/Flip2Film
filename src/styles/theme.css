@@ -67,6 +67,7 @@
   --color-text-purple: var(--base-purple);
   --color-text-light: var(--base-gray-50);
   --color-text-light-2: var(--base-gray-300);
+  --color-text-black: var(--base-black-500);
   /* =========================
    * Border / Divider
    * ========================= */

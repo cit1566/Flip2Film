@@ -2,9 +2,13 @@ import Image from "next/image"
 import testMovieImage from "../../../public/movie-poster.webp"
 import styles from "./profile-picture.module.css"
 
-export default function ProfilePicture() {
+interface ProfilePictureProps {
+  classStyle?: string | undefined
+}
+
+export default function ProfilePicture({ classStyle }: ProfilePictureProps) {
   return (
-    <figure className={styles.profilePictureWraper}>
+    <figure className={`${styles.profilePictureWraper} ${classStyle}`}>
       <Image
         className={styles.profilePicture}
         src={testMovieImage}
