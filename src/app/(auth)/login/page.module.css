@@ -6,7 +6,8 @@
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  gap: var(--element-gap)
+  gap: var(--element-gap);
+  margin-top: 50px;
 }
 
 /* 로고 영역 */

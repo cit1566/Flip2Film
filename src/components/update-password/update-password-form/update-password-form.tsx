@@ -43,11 +43,6 @@ export const UpdatePasswordForm = () => {
       className={styles.updateForm}
       onSubmit={handleSubmit(handleUpdateSubmit)}
     >
-      <header className={styles.header}>
-        <h2 className={styles.title}>비밀번호 재설정</h2>
-        <p className={styles.description}>새로운 비밀번호를 입력해주세요</p>
-      </header>
-
       <div className={styles.inputGroup}>
         <div className={styles.inputWrapper}>
           <Controller
