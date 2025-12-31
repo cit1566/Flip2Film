@@ -4,12 +4,17 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import { resetPasswordEmail } from "@/libs/api/user/user-api"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
-import { Mail } from "lucide-react"
+import { CheckCircle2, Mail } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./forgot-password-form.module.css"
 
 export const ForgotPasswordForm = () => {
+  const router = useRouter()
+  const [isSuccess, setIsSuccess] = useState(false)
+
   const {
     control,
     handleSubmit,
@@ -22,6 +27,7 @@ export const ForgotPasswordForm = () => {
   const handleForgotSubmit = async (data: { email: string }) => {
     try {
       await resetPasswordEmail(data.email)
+      setIsSuccess(true)
 
       toast.success("비밀번호 재설정 메일이 전송되었습니다")
     } catch (error) {
@@ -29,6 +35,35 @@ export const ForgotPasswordForm = () => {
         error instanceof Error ? error.message : "이메일 전송에 실패했습니다"
       )
     }
+  }
+
+  if (isSuccess) {
+    return (
+      <div className={styles.successWrapper}>
+        <header className={styles.header}>
+          <div className={`${styles.iconWrapper} ${styles.successIcon}`}>
+            <CheckCircle2
+              size={48}
+              strokeWidth={1.5}
+              className={styles.CheckCircle2Icon}
+            />
+          </div>
+          <h2 className={styles.title}>이메일을 확인해주세요!</h2>
+          <p className={styles.description}>
+            입력하신 주소로 비밀번호 재설정 링크를 보냈습니다
+            <br />
+            메일이 오지 않았다면 스팸함도 확인해주세요
+          </p>
+        </header>
+
+        <Button
+          variant="green"
+          title="로그인으로 돌아가기"
+          onClick={() => router.push("/login")}
+          className={styles.submitButton}
+        />
+      </div>
+    )
   }
 
   return (

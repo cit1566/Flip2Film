@@ -4,7 +4,7 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import { checkNicknameValidate } from "@/libs/api/auth/auth-api"
-import { updateUser, getUser, supabase } from "@/libs/api/user/user-api"
+import { getUser, supabase, updateUser } from "@/libs/api/user/user-api"
 import type { UserUpdate } from "@/libs/supabase/types"
 import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
@@ -90,7 +90,7 @@ export default function SocialProfilePage() {
     }
   }
 
-  const handleSignuSubmit = async (data: SocialProfileFormData) => {
+  const handleSignupSubmit = async (data: SocialProfileFormData) => {
     if (isSubmittingRef.current) return
 
     try {
@@ -104,7 +104,14 @@ export default function SocialProfilePage() {
         return
       }
 
-      const existingUser = await getUser(user.id).catch(() => null)
+      const existingUser = await getUser(user.id).catch(err => {
+        // PGRST116 = row not found (신규 소셜 가입자에게는 정상적인 상황)
+        if (err?.code !== "PGRST116") {
+          toast.error("Unexpected error fetching user:", err)
+        }
+        return null
+      })
+
       if (existingUser?.nickname && existingUser.nickname !== "익명") {
         toast.info("로그인이 성공했습니다")
         router.replace("/")
@@ -147,7 +154,7 @@ export default function SocialProfilePage() {
 
   return (
     <form
-      onSubmit={handleSubmit(handleSignuSubmit)}
+      onSubmit={handleSubmit(handleSignupSubmit)}
       className={styles.container}
     >
       <h1 className={styles.title}>간편 회원가입</h1>

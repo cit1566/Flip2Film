@@ -11,8 +11,9 @@ import {
 import createUser from "@/libs/api/user/user-api"
 import type { UserInsert } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { CheckCircle2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./sign-up-form.module.css"
@@ -32,6 +33,7 @@ type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
 export default function SignUpForm() {
   const router = useRouter()
   const isSubmittingRef = useRef(false)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const DB_ERROR_CODES = {
     UNIQUE_VIOLATION: "23505",
@@ -101,8 +103,8 @@ export default function SignUpForm() {
         profile_image,
       })
 
-      toast.success("회원가입 완료! 이메일 인증 후 로그인해주세요")
-      router.push("/auth/login")
+      setIsSuccess(true)
+      toast.success("회원가입 완료!")
     } catch (err: unknown) {
       const error = err as AuthError
       const errorCode = error?.code ?? ""
@@ -111,7 +113,7 @@ export default function SignUpForm() {
       if (errorCode === DB_ERROR_CODES.UNIQUE_VIOLATION) {
         if (errorMessage.includes("email")) {
           toast.info("이미 가입된 이메일입니다")
-          router.push("/auth/login")
+          router.push("/login")
           return
         }
         if (errorMessage.includes("nickname")) {
@@ -130,8 +132,40 @@ export default function SignUpForm() {
     }
   }
 
+  if (isSuccess) {
+    return (
+      <div className={styles.successWrapper}>
+        <header className={styles.header}>
+          <div className={`${styles.iconWrapper} ${styles.successIcon}`}>
+            <CheckCircle2
+              size={48}
+              strokeWidth={1.5}
+              className={styles.CheckCircle2Icon}
+            />
+          </div>
+          <h2 className={styles.title}>회원가입이 완료되었습니다</h2>
+          <p className={styles.description}>
+            입력하신 이메일로 인증 링크를 보냈습니다
+            <br />
+            메일 인증까지 완료해야 서비스 이용이 가능합니다
+          </p>
+        </header>
+
+        <Button
+          variant="green"
+          title="로그인하러 가기"
+          onClick={() => router.push("/login")}
+          className={styles.submitButton}
+        />
+      </div>
+    )
+  }
+
   return (
-    <form onSubmit={handleSubmit(handleSignUpSubmit)}>
+    <form
+      className={styles.signUpForm}
+      onSubmit={handleSubmit(handleSignUpSubmit)}
+    >
       <Controller
         name="profile_image"
         control={control}
@@ -152,7 +186,7 @@ export default function SignUpForm() {
           validate: checkEmailDuplicate,
         }}
         render={({ field, fieldState }) => (
-          <>
+          <div className={styles.inputWrapper}>
             <Input
               label="이메일"
               type="email"
@@ -171,7 +205,7 @@ export default function SignUpForm() {
             {errors.email && (
               <p className={styles.errorMessage}>{errors.email.message}</p>
             )}
-          </>
+          </div>
         )}
       />
 
@@ -183,7 +217,7 @@ export default function SignUpForm() {
           pattern: VALIDATION_PATTERNS.password,
         }}
         render={({ field, fieldState }) => (
-          <>
+          <div className={styles.inputWrapper}>
             <Input
               label="비밀번호"
               type="password"
@@ -201,7 +235,7 @@ export default function SignUpForm() {
             {errors.password && (
               <p className={styles.errorMessage}>{errors.password.message}</p>
             )}
-          </>
+          </div>
         )}
       />
 
@@ -214,7 +248,7 @@ export default function SignUpForm() {
             value === getValues("password") || "비밀번호가 일치하지 않습니다",
         }}
         render={({ field, fieldState }) => (
-          <>
+          <div className={styles.inputWrapper}>
             <Input
               label="비밀번호 재입력"
               type="password"
@@ -234,7 +268,7 @@ export default function SignUpForm() {
                 {errors.passwordCheck.message}
               </p>
             )}
-          </>
+          </div>
         )}
       />
 
@@ -248,7 +282,7 @@ export default function SignUpForm() {
           validate: checkNicknameDuplicate,
         }}
         render={({ field, fieldState }) => (
-          <>
+          <div className={styles.inputWrapper}>
             <Input
               label="닉네임"
               placeholder="최소 2자, 최대 6자"
@@ -266,7 +300,7 @@ export default function SignUpForm() {
             {errors.nickname && (
               <p className={styles.errorMessage}>{errors.nickname.message}</p>
             )}
-          </>
+          </div>
         )}
       />
 
@@ -274,15 +308,17 @@ export default function SignUpForm() {
         name="bio"
         control={control}
         render={({ field }) => (
-          <Input
-            label="Bio"
-            placeholder="자기소개를 입력해주세요"
-            clearable
-            value={field.value ?? ""}
-            onChange={e => field.onChange(e.target.value)}
-            onClear={() => field.onChange("")}
-            onBlur={field.onBlur}
-          />
+          <div className={styles.inputWrapper}>
+            <Input
+              label="Bio"
+              placeholder="자기소개를 입력해주세요"
+              clearable
+              value={field.value ?? ""}
+              onChange={e => field.onChange(e.target.value)}
+              onClear={() => field.onChange("")}
+              onBlur={field.onBlur}
+            />
+          </div>
         )}
       />
 
@@ -293,6 +329,7 @@ export default function SignUpForm() {
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"
         disabled={!isValid || isSubmitting || isValidating}
+        className={styles.submitButton}
       />
     </form>
   )

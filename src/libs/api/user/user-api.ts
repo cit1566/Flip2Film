@@ -39,7 +39,7 @@ export default async function createUser({
 
   const fileExtension =
     profile_image?.name.split(".").pop()?.toLowerCase() ?? "png"
-  const allowedExtensions = ["png", "jpeg"]
+  const allowedExtensions = ["png", "jpeg", "jpg"]
 
   if (profile_image && !allowedExtensions.includes(fileExtension)) {
     throw new Error("지원하지 않는 파일 형식입니다.")
@@ -127,6 +127,11 @@ export async function logOut() {
  * 사용자가 소셜로 로그인(kakao, google)로 연결해서 가입할 때, 리다이렉트 주소로 이동
  */
 export const signInWithSocial = async (provider: "kakao" | "google") => {
+  if (typeof window === "undefined") {
+    throw new Error(
+      "signInWithSocial이라는 함수는 클라이언트 함수에만 호출할 수 있습니다"
+    )
+  }
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {

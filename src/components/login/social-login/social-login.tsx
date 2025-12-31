@@ -9,6 +9,8 @@ type Provider = "kakao" | "google"
 
 export default function SocialLogin() {
   const handleLogin = async (provider: Provider) => {
+    if (typeof window === "undefined") return
+
     try {
       // 소셜로그인 API 함수 호출
       await signInWithSocial(provider)

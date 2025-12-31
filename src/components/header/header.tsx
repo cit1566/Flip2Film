@@ -22,7 +22,7 @@ export default function Header({ className }: HeaderProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const user = useUserStore(state => state.user)
-  const { isLoading } = useUserQuery()
+  const { isLoading, isError } = useUserQuery()
 
   const isUserComplete = user?.nickname && user.nickname !== "익명"
 
@@ -67,9 +67,8 @@ export default function Header({ className }: HeaderProps) {
   const handleLogOut = async () => {
     try {
       setIsProfileOpen(false)
+      await logOut()
       window.location.href = "/"
-
-      logOut()
     } catch {
       toast.error("로그아웃 에러가 발생했습니다")
     }
@@ -104,7 +103,7 @@ export default function Header({ className }: HeaderProps) {
           </button>
 
           {!isLoading &&
-            (isUserComplete ? (
+            (!isError && isUserComplete ? (
               <div className={styles.profileWrapper} ref={dropdownRef}>
                 <button
                   className={styles.profileImageButton}
