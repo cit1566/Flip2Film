@@ -2,11 +2,11 @@
 
 import { useUserStore } from "@/features/auth/use-user-store"
 import { useUserQuery } from "@/hooks/use-user-query"
-import { supabase, logOut } from "@/libs/api/user/user-api"
+import { logOut, supabase } from "@/libs/api/user/user-api"
 import { Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 import styles from "./header.module.css"
 
@@ -44,9 +44,9 @@ export default function Header({ className }: HeaderProps) {
   useEffect(() => {
     const handleScroll = () => {
       const current = window.scrollY
-      if (current > lastScroll) setShow(false)
+      if (current > lastScroll.current) setShow(false)
       else setShow(true)
-      setLastScroll(current)
+      lastScroll.current = current
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
@@ -134,7 +134,7 @@ export default function Header({ className }: HeaderProps) {
               )}
             </div>
           ) : (
-            <Link href="/auth/login" className={styles.loginLink}>
+            <Link href="/login" className={styles.loginLink}>
               로그인
             </Link>
           )}

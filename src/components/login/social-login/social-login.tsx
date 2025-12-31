@@ -12,7 +12,7 @@ export default function SocialLogin() {
 
   const handleLogin = async (provider: Provider) => {
     try {
-      const redirectTo = `${window.location.origin}/auth/social`
+      const redirectTo = `${window.location.origin}/social`
 
       const params =
         provider === "google"

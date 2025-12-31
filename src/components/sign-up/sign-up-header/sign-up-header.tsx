@@ -12,7 +12,7 @@ export default function SignUpHeader() {
       <button
         type="button"
         className={styles.backButton}
-        onClick={() => router.push("/auth/login")}
+        onClick={() => router.push("/login")}
         aria-label="뒤로가기"
       >
         <MoveLeft />

@@ -1,5 +1,5 @@
 .termsText {
-  margin-block: var(--component-gap);
+  margin-block: 20px;
   text-align: center;
   font-size: 0.85rem;
   color: var(--color-gray);

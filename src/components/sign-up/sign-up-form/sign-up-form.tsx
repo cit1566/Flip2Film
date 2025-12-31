@@ -152,7 +152,7 @@ export default function SignUpForm() {
           validate: checkEmailDuplicate,
         }}
         render={({ field, fieldState }) => (
-          <div>
+          <>
             <Input
               label="이메일"
               type="email"
@@ -171,7 +171,7 @@ export default function SignUpForm() {
             {errors.email && (
               <p className={styles.errorMessage}>{errors.email.message}</p>
             )}
-          </div>
+          </>
         )}
       />
 
@@ -183,7 +183,7 @@ export default function SignUpForm() {
           pattern: VALIDATION_PATTERNS.password,
         }}
         render={({ field, fieldState }) => (
-          <div>
+          <>
             <Input
               label="비밀번호"
               type="password"
@@ -201,7 +201,7 @@ export default function SignUpForm() {
             {errors.password && (
               <p className={styles.errorMessage}>{errors.password.message}</p>
             )}
-          </div>
+          </>
         )}
       />
 
@@ -214,7 +214,7 @@ export default function SignUpForm() {
             value === getValues("password") || "비밀번호가 일치하지 않습니다",
         }}
         render={({ field, fieldState }) => (
-          <div>
+          <>
             <Input
               label="비밀번호 재입력"
               type="password"
@@ -234,7 +234,7 @@ export default function SignUpForm() {
                 {errors.passwordCheck.message}
               </p>
             )}
-          </div>
+          </>
         )}
       />
 
@@ -248,7 +248,7 @@ export default function SignUpForm() {
           validate: checkNicknameDuplicate,
         }}
         render={({ field, fieldState }) => (
-          <div>
+          <>
             <Input
               label="닉네임"
               placeholder="최소 2자, 최대 6자"
@@ -266,7 +266,7 @@ export default function SignUpForm() {
             {errors.nickname && (
               <p className={styles.errorMessage}>{errors.nickname.message}</p>
             )}
-          </div>
+          </>
         )}
       />
 

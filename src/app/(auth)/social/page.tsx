@@ -44,7 +44,7 @@ export default function SocialProfilePage() {
         } = await supabase.auth.getUser()
 
         if (!user) {
-          router.replace("/auth/login")
+          router.replace("/login")
           return
         }
 
@@ -63,7 +63,7 @@ export default function SocialProfilePage() {
           toast.error(
             error.message ?? "사용자 정보를 확인하는 중 오류가 발생했습니다"
           )
-          router.replace("/auth/login")
+          router.replace("/login")
         }
       }
     }
@@ -205,6 +205,7 @@ export default function SocialProfilePage() {
       />
 
       <Button
+        className={styles.submitButton}
         variant="green"
         title={isSubmitting ? "가입 중..." : "가입하기"}
         type="submit"

@@ -126,13 +126,13 @@ export default function LoginForm() {
       />
 
       <div className={styles.loginFormBottomLinks}>
-        <Link href="/auth/sign-up" className={styles.loginFormLink}>
+        <Link href="/sign-up" className={styles.loginFormLink}>
           회원가입
         </Link>
 
         <span className={styles.loginFormSeparator}>/</span>
 
-        <Link href="/auth/forgot" className={styles.loginFormLink}>
+        <Link href="/forgot" className={styles.loginFormLink}>
           비밀번호 찾기
         </Link>
       </div>
