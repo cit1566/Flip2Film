@@ -4,13 +4,16 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import { updatePassword } from "@/libs/api/user/user-api"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { LockIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./update-password-form.module.css"
 
 export const UpdatePasswordForm = () => {
   const router = useRouter()
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const {
     control,
@@ -31,11 +34,36 @@ export const UpdatePasswordForm = () => {
     try {
       await updatePassword(data.password)
 
+      setIsSuccess(true)
       toast.success("비밀번호가 성공적으로 변경되었습니다")
-      router.push("/login")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "비밀번호 변경 실패")
     }
+  }
+
+  if (isSuccess) {
+    return (
+      <div className={styles.successWrapper}>
+        <header className={styles.header}>
+          <div className={`${styles.iconWrapper} ${styles.successIcon}`}>
+            <LockIcon size={48} strokeWidth={1.5} className={styles.lockIcon} />
+          </div>
+          <h2 className={styles.title}>변경이 완료되었습니다!</h2>
+          <p className={styles.description}>
+            새로운 비밀번호로 안전하게 변경되었습니다
+            <br />
+            다시 로그인하여 서비스를 이용해 주세요
+          </p>
+        </header>
+
+        <Button
+          variant="green"
+          title="로그인하러 가기"
+          onClick={() => router.push("/login")}
+          className={styles.submitButton}
+        />
+      </div>
+    )
   }
 
   return (

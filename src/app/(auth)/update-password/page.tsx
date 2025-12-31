@@ -1,5 +1,5 @@
+import AuthHeader from "@/components/atom/auth-header/auth-header"
 import { UpdatePasswordForm } from "@/components/update-password/update-password-form/update-password-form"
-import AuthHeader from "../../../components/atom/auth-header/auth-header"
 import styles from "./page.module.css"
 
 export default function UpdatePasswordPage() {

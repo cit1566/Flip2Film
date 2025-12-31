@@ -22,6 +22,8 @@ interface AuthError {
   code?: string
   status?: number
   message: string
+  details?: string
+  hint?: string
 }
 
 type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
@@ -108,15 +110,21 @@ export default function SignUpForm() {
     } catch (err: unknown) {
       const error = err as AuthError
       const errorCode = error?.code ?? ""
-      const errorMessage = error?.message?.toLowerCase() ?? ""
 
       if (errorCode === DB_ERROR_CODES.UNIQUE_VIOLATION) {
-        if (errorMessage.includes("email")) {
+        const errorDetail = (
+          error?.details ??
+          error?.message ??
+          ""
+        ).toLowerCase()
+
+        if (errorDetail.includes("email")) {
           toast.info("이미 가입된 이메일입니다")
           router.push("/login")
           return
         }
-        if (errorMessage.includes("nickname")) {
+
+        if (errorDetail.includes("nickname")) {
           setError(
             "nickname",
             { type: "manual", message: "이미 사용 중인 닉네임 입니다" },
@@ -153,7 +161,7 @@ export default function SignUpForm() {
 
         <Button
           variant="green"
-          title="로그인하러 가기"
+          title="로그인으로 이동하기"
           onClick={() => router.push("/login")}
           className={styles.submitButton}
         />
