@@ -48,7 +48,7 @@ export const ForgotPasswordForm = () => {
               className={styles.CheckCircle2Icon}
             />
           </div>
-          <h2 className={styles.title}>이메일을 확인해주세요!</h2>
+          <h2 className={styles.title}>비밀번호 재설정 링크 전송</h2>
           <p className={styles.description}>
             입력하신 주소로 비밀번호 재설정 링크를 보냈습니다
             <br />
@@ -58,7 +58,7 @@ export const ForgotPasswordForm = () => {
 
         <Button
           variant="green"
-          title="로그인으로 돌아가기"
+          title="로그인으로 이동하기"
           onClick={() => router.push("/login")}
           className={styles.submitButton}
         />

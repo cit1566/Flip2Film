@@ -48,7 +48,7 @@ export const UpdatePasswordForm = () => {
           <div className={`${styles.iconWrapper} ${styles.successIcon}`}>
             <LockIcon size={48} strokeWidth={1.5} className={styles.lockIcon} />
           </div>
-          <h2 className={styles.title}>변경이 완료되었습니다!</h2>
+          <h2 className={styles.title}>비밀번호 변경 완료</h2>
           <p className={styles.description}>
             새로운 비밀번호로 안전하게 변경되었습니다
             <br />
@@ -58,7 +58,7 @@ export const UpdatePasswordForm = () => {
 
         <Button
           variant="green"
-          title="로그인하러 가기"
+          title="로그인으로 이동하기"
           onClick={() => router.push("/login")}
           className={styles.submitButton}
         />
