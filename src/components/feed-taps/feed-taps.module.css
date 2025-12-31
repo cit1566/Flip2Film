@@ -1,91 +1,108 @@
+/* ---------------------------------------------------------- */
+/* Section */
+/* ---------------------------------------------------------- */
 .feedTapsSection {
   background: white;
   margin-block: 20px;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(149, 157, 165, 0.15) 0px 6px 20px;
+}
+
+/* ---------------------------------------------------------- */
+/* Tabs */
+/* ---------------------------------------------------------- */
+.tabsContainer {
+  width: 100%;
 }
 
 .tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-bottom: 1px solid var(--color-gray-light-2);
-  word-break: keep-all;
-
-  .tab {
-    background-color: transparent;
-    border: none;
-    color: var(--color-gray);
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 10px 20px;
-  }
-
-  .isActive {
-    color: var(--color-black);
-    font-weight: 800;
-    box-shadow: var(--color-green) 0 1.5px;
-    margin: 0 25px;
-  }
 }
 
+.tab {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 12px 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.tab:hover {
+  color: var(--color-black);
+}
+
+.isActive {
+  color: var(--color-black);
+  font-weight: 700;
+}
+
+.isActive::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-green);
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------- */
+/* Panel */
+/* ---------------------------------------------------------- */
 .tabPanel {
-  padding: 2px 3px 3px;
-
-  .reviewList {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3px;
-  }
-
-  .reviewList,
-  .listItem {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+  padding-top: 16px;
 }
 
+/* ---------------------------------------------------------- */
+/* Review List */
+/* ---------------------------------------------------------- */
+.reviewList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.reviewList,
+.listItem {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------------------------------------------------------- */
+/* Responsive */
+/* ---------------------------------------------------------- */
 @media (min-width: 481px) {
-  .tabs {
-    border-bottom: 2px solid var(--color-gray-light-2);
+  .tab {
+    font-size: 1.125rem;
+    padding: 16px 8px;
+  }
 
-    .tab {
-      font-size: 1.25rem;
-      padding: 20px;
-    }
-
-    .isActive {
-      box-shadow: var(--color-green) 0 2px;
-      margin: 0 50px;
-    }
+  .isActive::after {
+    height: 3px;
   }
 
   .tabPanel {
-    padding: 3px;
+    padding-top: 20px;
   }
 }
 
 @media (min-width: 769px) {
-  .tabs {
-    .tab {
-      font-size: 1.75rem;
-      padding: 24px;
-    }
-
-    .isActive {
-      box-shadow: var(--color-green) 0 3px;
-      margin: 0 70px;
-    }
+  .tab {
+    font-size: 1.5rem;
+    padding: 20px 8px;
   }
 
-  .tabPanel {
-    padding: 4px;
-
-    .reviewList {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 3px;
-    }
+  .reviewList {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
   }
 }
