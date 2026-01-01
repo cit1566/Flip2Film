@@ -3,9 +3,8 @@
   flex-flow: column nowrap;
   background-color: var(--color-bg-light);
   color: var(--color-black);
-  padding: 15px;
-
   width: 100%;
+  padding-top: 20px;
 }
 
 .heading {

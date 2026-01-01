@@ -6,12 +6,12 @@ import ReviewContentBox from "@/components/review/review-content-box"
 import type { Review } from "@/libs/supabase/types"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
+import Tiptap from "../../tiptap/tiptap"
 import ReviewCategory from "./category"
 import Input from "./input"
 import Label from "./label"
 import styles from "./review-create-form.module.css"
 import StarRating from "./star-rating"
-import Textarea from "./textarea"
 
 type ReviewFormData = Review
 
@@ -60,9 +60,6 @@ export default function ReviewCreateForm() {
 
       // if (error) throw error;
 
-      // 추후 주석처리
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
       // 성공 토스트
       toast.success("리뷰가 등록되었습니다.", {
         id: loadingToast,
@@ -105,10 +102,9 @@ export default function ReviewCreateForm() {
               value.trim() !== "" || "영화 또는 도서를 선택해주세요",
           })}
         />
-      </ReviewContentBox>
 
-      {/* 리뷰 작성(제목, 내용) */}
-      <ReviewContentBox>
+        {/* 리뷰 작성(제목, 내용) */}
+
         <Input
           labelText="제목"
           id="title"
@@ -126,7 +122,8 @@ export default function ReviewCreateForm() {
             validate: value => value.trim() !== "" || "제목을 입력해주세요",
           })}
         />
-        <Textarea
+        <Tiptap />
+        {/* <Textarea
           labelText="감상평"
           id="content"
           mandatory={true}
@@ -141,12 +138,11 @@ export default function ReviewCreateForm() {
             },
             validate: value => value.trim() !== "" || "감상평을 입력해주세요",
           })}
-        />
-        {/* <p className={styles.letterLimit}>0 / 10000</p> */}
-      </ReviewContentBox>
+        /> */}
+        <p className={styles.letterLimit}>0 / 10000</p>
 
-      {/* 별점 */}
-      <ReviewContentBox>
+        {/* 별점 */}
+
         <Controller
           name="rating"
           control={control}
@@ -154,10 +150,9 @@ export default function ReviewCreateForm() {
             <StarRating value={field.value} onChange={field.onChange} />
           )}
         />
-      </ReviewContentBox>
 
-      {/* 리뷰 공개 설정 */}
-      <ReviewContentBox>
+        {/* 리뷰 공개 설정 */}
+
         <Label labelText="공개 여부" id="is_public" />
         <div className={styles.toggleContainer}>
           <p className={styles.reviewPublicMessage}>
