@@ -1,4 +1,4 @@
-import "server-only"
+// import "server-only"
 
 // .env에 저장된 TMDB API Key 가져오기 (Bearer 토큰 방식)
 const TMDB_READ_ACCESS_API = process.env.TMDB_READ_ACCESS_API_KEY
@@ -13,7 +13,7 @@ if (!TMDB_READ_ACCESS_API) {
 const BASE_URL = "https://api.themoviedb.org/3"
 
 // fetch 요청 시 공통으로 사용할 옵션
-const options = {
+export const TMDB_options = {
   method: "GET",
   headers: {
     accept: "application/json",
@@ -29,7 +29,7 @@ const options = {
  * - 공통적으로 에러 처리 및 JSON 변환 처리
  */
 async function request<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${BASE_URL}${endpoint}`, options)
+  const res = await fetch(`${BASE_URL}${endpoint}`, TMDB_options)
 
   // 네트워크는 문제 없지만 API 자체가 실패한 경우
   if (!res.ok) {
@@ -42,7 +42,9 @@ async function request<T>(endpoint: string): Promise<T> {
 
 export interface TMDBProps {
   posterURL: PosterPathProps
+  getPosterUrl: (path: string, size: string) => string
   getMovies: (input: string | number) => Promise<MovieRoot>
+  getMovieId: (input: string) => Promise<TmdbMovieDetail>
   getRecentMovies: () => Promise<MovieRoot>
 }
 
@@ -59,11 +61,42 @@ export const TMDB: TMDBProps = {
       w1280: "w1280",
       original: "original",
     },
-    logo_sizes: ["w45", "w92", "w154", "w185", "w300", "w500", "original"],
-    poster_sizes: ["w92", "w154", "w185", "w342", "w500", "w780", "original"],
-    profile_sizes: ["w45", "w185", "h632", "original"],
-    still_sizes: ["w92", "w185", "w300", "original"],
+    logo_sizes: {
+      w45: "w45",
+      w92: "w92",
+      w154: "w154",
+      w185: "w185",
+      w300: "w300",
+      w500: "w500",
+      original: "original",
+    },
+    poster_sizes: {
+      w92: "w92",
+      w154: "w154",
+      w185: "w185",
+      w342: "w342",
+      w500: "w500",
+      w780: "w780",
+      original: "original",
+    },
+    profile_sizes: {
+      w45: "w45",
+      w185: "w185",
+      h632: "h632",
+      original: "original",
+    },
+    still_sizes: {
+      w92: "w92",
+      w185: "w185",
+      w300: "w300",
+      original: "original",
+    },
   },
+
+  getPosterUrl(path, size) {
+    return `${TMDB.posterURL.secure_base_url}${size}/${path}`
+  },
+
   /**
    * 영화 검색 API
    * @param input 검색어(문자열 또는 숫자)
@@ -77,6 +110,9 @@ export const TMDB: TMDBProps = {
     )
   },
 
+  getMovieId(movieId) {
+    return request(`/movie/${movieId}?language=ko-KR`)
+  },
   /**
    * 최신 영화 정보 조회
    * @returns 현재 상영 중인 영화 목록 JSON
@@ -92,12 +128,12 @@ export const TMDB: TMDBProps = {
 // 영화 API 반환 type
 export interface MovieRoot {
   page: number
-  results: movieItemProps[]
+  results: MovieItemProps[]
   total_pages: number
   total_results: number
 }
 
-export interface movieItemProps {
+export interface MovieItemProps {
   adult: boolean
   backdrop_path: string | null
   genre_ids: number[]
@@ -118,14 +154,107 @@ export interface movieItemProps {
 // posterURL type 정의
 export interface PosterPathProps {
   secure_base_url: string
+
   backdrop_sizes: {
     w300: "w300"
     w780: "w780"
     w1280: "w1280"
     original: "original"
   }
-  logo_sizes: string[]
-  poster_sizes: string[]
-  profile_sizes: string[]
-  still_sizes: string[]
+
+  logo_sizes: {
+    w45: "w45"
+    w92: "w92"
+    w154: "w154"
+    w185: "w185"
+    w300: "w300"
+    w500: "w500"
+    original: "original"
+  }
+
+  poster_sizes: {
+    w92: "w92"
+    w154: "w154"
+    w185: "w185"
+    w342: "w342"
+    w500: "w500"
+    w780: "w780"
+    original: "original"
+  }
+
+  profile_sizes: {
+    w45: "w45"
+    w185: "w185"
+    h632: "h632"
+    original: "original"
+  }
+
+  still_sizes: {
+    w92: "w92"
+    w185: "w185"
+    w300: "w300"
+    original: "original"
+  }
+}
+
+// --------------------------------------------------------
+// getMovieId
+// --------------------------------------------------------
+export interface TmdbCollection {
+  id: number
+  name: string
+  poster_path: string | null
+  backdrop_path: string | null
+}
+
+export interface TmdbGenre {
+  id: number
+  name: string
+}
+
+export interface TmdbProductionCompany {
+  id: number
+  logo_path: string | null
+  name: string
+  origin_country: string
+}
+
+export interface TmdbProductionCountry {
+  iso_3166_1: string
+  name: string
+}
+
+export interface TmdbSpokenLanguage {
+  english_name: string
+  iso_639_1: string
+  name: string
+}
+
+export interface TmdbMovieDetail {
+  adult: boolean
+  backdrop_path: string | null
+  belongs_to_collection: TmdbCollection | null
+  budget: number
+  genres: TmdbGenre[]
+  homepage: string
+  id: number
+  imdb_id: string | null
+  origin_country: string[]
+  original_language: string
+  original_title: string
+  overview: string
+  popularity: number
+  poster_path: string | null
+  production_companies: TmdbProductionCompany[]
+  production_countries: TmdbProductionCountry[]
+  release_date: string // "YYYY-MM-DD"
+  revenue: number
+  runtime: number | null
+  spoken_languages: TmdbSpokenLanguage[]
+  status: string
+  tagline: string
+  title: string
+  video: boolean
+  vote_average: number
+  vote_count: number
 }

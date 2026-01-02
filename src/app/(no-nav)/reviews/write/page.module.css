@@ -17,6 +17,106 @@
   color: var(--color-gray);
 }
 
+/* ------------------------------------- */
+/* 카테고리 폼 */
+/* ------------------------------------- */
+
+.reviewCreateForm {
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 20px;
+  border-radius: 15px;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 20px;
+
+  /* --------------- 카테고리 박스 ------------- */
+  .category {
+    width: 100%;
+    height: fit-content;
+
+    /* 카테고리 제목 */
+    h2 {
+      font-weight: bold;
+      font-size: 1rem;
+      color: var(--color-black);
+      margin-bottom: 10px;
+
+      & span {
+        color: var(--color-red);
+      }
+    }
+
+    /* 카테고리 input 박스 */
+    .categoryInput {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* input은 보이지 않게, 접근성은 유지 */
+    .radioInput {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* label을 버튼처럼 */
+    .radioButton {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      height: 44px;
+      min-width: 120px;
+      padding: 0 16px;
+
+      border: 1px solid var(--color-border-d0);
+      border-radius: 10px;
+      background: #fff;
+
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* 텍스트 */
+    .radioText {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ✅ 선택되면 버튼이 활성화된 것처럼 */
+    .radioButton:has(.radioInput:checked) {
+      border-color: var(--color-border-4);
+      background: var(--color-green);
+      color: white;
+    }
+
+    /* 키보드 탭 포커스 표시 */
+    .radioButton:has(.radioInput:focus-visible) {
+      outline: 2px solid rgba(0, 0, 0, 0.35);
+      outline-offset: 2px;
+    }
+  }
+
+  /* -------------- 카테고리 검색 input ------------ */
+  .searchCategory {
+    /* display: flex; */
+    /* flex-flow: column nowrap; */
+    width: 100%;
+    /* gap: 10px; */
+  }
+}
+
+/* ---------------------------------------------- */
+/* 중단점 */
+/* ---------------------------------------------- */
+
+/* 중단선 */
+
 @media (min-width: 481px) {
   .reviewCreateSection {
     align-items: center;

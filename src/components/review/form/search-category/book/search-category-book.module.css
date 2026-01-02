@@ -1,0 +1,195 @@
+.wrap {
+  position: relative;
+}
+
+.label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0f172a;
+
+  span {
+    color: var(--color-red);
+  }
+}
+
+.input {
+  width: 100%;
+  height: 50px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  font-size: 1rem;
+  color: #0f172a;
+  background: #fff;
+}
+
+.removeButton {
+  position: absolute;
+  right: 0px;
+  height: 50px;
+  aspect-ratio: 1;
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--color-gray);
+}
+
+.list {
+  position: absolute;
+  /* top: calc(44px + 8px); */
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  overflow: auto;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+}
+
+.listItem {
+  margin: 0;
+}
+
+.itemButton {
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+}
+
+.itemButton:hover {
+  background: #f4f7ff;
+}
+
+.thumb {
+  width: 44px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #f1f5f9;
+  flex: 0 0 auto;
+}
+
+.itemText {
+  min-width: 0;
+  flex: 1;
+}
+
+.itemTitle {
+  font-size: 0.875rem;
+  font-weight: 900;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemMeta {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: rgba(15, 23, 42, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.previewCard {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.previewRow {
+  display: flex;
+  gap: 16px;
+}
+
+.previewThumb {
+  width: 90px;
+  height: 130px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #f1f5f9;
+  flex: 0 0 auto;
+}
+
+.previewInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.previewTitle {
+  width: 100%;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.closeBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  padding: 0;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-gray);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewAuthor {
+  margin-top: 6px;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.previewMetaLine {
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.stateText {
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.stateTextError {
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+  color: #ef4444;
+}

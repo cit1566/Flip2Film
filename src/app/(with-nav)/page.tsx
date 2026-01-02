@@ -1,11 +1,11 @@
 import Home from "../../components/main-body/home/home"
 import { type BookItemProps, getAladdin } from "../../libs/api/book/book-api"
-import { type movieItemProps, TMDB } from "../../libs/api/movie/movie-api"
+import { type MovieItemProps, TMDB } from "../../libs/api/movie/movie-api"
 import styles from "./page.module.css"
 
 export interface PosterListProps {
   book: BookItemProps[]
-  movie: movieItemProps[]
+  movie: MovieItemProps[]
 }
 
 function toMessage(e: unknown, fallback: string): string {
@@ -16,7 +16,7 @@ export default async function HomePage() {
   const errors: string[] = []
 
   let bookBest: BookItemProps[] = []
-  let movieBest: movieItemProps[] = []
+  let movieBest: MovieItemProps[] = []
 
   try {
     // 알라딘 베스트 도서 리스트
