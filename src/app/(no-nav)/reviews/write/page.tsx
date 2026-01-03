@@ -18,7 +18,10 @@ export default function ReviewCreatePage() {
         영화나 도서에 대한 당신의 생각을 공유해주세요.
       </p>
 
-      <form className={styles.reviewCreateForm}>
+      <form
+        className={styles.reviewCreateForm}
+        onSubmit={e => e.preventDefault()}
+      >
         {/* 카테고리 */}
         <div className={styles.category}>
           <h2>
