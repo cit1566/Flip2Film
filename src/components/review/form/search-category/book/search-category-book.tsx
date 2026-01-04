@@ -39,7 +39,6 @@ export default function SearchCategorBook({
 }: SearchCategorBookProps) {
   const [q, setQ] = useState("")
   const debounced = useDebounce(q, 400)
-  // const [selectedId, setSelectedId] = useState<number | null>(null)
 
   // 1) 검색 자동완성
   const searchQuery = useQuery({
