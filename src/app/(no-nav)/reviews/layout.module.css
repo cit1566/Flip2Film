@@ -1,39 +1,93 @@
-.header {
-  position: sticky;
-  top: 0;
-  transition: transform 0.1s ease;
+:root {
+  /* 이 파일에서만 쓸 거면 :root 말고 아래 클래스에 변수로 둬도 됨 */
 }
 
 .mainBody {
+  --page-padding: 15px;
+  --header-h: 70px;
+  --max-w: 1279px;
+
+  width: 100%;
+  min-height: 100vh;
   background: var(--color-bg-light);
-  width: 100%;
+
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   align-items: center;
-  padding-inline: 15px;
-  overflow: hidden;
+
+  padding-inline: var(--page-padding);
+
+  /* 드롭다운/툴팁 잘림 이슈 있으면 hidden 금지 */
+  overflow: visible;
+  position: relative;
 }
 
-.container {
-  min-width: 363px;
+/* ---------------- Header (fixed) ---------------- */
+.reviewHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: var(--header-h);
+  background: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-inline: var(--page-padding);
+  z-index: 100;
+
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.reviewHeaderInner {
   width: 100%;
-  padding-bottom: 100px;
+  max-width: var(--max-w);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-inline: var(--page-padding);
+
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
 }
 
-/* ------------------------------- */
-@media (min-width: 1279px) {
-  .container {
-    max-width: 1279px;
-  }
+.reviewHeaderButtonBox {
+  display: flex;
+  gap: 10px;
 }
-@media (min-width: 768px) and (max-width: 1279px) {
+
+/* ---------------- Page container ---------------- */
+.container {
+  width: 100%;
+  max-width: var(--max-w);
+
+  /* fixed header 공간 확보 */
+  padding-top: var(--header-h);
+  padding-bottom: 100px;
+
+  /* margin-top 대신 padding-top 추천 */
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1279px) {
   .container {
     max-width: 768px;
   }
 }
 
 @media (max-width: 768px) {
+  .reviewHeaderInner {
+    font-size: 1.6rem;
+    padding-inline: 0; /* 모바일에서 좌우 패딩 과하면 줄이기 */
+  }
+
   .container {
-    max-width: 768px;
+    max-width: 100%;
   }
 }
