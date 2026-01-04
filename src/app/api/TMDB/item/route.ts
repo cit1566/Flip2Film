@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   const posterUrl = (data: string | null): string => {
     if (data) return TMDB.getPosterUrl(data, TMDB.posterURL.poster_sizes.w92)
 
-    return "asdf"
+    return "/image/non-poster.png"
   }
 
   const poster_url = posterUrl(res.poster_path)

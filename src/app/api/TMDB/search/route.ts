@@ -23,10 +23,9 @@ export async function GET(req: Request) {
       original_title: it.original_title,
       overview: it.overview,
       popularity: it.popularity,
-      poster_path: TMDB.getPosterUrl(
-        it.poster_path,
-        TMDB.posterURL.poster_sizes.w92
-      ),
+      poster_path: it.poster_path
+        ? TMDB.getPosterUrl(it.poster_path, TMDB.posterURL.poster_sizes.w92)
+        : "/image/non-poster.png",
       release_date: it.release_date,
       title: it.title,
       video: it.video,
