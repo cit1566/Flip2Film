@@ -18,6 +18,9 @@ import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./sign-up-form.module.css"
 
+/**
+ * Supabase / DB 에러 타입 (필요한 것만 최소 정의)
+ */
 interface AuthError {
   code?: string
   status?: number
@@ -26,6 +29,10 @@ interface AuthError {
   hint?: string
 }
 
+/**
+ * 회원가입 폼에서 실제로 사용하는 데이터 타입
+ * (DB insert 타입 + UI 전용 필드)
+ */
 type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
   password: string
   passwordCheck: string
@@ -34,13 +41,28 @@ type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
 
 export default function SignUpForm() {
   const router = useRouter()
+
+  /**
+   * 중복 submit 방지용 ref
+   * - react-hook-form의 isSubmitting은 비동기 타이밍에 취약할 수 있음
+   * - 서버 요청 중 버튼 연타 방지 목적
+   */
   const isSubmittingRef = useRef(false)
+
+  /** 회원가입 성공 여부 (성공 화면 전환용) */
   const [isSuccess, setIsSuccess] = useState(false)
 
+  /**
+   * Postgres 에러 코드 상수
+   * - 23505: UNIQUE 제약조건 위반
+   */
   const DB_ERROR_CODES = {
     UNIQUE_VIOLATION: "23505",
   }
 
+  /**
+   * react-hook-form 설정
+   */
   const {
     control,
     handleSubmit,
@@ -59,6 +81,9 @@ export default function SignUpForm() {
     },
   })
 
+  /**
+   * Input 상태 계산 (UI용)
+   */
   const handleInputStatus = (
     isTouched: boolean,
     hasError: boolean,
@@ -69,7 +94,13 @@ export default function SignUpForm() {
     return "default"
   }
 
-  const checkEmailDuplicate = async (value: string | null | undefined) => {
+  /**
+   * 이메일 중복 검사
+   * - 형식이 맞지 않으면 검사하지 않음
+   * - true: 통과
+   * - string: 에러 메시지
+   */
+  const checkEmailDuplicate = async (value?: string | null) => {
     if (!value || !VALIDATION_PATTERNS.email.value.test(value)) return true
 
     try {
@@ -80,8 +111,12 @@ export default function SignUpForm() {
     }
   }
 
-  const checkNicknameDuplicate = async (value: string | null | undefined) => {
+  /**
+   * 닉네임 중복 검사
+   */
+  const checkNicknameDuplicate = async (value?: string | null) => {
     if (!value || value.length < 2) return true
+
     try {
       const isExists = await checkNicknameValidate(value)
       return isExists ? "이미 사용 중인 닉네임 입니다" : true
@@ -90,13 +125,18 @@ export default function SignUpForm() {
     }
   }
 
+  /**
+   * 회원가입 submit 핸들러
+   */
   const handleSignUpSubmit = async (data: SignUpFormData) => {
     if (isSubmittingRef.current) return
 
     try {
       isSubmittingRef.current = true
+
       const { email, password, nickname, bio, profile_image } = data
 
+      // 사용자 생성 (Auth + public.user)
       await createUser({
         email,
         password,
@@ -111,6 +151,9 @@ export default function SignUpForm() {
       const error = err as AuthError
       const errorCode = error?.code ?? ""
 
+      /**
+       * DB UNIQUE 에러 분기 처리
+       */
       if (errorCode === DB_ERROR_CODES.UNIQUE_VIOLATION) {
         const errorDetail = (
           error?.details ??
@@ -140,6 +183,9 @@ export default function SignUpForm() {
     }
   }
 
+  /**
+   * 회원가입 성공 화면
+   */
   if (isSuccess) {
     return (
       <div className={styles.successWrapper}>
@@ -155,7 +201,7 @@ export default function SignUpForm() {
           <p className={styles.description}>
             입력하신 이메일로 인증 링크를 보냈습니다
             <br />
-            메일 인증까지 완료해야 서비스 이용이 가능합니다
+            메일 인증 후 서비스 이용이 가능합니다
           </p>
         </header>
 
@@ -169,11 +215,15 @@ export default function SignUpForm() {
     )
   }
 
+  /**
+   * 회원가입 폼
+   */
   return (
     <form
       className={styles.signUpForm}
       onSubmit={handleSubmit(handleSignUpSubmit)}
     >
+      {/* 프로필 이미지 */}
       <Controller
         name="profile_image"
         control={control}
@@ -185,6 +235,7 @@ export default function SignUpForm() {
         )}
       />
 
+      {/* 이메일 */}
       <Controller
         name="email"
         control={control}
@@ -217,6 +268,7 @@ export default function SignUpForm() {
         )}
       />
 
+      {/* 비밀번호 */}
       <Controller
         name="password"
         control={control}
@@ -247,6 +299,7 @@ export default function SignUpForm() {
         )}
       />
 
+      {/* 비밀번호 확인 */}
       <Controller
         name="passwordCheck"
         control={control}
@@ -280,6 +333,7 @@ export default function SignUpForm() {
         )}
       />
 
+      {/* 닉네임 */}
       <Controller
         name="nickname"
         control={control}
@@ -312,6 +366,7 @@ export default function SignUpForm() {
         )}
       />
 
+      {/* Bio */}
       <Controller
         name="bio"
         control={control}
@@ -319,7 +374,7 @@ export default function SignUpForm() {
           <div className={styles.inputWrapper}>
             <Input
               label="Bio"
-              placeholder="자기소개를 입력해주세요"
+              placeholder="자기소개를 입력해주세요 (선택)"
               clearable
               value={field.value ?? ""}
               onChange={e => field.onChange(e.target.value)}

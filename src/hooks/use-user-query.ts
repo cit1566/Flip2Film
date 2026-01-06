@@ -1,11 +1,11 @@
-import { useUserStore } from "@/features/auth/use-user-store"
 import { getUser, supabase } from "@/libs/api/user/user-api"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
+import { useUserStore } from "../store/useUserStore"
 
 export const useUserQuery = () => {
   const queryClient = useQueryClient()
-  const { setUser, clearUser } = useUserStore()
+  const { setUserData, reset } = useUserStore()
 
   const query = useQuery({
     queryKey: ["user-profile"],
@@ -26,21 +26,21 @@ export const useUserQuery = () => {
       if (event === "SIGNED_IN") {
         queryClient.invalidateQueries({ queryKey: ["user-profile"] })
       } else if (event === "SIGNED_OUT") {
-        clearUser()
+        reset()
         queryClient.setQueryData(["user-profile"], null)
       }
     })
 
     return () => subscription.unsubscribe()
-  }, [queryClient, clearUser])
+  }, [queryClient, reset])
 
   useEffect(() => {
     if (query.data) {
-      setUser(query.data)
+      setUserData(query.data)
     } else if (!query.isLoading && !query.data) {
-      clearUser()
+      reset()
     }
-  }, [query.data, query.isLoading, setUser, clearUser])
+  }, [query.data, query.isLoading, setUserData, reset])
 
   return query
 }

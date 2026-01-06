@@ -1,5 +1,6 @@
+import type { AuthTokenResponse, Session } from "@supabase/supabase-js"
 import createClient from "../../supabase/client"
-import type { UserInsert, UserUpdate } from "../../supabase/types"
+import type { User, UserInsert, UserUpdate } from "../../supabase/types"
 
 export const supabase = createClient()
 
@@ -81,8 +82,16 @@ export default async function createUser({
   return data.user
 }
 
+// 브라우저 쿠키 토큰 데이터 가져오기
+export async function getBrowserSession(): Promise<Session | null> {
+  const { data: token } = await supabase.auth.getSession()
+  if (!token.session) return null
+
+  return token.session
+}
+
 // 사용자 id에 해당하는 user 데이터 가져오기
-export async function getUser(id: string) {
+export async function getUser(id: string): Promise<User | null> {
   const { data, error } = await supabase
     .from("user")
     .select("*")
@@ -107,7 +116,10 @@ export async function updateUser(
 }
 
 // 사용자 토큰 발행
-export async function logIn(email: string, password: string) {
+export async function logIn(
+  email: string,
+  password: string
+): Promise<AuthTokenResponse["data"]> {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
