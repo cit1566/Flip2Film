@@ -2,7 +2,6 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import { logIn } from "@/libs/api/user/user-api"
 import { useUserStore } from "@/store/useUserStore"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -10,6 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { logIn } from "../../../libs/api/user"
 import getUserProfileUrl from "../../../libs/api/user/get-user-profile"
 import styles from "./login-form.module.css"
 

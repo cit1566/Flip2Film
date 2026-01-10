@@ -8,7 +8,6 @@ import {
   checkEmailValidate,
   checkNicknameValidate,
 } from "@/libs/api/auth/auth-api"
-import createUser from "@/libs/api/user/user-api"
 import type { UserInsert } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { CheckCircle2 } from "lucide-react"
@@ -16,6 +15,7 @@ import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { createUser } from "../../../libs/api/user"
 import styles from "./sign-up-form.module.css"
 
 /**

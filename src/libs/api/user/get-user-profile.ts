@@ -1,5 +1,5 @@
 import createClient from "../../supabase/client"
-import { getUser } from "./user-api"
+import { getUser } from "./profile"
 
 export default async function getUserProfileUrl(
   userId: string

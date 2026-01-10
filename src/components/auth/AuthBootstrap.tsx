@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { getBrowserSession } from "../../libs/api/user/user-api"
+import { getBrowserSession } from "../../libs/api/user"
 import createClient from "../../libs/supabase/client"
 import { useUserStore } from "../../store/useUserStore"
 
@@ -34,16 +34,27 @@ export default function AuthBootstrap() {
       // ✅ userId 저장(헤더 등에서 로그인 유무 판단/쿼리 enabled 용도로 사용)
       setUserId(u.id)
 
-      // ✅ userData 저장(닉네임/이메일/프로필 이미지 등 UI 렌더링 용도)
-      // 주의: user_metadata의 값들은 언제든 없을 수 있으니(특히 nickname/bio) 안전하게 처리하는 게 좋음
-      setUserData({
-        id: u.id,
-        email: u.email ?? null,
-        nickname: (u.user_metadata?.nickname as string) ?? "",
-        bio: (u.user_metadata?.bio as string | null) ?? null,
-        profile_image:
-          (u.user_metadata?.profile_image as string | null) ?? null,
-      })
+      if (u.app_metadata.provider === "email") {
+        // ✅ userData 저장(닉네임/이메일/프로필 이미지 등 UI 렌더링 용도)
+        // 주의: user_metadata의 값들은 언제든 없을 수 있으니(특히 nickname/bio) 안전하게 처리하는 게 좋음
+        setUserData({
+          id: u.id,
+          email: u.email ?? null,
+          nickname: (u.user_metadata?.nickname as string) ?? "",
+          bio: (u.user_metadata?.bio as string | null) ?? null,
+          profile_image:
+            (u.user_metadata?.profile_image as string | null) ?? null,
+        })
+      } else {
+        setUserData({
+          id: u.id,
+          email: u.email ?? null,
+          nickname: (u.user_metadata?.nickname as string) ?? "",
+          bio: (u.user_metadata?.bio as string | null) ?? null,
+          profile_image:
+            (u.user_metadata?.profile_image as string | null) ?? null,
+        })
+      }
     }
 
     // ✅ 컴포넌트 마운트 직후(앱 시작/새로고침 포함) 세션 확인 실행

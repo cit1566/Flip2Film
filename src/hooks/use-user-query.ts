@@ -1,6 +1,7 @@
-import { getUser, supabase } from "@/libs/api/user/user-api"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
+import { getUser } from "../libs/api/user"
+import { supabase } from "../libs/supabase/client"
 import { useUserStore } from "../store/useUserStore"
 
 export const useUserQuery = () => {

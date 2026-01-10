@@ -1,12 +1,12 @@
 "use client"
 
-import { logOut } from "@/libs/api/user/user-api"
 import { useQuery } from "@tanstack/react-query"
 import { Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import { logOut } from "../../libs/api/user"
 import getUserProfileUrl from "../../libs/api/user/get-user-profile"
 import { useUserStore } from "../../store/useUserStore"
 import styles from "./header.module.css"
