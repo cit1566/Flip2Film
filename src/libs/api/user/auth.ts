@@ -137,6 +137,7 @@ export async function logOut() {
 
 // -----------------------------------------------------------------------------------------
 /**
+/**
  * 소셜 로그인 (OAuth)
  * - 브라우저에서만 사용
  */
@@ -146,7 +147,8 @@ export const signInWithSocial = async (provider: "kakao" | "google") => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${window.location.origin}/social`,
+      // ✅ social로 바로 보내지 말고 callback으로 보내서 session 교환
+      redirectTo: `${window.location.origin}/api/auth?next=/social`,
       queryParams:
         provider === "google"
           ? { prompt: "consent select_account" }
@@ -157,6 +159,7 @@ export const signInWithSocial = async (provider: "kakao" | "google") => {
   if (error) throw new Error(error.message)
   return true
 }
+
 // -----------------------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------------------

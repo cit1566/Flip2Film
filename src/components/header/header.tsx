@@ -110,6 +110,7 @@ export default function Header({ className }: HeaderProps) {
   }
 
   const authReady = !!userId && isUserComplete // 너 기준 “로그인 상태”
+  // const authReady = true
   return (
     <header
       className={`${styles.header} ${className ?? ""} ${show ? styles.show : styles.hide}`}
