@@ -7,7 +7,6 @@ import {
   makeProfileImagePath,
   validateProfileImage,
 } from "./profile-image"
-import { ensureBrowser } from "./user-api"
 
 const supabase = createClient()
 
@@ -21,6 +20,13 @@ export interface CreateUserProps {
   bio: UserInsert["bio"]
   nickname: UserInsert["nickname"]
   profile_image: File | null
+}
+export function ensureBrowser(fnName: string) {
+  if (typeof window === "undefined") {
+    throw new Error(
+      `${fnName} 함수는 브라우저(클라이언트)에서만 호출할 수 있습니다.`
+    )
+  }
 }
 
 // -----------------------------------------------------------------------------------------

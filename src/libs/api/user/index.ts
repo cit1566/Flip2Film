@@ -15,10 +15,17 @@ export {
 } from "./auth"
 
 // Session
-export { getBrowserSession } from "./session"
+export { getBrowserSession, getBrowserUser } from "./session"
 
 // public.user (DB)
 export { getUser, updateUser } from "./profile"
 
 // Storage (Profile image)
-export { getProfileImageUrl, uploadProfileImage } from "./profile-image"
+export {
+  assert,
+  getProfileImageUrl,
+  makeProfileImagePath,
+  makeUuid,
+  uploadProfileImage,
+  validateProfileImage,
+} from "./profile-image"

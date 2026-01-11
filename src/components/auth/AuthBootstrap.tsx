@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { getBrowserSession } from "../../libs/api/user"
+import { getBrowserUser } from "../../libs/api/user"
 import createClient from "../../libs/supabase/client"
 import { useUserStore } from "../../store/useUserStore"
 
@@ -23,36 +23,33 @@ export default function AuthBootstrap() {
     // 있으면 그 세션의 user 정보를 store에 복구해줌.
     const getUserData = async (): Promise<void> => {
       // getBrowserSession: 내부적으로 supabase.auth.getSession() 같은 걸 감싼 함수라고 가정
-      const tokenSession = await getBrowserSession()
+      const user = await getBrowserUser()
 
       // 세션이 없으면(=로그인 상태 아님) 아무것도 하지 않음
-      if (!tokenSession) return
-
-      // 세션이 있으면 user 정보를 꺼내 store에 저장
-      const u = tokenSession.user
+      if (!user) return
 
       // ✅ userId 저장(헤더 등에서 로그인 유무 판단/쿼리 enabled 용도로 사용)
-      setUserId(u.id)
+      setUserId(user.id)
 
-      if (u.app_metadata.provider === "email") {
+      if (user.app_metadata.provider === "email") {
         // ✅ userData 저장(닉네임/이메일/프로필 이미지 등 UI 렌더링 용도)
         // 주의: user_metadata의 값들은 언제든 없을 수 있으니(특히 nickname/bio) 안전하게 처리하는 게 좋음
         setUserData({
-          id: u.id,
-          email: u.email ?? null,
-          nickname: (u.user_metadata?.nickname as string) ?? "",
-          bio: (u.user_metadata?.bio as string | null) ?? null,
+          id: user.id,
+          email: user.email ?? null,
+          nickname: (user.user_metadata?.nickname as string) ?? "",
+          bio: (user.user_metadata?.bio as string | null) ?? null,
           profile_image:
-            (u.user_metadata?.profile_image as string | null) ?? null,
+            (user.user_metadata?.profile_image as string | null) ?? null,
         })
       } else {
         setUserData({
-          id: u.id,
-          email: u.email ?? null,
-          nickname: (u.user_metadata?.nickname as string) ?? "",
-          bio: (u.user_metadata?.bio as string | null) ?? null,
+          id: user.id,
+          email: user.email ?? null,
+          nickname: (user.user_metadata?.nickname as string) ?? "",
+          bio: (user.user_metadata?.bio as string | null) ?? null,
           profile_image:
-            (u.user_metadata?.profile_image as string | null) ?? null,
+            (user.user_metadata?.profile_image as string | null) ?? null,
         })
       }
     }
