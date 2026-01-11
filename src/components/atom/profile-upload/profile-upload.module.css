@@ -8,8 +8,15 @@
 
 .profileImageBox {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 150px;
+  height: 150px;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--color-bg-dark);
+  }
 }
 
 .profileImage {
@@ -20,16 +27,24 @@
 }
 
 .hiddenInput {
-  display: none;
+  /* display: none; */
+  background: pink;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .profileUploadButton {
   position: absolute;
-  right: -3px;
-  bottom: -3px;
+  right: 0px;
+  bottom: 0px;
 
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 
   display: flex;
   justify-content: center;
@@ -58,4 +73,25 @@
   line-height: 1.4;
   text-align: center;
   font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .profileImageBox {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .profileImageBox {
+    width: 125px;
+    height: 125px;
+  }
+}
+
+@media (min-width: 1279px) {
+  .profileImageBox {
+    width: 150px;
+    height: 150px;
+  }
 }

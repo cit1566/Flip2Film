@@ -4,11 +4,12 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import { checkNicknameValidate } from "@/libs/api/auth/auth-api"
-import { getUser, supabase, updateUser } from "@/libs/api/user/user-api"
+import { getUser, updateUser, uploadProfileImage } from "@/libs/api/user"
+import { getBrowserUser } from "@/libs/api/user/session"
 import type { UserUpdate } from "@/libs/supabase/types"
-import { useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import styles from "./page.module.css"
@@ -19,14 +20,13 @@ type SocialProfileFormData = Pick<UserUpdate, "nickname" | "bio"> & {
 
 export default function SocialProfilePage() {
   const router = useRouter()
-  const isSubmittingRef = useRef(false)
   const [isChecking, setIsChecking] = useState(true)
   const queryClient = useQueryClient()
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted, isValid },
+    formState: { errors, isSubmitted, isValid },
   } = useForm<SocialProfileFormData>({
     mode: "onChange",
     defaultValues: {
@@ -36,24 +36,22 @@ export default function SocialProfilePage() {
     },
   })
 
+  // 로그인 상태 확인
   useEffect(() => {
     const checkUserStatus = async () => {
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-
+        const user = await getBrowserUser()
         if (!user) {
           router.replace("/login")
           return
         }
-
         const userData = await getUser(user.id)
         if (userData?.nickname && userData.nickname !== "익명") {
           toast.success("로그인이 성공했습니다")
           router.replace("/")
           return
         }
+
         setIsChecking(false)
       } catch (err: unknown) {
         const error = err as { code?: string; message?: string }
@@ -90,45 +88,29 @@ export default function SocialProfilePage() {
     }
   }
 
-  const handleSignupSubmit = async (data: SocialProfileFormData) => {
-    if (isSubmittingRef.current) return
+  // ✅ 간편 회원가입 mutation
+  const socialSignupMutation = useMutation({
+    mutationKey: ["social-profile-signup"],
+    mutationFn: async (form: SocialProfileFormData) => {
+      const user = await getBrowserUser()
 
-    try {
-      isSubmittingRef.current = true
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      if (!user) throw new Error("로그인 정보가 없습니다")
 
-      if (!user) {
-        toast.error("로그인 정보가 없습니다")
-        return
-      }
-
+      // 이미 프로필 세팅 완료된 사용자면 바로 종료
       const existingUser = await getUser(user.id).catch(err => {
-        if (err?.code !== "PGRST116") {
-          toast.error("Unexpected error fetching user:", err)
-        }
-        return null
+        if (err?.code === "PGRST116") return null
+        throw err
       })
 
       if (existingUser?.nickname && existingUser.nickname !== "익명") {
-        toast.info("로그인이 성공했습니다")
-        router.replace("/")
-        return
+        return { alreadyCompleted: true, userId: user.id }
       }
 
-      const { nickname, bio, profile_image } = data
-      let imagePath = null
+      const { nickname, bio, profile_image } = form
+      let imagePath: string | null = null
 
       if (profile_image instanceof File) {
-        const fileExt = profile_image.name.split(".").pop() ?? "png"
-        const filePath = `${user.id}/profile.${fileExt}`
-
-        const { error: uploadError } = await supabase.storage
-          .from("profile_image")
-          .upload(filePath, profile_image, { upsert: true })
-
-        if (uploadError) throw uploadError
+        const { filePath } = await uploadProfileImage(user.id, profile_image)
         imagePath = filePath
       }
 
@@ -138,22 +120,46 @@ export default function SocialProfilePage() {
         profile_image: imagePath,
       })
 
-      await queryClient.invalidateQueries({ queryKey: ["user-profile"] })
-
-      toast.success("간편 회원가입이 완료되었습니다")
+      return { alreadyCompleted: false, userId: user.id }
+    },
+    onSuccess: async result => {
+      if (result.alreadyCompleted) {
+        toast.info("로그인이 성공했습니다")
+      } else {
+        await queryClient.invalidateQueries({ queryKey: ["user-profile"] })
+        toast.success("간편 회원가입이 완료되었습니다")
+      }
       router.replace("/")
-    } catch {
-      toast.error("간편 회원가입에 실패했습니다")
-    } finally {
-      isSubmittingRef.current = false
-    }
-  }
+    },
+    onError: (err: unknown) => {
+      const e = err as { message?: string }
+      toast.error(
+        `간편 회원가입에 실패했습니다: ${e?.message ?? "Unknown error"}`
+      )
+    },
+  })
 
-  if (isChecking) return null
+  if (isChecking) {
+    return (
+      <div className={styles.checkingWrap} role="status" aria-live="polite">
+        <div className={styles.checkingCard}>
+          <div className={styles.spinner} aria-hidden="true" />
+          <p className={styles.checkingTitle}>로그인 상태 확인 중…</p>
+          <p className={styles.checkingSub}>잠시만 기다려주세요.</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <form
-      onSubmit={handleSubmit(handleSignupSubmit)}
+      onSubmit={handleSubmit(async form => {
+        try {
+          await socialSignupMutation.mutateAsync(form)
+        } catch {
+          // onError에서 처리
+        }
+      })}
       className={styles.container}
     >
       <h1 className={styles.title}>간편 회원가입</h1>
@@ -213,9 +219,9 @@ export default function SocialProfilePage() {
       <Button
         className={styles.submitButton}
         variant="green"
-        title={isSubmitting ? "가입 중..." : "가입하기"}
+        title={socialSignupMutation.isPending ? "가입 중..." : "가입하기"}
         type="submit"
-        disabled={(isSubmitted && !isValid) || isSubmitting}
+        disabled={(isSubmitted && !isValid) || socialSignupMutation.isPending}
       />
     </form>
   )
