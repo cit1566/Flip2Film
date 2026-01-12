@@ -1,15 +1,15 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
 import { Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
-import { logOut } from "../../libs/api/client/user"
-import getUserProfileUrl from "../../libs/api/client/user/get-user-profile"
-import { useUserStore } from "../../store/useUserStore"
 import styles from "./header.module.css"
+import { useDropdown } from "./hooks/use-drop-down"
+import { useHeaderVisivility } from "./hooks/use-header-visibility"
+import { useLogout } from "./hooks/use-logout"
+import { useMeProfile } from "./hooks/use-me-profile"
 import ProfileSkeleton from "./profile/profile-skeleton"
 
 interface HeaderProps {
@@ -17,100 +17,31 @@ interface HeaderProps {
 }
 
 export default function Header({ className }: HeaderProps) {
-  const lastScroll = useRef(0)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const [show, setShow] = useState(true)
+  const { show } = useHeaderVisivility(50)
   const [isSearchOpen, setSearchOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
 
-  const MIN_SCROLL = 50
+  const {
+    ref: dropdownRef,
+    open: isProfileOpen,
+    setOpen: setIsProfileOpen,
+  } = useDropdown<HTMLDivElement>()
+  const { authReady, profileImageUrl, isLoading } = useMeProfile()
 
-  const user = useUserStore(state => state.userData)
-  const userId = useUserStore(state => state.userId)
-
-  const { data: profileImageUrl = "/default-profile.png", isLoading } =
-    useQuery({
-      queryKey: ["profileImageUrl", userId],
-      queryFn: async () => {
-        return await getUserProfileUrl(userId as string)
-      },
-      staleTime: 1000 * 60 * 5,
-      enabled: !!userId,
-    })
-
-  const isUserComplete = user?.nickname && user.nickname !== "익명"
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsProfileOpen(false)
-      }
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" || event.code === "Escape") {
-        setIsProfileOpen(false)
-      }
-    }
-
-    if (isProfileOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-      document.addEventListener("keydown", handleKeyDown)
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-      document.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [isProfileOpen])
-
-  useEffect(() => {
-    let rafId: number | null = null
-    let latestY = window.scrollY // 스크롤 이벤트에서 최신값만 저장
-
-    const update = () => {
-      const current = latestY
-      if (current > lastScroll.current) {
-        if (current >= MIN_SCROLL) setShow(false)
-      } else {
-        setShow(true)
-      }
-
-      lastScroll.current = current
-      rafId = null
-    }
-
-    const onScroll = () => {
-      latestY = window.scrollY
-
-      // 이미 한 프레임 예약돼 있으면 또 예약하지 않음(= 1프레임 1번)
-      rafId ??= requestAnimationFrame(update)
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      if (rafId !== null) cancelAnimationFrame(rafId)
-    }
-  }, [])
+  const logoutMutation = useLogout()
 
   const handleLogOut = async () => {
     try {
       toast.success("로그아웃되었습니다")
       setIsProfileOpen(false)
-      await logOut()
+      await logoutMutation.mutateAsync()
       window.location.href = "/"
-    } catch {
-      toast.error("로그아웃 에러가 발생했습니다")
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e?.message ?? "로그아웃 에러가 발생했습니다.")
+      }
     }
   }
 
-  const authReady = !!userId && isUserComplete // 너 기준 “로그인 상태”
-  // const authReady = true
   return (
     <header
       className={`${styles.header} ${className ?? ""} ${show ? styles.show : styles.hide}`}

@@ -1,0 +1,21 @@
+import { fetchMeProfile } from "@/libs/api/client/me/me"
+import { useQuery } from "@tanstack/react-query"
+
+export function useMeProfile() {
+  const query = useQuery({
+    queryKey: ["profileImageUrl"],
+    queryFn: fetchMeProfile,
+    staleTime: 1000 * 60 * 5,
+  })
+
+  const me = query.data ?? null
+  const authReady = Boolean(me?.nickname && me.nickname !== "익명")
+  const profileImageUrl = me?.profile_image ?? "/profile/default-profile.png"
+
+  return {
+    ...query,
+    me,
+    authReady,
+    profileImageUrl,
+  }
+}
