@@ -1,6 +1,6 @@
 "use client"
 
-import type { PosterPathProps } from "@/libs/api/movie/movie-api"
+import type { PosterPathProps } from "@/libs/api/client/movie/movie-api"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
 import type { PosterListProps } from "../../../app/page"

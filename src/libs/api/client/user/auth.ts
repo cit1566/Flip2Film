@@ -148,7 +148,7 @@ export const signInWithSocial = async (provider: "kakao" | "google") => {
     provider,
     options: {
       // ✅ social로 바로 보내지 말고 callback으로 보내서 session 교환
-      redirectTo: `${window.location.origin}/api/auth?next=/social`,
+      redirectTo: `${window.location.origin}/api/auth/callback?next=/social`,
       queryParams:
         provider === "google"
           ? { prompt: "consent select_account" }

@@ -1,0 +1,97 @@
+.container {
+  width: 100%;
+  height: max-content;
+  margin-block: 15% 15%;
+  padding-inline: 10%;
+  padding-block: 10%;
+  display: flex;
+  background: white;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 15px;
+  gap: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-black);
+  text-align: center;
+}
+
+.submitButton {
+  margin-top: 50px;
+}
+
+.errorMessage {
+  margin-block: 0;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--color-red);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1279px) {
+  .title {
+    font-size: 2.5rem;
+  }
+}
+
+/* 로딩 상태 UI 컴포넌트 */
+.checkingWrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.checkingCard {
+  width: min(360px, 92vw);
+  padding: 20px 18px;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.checkingTitle {
+  margin: 12px 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+}
+
+.checkingSub {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 3px solid rgba(0, 0, 0, 0.12);
+  border-top-color: var(--color-green);
+  margin: 0 auto;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

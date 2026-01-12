@@ -1,6 +1,6 @@
 import type { PosterListProps } from "@/app/page"
 import { useDebounceCallback } from "@/hooks/useDebounceCallback"
-import type { PosterPathProps } from "@/libs/api/movie/movie-api"
+import type { PosterPathProps } from "@/libs/api/client/movie/movie-api"
 import chunkArray from "@/utils/chunkArray"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import Image from "next/image"

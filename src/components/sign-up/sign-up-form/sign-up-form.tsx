@@ -7,7 +7,7 @@ import TermsText from "@/components/sign-up/terms-text/terms-text"
 import {
   checkEmailValidate,
   checkNicknameValidate,
-} from "@/libs/api/auth/auth-api"
+} from "@/libs/api/client/auth/auth-api"
 import type { UserInsert } from "@/libs/supabase/types"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { CheckCircle2 } from "lucide-react"
