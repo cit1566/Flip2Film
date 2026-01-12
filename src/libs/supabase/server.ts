@@ -26,5 +26,3 @@ export const createClient = async () => {
     },
   })
 }
-
-export const supabase = await createClient()

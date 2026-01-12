@@ -1,4 +1,4 @@
-import { supabase } from "@/libs/supabase/server"
+import { createClient } from "@/libs/supabase/server"
 import { NextResponse } from "next/server"
 
 interface Body {
@@ -8,6 +8,8 @@ interface Body {
 }
 
 export async function POST(req: Request) {
+  const supabase = await createClient()
+
   // ✅ 인증 확인 (서버)
   const { data: claimsData } = await supabase.auth.getClaims()
   const userId = claimsData?.claims?.sub

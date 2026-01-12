@@ -1,7 +1,9 @@
-import { supabase } from "@/libs/supabase/server"
+import { createClient } from "@/libs/supabase/server"
 import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {
+  const supabase = await createClient()
+
   // 로그인 상태가 아니면 체크 의미 없으니 401 처리(선택)
   const { data: claimsData } = await supabase.auth.getClaims()
   const userId = claimsData?.claims?.sub

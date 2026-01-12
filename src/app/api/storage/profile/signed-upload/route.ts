@@ -1,10 +1,12 @@
-import { supabase } from "@/libs/supabase/server"
+import { createClient } from "@/libs/supabase/server"
 import { NextResponse } from "next/server"
 
 const BUCKET = "profile_image"
 const ALLOWED_EXT = new Set(["png", "jpg", "jpeg"])
 
 export async function POST(req: Request) {
+  const supabase = await createClient()
+
   const { data: claimsData } = await supabase.auth.getClaims()
   const userId = claimsData?.claims?.sub
   if (!userId) {

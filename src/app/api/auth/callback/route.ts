@@ -1,5 +1,6 @@
 // app/api/auth/callback/route.ts
-import { supabase } from "@/libs/supabase/server"
+
+import { createClient } from "@/libs/supabase/server"
 import { cookies } from "next/headers"
 import { NextResponse, type NextRequest } from "next/server"
 
@@ -27,6 +28,8 @@ export async function GET(req: NextRequest) {
     //    - createClient 내부에서 이미 읽는다면 없어도 되지만, 넣어도 안전함
     cookies()
   ).getAll()
+
+  const supabase = await createClient()
 
   const { error } = await supabase.auth.exchangeCodeForSession(code)
   if (error) {
