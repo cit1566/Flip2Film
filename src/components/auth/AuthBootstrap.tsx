@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { toast } from "sonner"
-import { getBrowserSession, getUser } from "../../libs/api/user"
+import { getBrowserSession, getUser } from "../../libs/api/client/user"
 import { supabase } from "../../libs/supabase/client"
 import { useUserStore } from "../../store/useUserStore"
 

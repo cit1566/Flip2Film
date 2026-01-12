@@ -1,6 +1,6 @@
 import type { AuthTokenResponse, AuthUser } from "@supabase/supabase-js"
-import createClient from "../../supabase/client"
-import type { UserInsert, UserUpdate } from "../../supabase/types"
+import createClient from "../../../supabase/client"
+import type { UserInsert, UserUpdate } from "../../../supabase/types"
 import {
   assert,
   getFileExtension,

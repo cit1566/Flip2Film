@@ -1,6 +1,10 @@
 import { checkNicknameValidate } from "@/libs/api/client/auth/auth-api"
-import { getUser, updateUser, uploadProfileImage } from "@/libs/api/user"
-import { getBrowserUser } from "@/libs/api/user/session"
+import {
+  getBrowserUser,
+  getUser,
+  updateUser,
+  uploadProfileImage,
+} from "@/libs/api/client/user"
 import type { UserUpdate } from "@/libs/supabase/types"
 
 export type SocialProfileFormData = Pick<UserUpdate, "nickname" | "bio"> & {

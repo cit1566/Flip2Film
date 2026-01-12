@@ -1,5 +1,5 @@
 import type { Session, User } from "@supabase/supabase-js"
-import { supabase } from "../../supabase/client"
+import { supabase } from "../../../supabase/client"
 
 /** 브라우저 쿠키 토큰(세션) 가져오기 */
 export async function getBrowserSession(): Promise<Session | null> {

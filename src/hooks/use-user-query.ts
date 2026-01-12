@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
-import { getUser } from "../libs/api/user"
+import { getUser } from "../libs/api/client/user"
 import { supabase } from "../libs/supabase/client"
 import { useUserStore } from "../store/useUserStore"
 

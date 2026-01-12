@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { resetPasswordEmail } from "../../../libs/api/user"
+import { resetPasswordEmail } from "../../../libs/api/client/user"
 import styles from "./forgot-password-form.module.css"
 
 export const ForgotPasswordForm = () => {

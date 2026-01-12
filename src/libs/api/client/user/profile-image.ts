@@ -1,4 +1,4 @@
-import createClient from "../../supabase/client"
+import createClient from "../../../supabase/client"
 
 /**
  * Storage 전용 Supabase 클라이언트

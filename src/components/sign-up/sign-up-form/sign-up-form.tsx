@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { createUser } from "../../../libs/api/user"
+import { createUser } from "../../../libs/api/client/user"
 import styles from "./sign-up-form.module.css"
 
 /**

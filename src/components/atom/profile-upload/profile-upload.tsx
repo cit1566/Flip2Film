@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { validateProfileImage } from "../../../libs/api/user"
+import { validateProfileImage } from "../../../libs/api/client/user"
 import styles from "./profile-upload.module.css"
 
 interface ProfileUploadProps {

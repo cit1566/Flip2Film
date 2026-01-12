@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { toast } from "sonner"
-import { signInWithSocial } from "../../../libs/api/user"
+import { signInWithSocial } from "../../../libs/api/client/user"
 import styles from "./social-login.module.css"
 
 type Provider = "kakao" | "google"

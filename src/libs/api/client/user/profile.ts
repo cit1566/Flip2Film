@@ -1,5 +1,5 @@
-import createClient from "../../supabase/client"
-import type { User, UserUpdate } from "../../supabase/types"
+import createClient from "../../../supabase/client"
+import type { User, UserUpdate } from "../../../supabase/types"
 import { assert } from "./profile-image"
 
 /** 사용자 id에 해당하는 public.user 데이터 가져오기 */
