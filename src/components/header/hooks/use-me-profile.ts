@@ -1,5 +1,6 @@
 import { fetchMeProfile } from "@/libs/api/client/me/me"
 import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 
 export function useMeProfile() {
   const query = useQuery({
@@ -12,10 +13,13 @@ export function useMeProfile() {
   const authReady = Boolean(me?.nickname && me.nickname !== "익명")
   const profileImageUrl = me?.profile_image ?? "/profile/default-profile.png"
 
-  return {
-    ...query,
-    me,
-    authReady,
-    profileImageUrl,
-  }
+  return useMemo(
+    () => ({
+      ...query,
+      me,
+      authReady,
+      profileImageUrl,
+    }),
+    [query, me, authReady, profileImageUrl]
+  )
 }

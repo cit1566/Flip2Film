@@ -2,15 +2,10 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import { useUserStore } from "@/store/useUserStore"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { logIn } from "../../../libs/api/client/user"
-import getUserProfileUrl from "../../../libs/api/client/user/get-user-profile"
+import { useLogin } from "./hooks/use-login"
 import styles from "./login-form.module.css"
 
 interface LoginFormData {
@@ -19,9 +14,7 @@ interface LoginFormData {
 }
 
 export default function LoginForm() {
-  const router = useRouter()
-  const { setUserId, setUserData } = useUserStore()
-  const queryClient = useQueryClient()
+  const loginMutation = useLogin()
 
   const {
     control,
@@ -45,37 +38,6 @@ export default function LoginForm() {
     if (isTouched && value.trim().length > 0) return "success"
     return "default"
   }
-
-  const loginMutation = useMutation({
-    mutationFn: async ({ email, password }: LoginFormData) =>
-      await logIn(email, password),
-    onSuccess: async ({ user }) => {
-      if (!user) toast.error("사용자의 ID를 찾을 수 없습니다.")
-      else {
-        toast.success("로그인에 성공했습니다.")
-        router.push("/")
-        setUserId(user.id)
-
-        setUserData({
-          bio: (user.user_metadata?.bio as string | null) ?? null,
-          email: user.email ?? null, // ✅ email은 여기
-          id: user.id, // ✅ id는 여기
-          nickname: (user.user_metadata?.nickname as string) ?? "",
-          profile_image:
-            (user.user_metadata?.profile_image as string | null) ?? null,
-        })
-
-        await queryClient.prefetchQuery({
-          queryKey: ["profileImageUrl", user.id],
-          queryFn: async () => await getUserProfileUrl(user.id),
-        })
-      }
-    },
-    onError: error => {
-      if (error instanceof Error) toast.error(error.message)
-      else toast.error("로그인에 실패했습니다.")
-    },
-  })
 
   async function onSubmit(data: LoginFormData) {
     loginMutation.mutate(data)
