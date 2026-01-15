@@ -1,5 +1,6 @@
 export { default as getInputStatus } from "./auth/getInputStatus"
 export { default as chunkArray } from "./chunkArray"
+export { DB_ERROR_CODES } from "./commonConstants/Constants"
 export { default as extractImageSrcList } from "./extractImageSrcList"
 export { default as fileToBase64 } from "./fileToBase64"
 export { default as removeImageTags } from "./removeImageTag"

@@ -6,7 +6,7 @@
 
 // Auth / OAuth / Password
 export {
-  default as createUser,
+  createUser,
   logIn,
   logOut,
   resetPasswordEmail,

@@ -36,7 +36,7 @@ export function ensureBrowser(fnName: string) {
  * - 트리거에 의해 public.user 자동 생성
  * - (선택) 프로필 이미지 업로드 + public.user.profile_image 업데이트
  */
-export default async function createUser({
+export async function createUser({
   email,
   password,
   bio,

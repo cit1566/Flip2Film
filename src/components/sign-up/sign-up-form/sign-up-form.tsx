@@ -8,15 +8,15 @@ import {
   checkEmailValidate,
   checkNicknameValidate,
 } from "@/libs/api/client/auth/auth-api"
+import { createUser } from "@/libs/api/client/user"
 import type { UserInsert } from "@/libs/supabase/types"
+import { DB_ERROR_CODES, getInputStatus } from "@/utils"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import { CheckCircle2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { createUser } from "../../../libs/api/client/user"
-import { getInputStatus } from "../../../utils"
 import styles from "./sign-up-form.module.css"
 
 /**
@@ -52,14 +52,6 @@ export default function SignUpForm() {
 
   /** 회원가입 성공 여부 (성공 화면 전환용) */
   const [isSuccess, setIsSuccess] = useState(false)
-
-  /**
-   * Postgres 에러 코드 상수
-   * - 23505: UNIQUE 제약조건 위반
-   */
-  const DB_ERROR_CODES = {
-    UNIQUE_VIOLATION: "23505",
-  }
 
   /**
    * react-hook-form 설정
