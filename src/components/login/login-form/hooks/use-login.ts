@@ -1,8 +1,10 @@
+"use client"
+
 import { logIn } from "@/libs/api/client/user"
 import getUserProfileUrl from "@/libs/api/client/user/get-user-profile"
 import { useUserStore } from "@/store/useUserStore"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { mapAuthUserToStore } from "../login.service"
 
