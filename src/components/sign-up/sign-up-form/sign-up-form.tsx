@@ -16,6 +16,7 @@ import { useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { createUser } from "../../../libs/api/client/user"
+import { getInputStatus } from "../../../utils"
 import styles from "./sign-up-form.module.css"
 
 /**
@@ -80,19 +81,6 @@ export default function SignUpForm() {
       profile_image: null,
     },
   })
-
-  /**
-   * Input 상태 계산 (UI용)
-   */
-  const handleInputStatus = (
-    isTouched: boolean,
-    hasError: boolean,
-    value: string
-  ) => {
-    if (hasError) return "error"
-    if (isTouched && value.trim().length > 0) return "success"
-    return "default"
-  }
 
   /**
    * 이메일 중복 검사
@@ -255,7 +243,7 @@ export default function SignUpForm() {
               onChange={e => field.onChange(e.target.value)}
               onBlur={field.onBlur}
               onClear={() => field.onChange("")}
-              status={handleInputStatus(
+              status={getInputStatus(
                 fieldState.isTouched,
                 Boolean(fieldState.error),
                 field.value ?? ""
@@ -286,7 +274,7 @@ export default function SignUpForm() {
               value={field.value ?? ""}
               onChange={e => field.onChange(e.target.value)}
               onBlur={field.onBlur}
-              status={handleInputStatus(
+              status={getInputStatus(
                 fieldState.isTouched,
                 Boolean(fieldState.error),
                 field.value ?? ""
@@ -318,7 +306,7 @@ export default function SignUpForm() {
               value={field.value ?? ""}
               onChange={e => field.onChange(e.target.value)}
               onBlur={field.onBlur}
-              status={handleInputStatus(
+              status={getInputStatus(
                 fieldState.isTouched,
                 Boolean(fieldState.error),
                 field.value ?? ""
@@ -353,7 +341,7 @@ export default function SignUpForm() {
               onChange={e => field.onChange(e.target.value)}
               onClear={() => field.onChange("")}
               onBlur={field.onBlur}
-              status={handleInputStatus(
+              status={getInputStatus(
                 fieldState.isTouched,
                 Boolean(fieldState.error),
                 field.value ?? ""

@@ -5,6 +5,7 @@ import Input from "@/components/atom/input/input"
 import { VALIDATION_PATTERNS } from "@/utils/validation"
 import Link from "next/link"
 import { Controller, useForm } from "react-hook-form"
+import { getInputStatus } from "../../../utils"
 import { useLogin } from "./hooks/use-login"
 import styles from "./login-form.module.css"
 
@@ -28,16 +29,6 @@ export default function LoginForm() {
       password: "",
     },
   })
-
-  function getInputStatus(
-    isTouched: boolean,
-    hasError: boolean,
-    value: string
-  ) {
-    if (hasError) return "error"
-    if (isTouched && value.trim().length > 0) return "success"
-    return "default"
-  }
 
   async function onSubmit(data: LoginFormData) {
     loginMutation.mutate(data)
