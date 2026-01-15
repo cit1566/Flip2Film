@@ -1,4 +1,10 @@
-// app/api/auth/callback/route.ts
+// GET /api/auth/callback (가장 중요)
+// 역할: Supabase가 준 code를 세션으로 교환하고(쿠키 세팅), next로 redirect
+// 여기서 처리하는 것들:
+// 소셜 로그인 callback
+// 이메일 인증(회원가입 confirm) callback
+// 비밀번호 재설정(recovery) callback
+// 즉, **인증 플로우의 “공용 관문”**으로 둠.
 
 import { createClient } from "@/libs/supabase/server"
 import { cookies } from "next/headers"
