@@ -17,7 +17,8 @@ export interface Database {
       review: {
         Row: {
           category: string
-          content: string
+          content_text: string
+          contents_json: Json
           created_at: string
           id: string
           is_public: boolean
@@ -26,11 +27,13 @@ export interface Database {
           rating: number
           review_owner_id: string
           spoiler: boolean
+          status: Database["public"]["Enums"]["review_status"]
           title: string
         }
         Insert: {
           category?: string
-          content: string
+          content_text: string
+          contents_json: Json
           created_at?: string
           id?: string
           is_public?: boolean
@@ -39,11 +42,13 @@ export interface Database {
           rating?: number
           review_owner_id?: string
           spoiler?: boolean
+          status?: Database["public"]["Enums"]["review_status"]
           title: string
         }
         Update: {
           category?: string
-          content?: string
+          content_text?: string
+          contents_json?: Json
           created_at?: string
           id?: string
           is_public?: boolean
@@ -52,6 +57,7 @@ export interface Database {
           rating?: number
           review_owner_id?: string
           spoiler?: boolean
+          status?: Database["public"]["Enums"]["review_status"]
           title?: string
         }
         Relationships: [
@@ -67,21 +73,21 @@ export interface Database {
       user: {
         Row: {
           bio: string | null
-          email: string | null
+          email: string
           id: string
           nickname: string
           profile_image: string | null
         }
         Insert: {
           bio?: string | null
-          email?: string | null
-          id?: string
+          email: string
+          id: string
           nickname: string
           profile_image?: string | null
         }
         Update: {
           bio?: string | null
-          email?: string | null
+          email?: string
           id?: string
           nickname?: string
           profile_image?: string | null
@@ -96,7 +102,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      review_status: "draft" | "published"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -223,6 +229,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      review_status: ["draft", "published"],
+    },
   },
 } as const
