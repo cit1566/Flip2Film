@@ -4,14 +4,10 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
-import {
-  checkEmailValidate,
-  checkNicknameValidate,
-} from "@/libs/api/client/auth/auth-api"
-import { createUser } from "@/libs/api/client/user"
+import checkValidate from "@/libs/api/server/auth/checkValidate"
 import type { UserInsert } from "@/libs/supabase/types"
 import { DB_ERROR_CODES, getInputStatus } from "@/utils"
-import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
 import { CheckCircle2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
@@ -75,54 +71,24 @@ export default function SignUpForm() {
   })
 
   /**
-   * 이메일 중복 검사
-   * - 형식이 맞지 않으면 검사하지 않음
-   * - true: 통과
-   * - string: 에러 메시지
-   */
-  const checkEmailDuplicate = async (value?: string | null) => {
-    if (!value || !VALIDATION_PATTERNS.email.value.test(value)) return true
-
-    try {
-      const isExists = await checkEmailValidate(value)
-      return isExists ? "이미 가입된 사용자 입니다" : true
-    } catch {
-      return "이메일 확인 중 오류가 발생했습니다"
-    }
-  }
-
-  /**
-   * 닉네임 중복 검사
-   */
-  const checkNicknameDuplicate = async (value?: string | null) => {
-    if (!value || value.length < 2) return true
-
-    try {
-      const isExists = await checkNicknameValidate(value)
-      return isExists ? "이미 사용 중인 닉네임 입니다" : true
-    } catch {
-      return "닉네임 확인 중 오류가 발생했습니다"
-    }
-  }
-
-  /**
    * 회원가입 submit 핸들러
    */
   const handleSignUpSubmit = async (data: SignUpFormData) => {
     if (isSubmittingRef.current) return
+    if (!data.email) return
 
     try {
       isSubmittingRef.current = true
+      const formData = new FormData()
+      formData.append("email", data.email)
+      formData.append("passowrd", data.password)
+      formData.append("nickname", data.nickname)
+      formData.append("profile_image", data.profile_image ?? "")
 
-      const { email, password, nickname, bio, profile_image } = data
-
-      // 사용자 생성 (Auth + public.user)
-      await createUser({
-        email,
-        password,
-        nickname,
-        bio,
-        profile_image,
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       })
 
       setIsSuccess(true)
@@ -222,7 +188,7 @@ export default function SignUpForm() {
         rules={{
           required: "이메일을 입력해주세요",
           pattern: VALIDATION_PATTERNS.email,
-          validate: checkEmailDuplicate,
+          validate: value => checkValidate({ key: "email", value }),
         }}
         render={({ field, fieldState }) => (
           <div className={styles.inputWrapper}>
@@ -321,7 +287,7 @@ export default function SignUpForm() {
           required: "닉네임을 입력해주세요",
           minLength: { value: 2, message: "닉네임은 최소 2자입니다" },
           maxLength: { value: 6, message: "닉네임은 최대 6자입니다" },
-          validate: checkNicknameDuplicate,
+          validate: value => checkValidate({ key: "nickname", value }),
         }}
         render={({ field, fieldState }) => (
           <div className={styles.inputWrapper}>

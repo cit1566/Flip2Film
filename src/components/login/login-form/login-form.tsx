@@ -2,7 +2,7 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
 import Link from "next/link"
 import { Controller, useForm } from "react-hook-form"
 import { getInputStatus } from "../../../utils"

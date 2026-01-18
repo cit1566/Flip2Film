@@ -2,7 +2,7 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
 import { CheckCircle2, Mail } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"

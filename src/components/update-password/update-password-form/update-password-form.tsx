@@ -2,13 +2,13 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { updatePassword } from "@/libs/api/client/user"
+import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
 import { LockIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { updatePassword } from "../../../libs/api/client/user"
 import styles from "./update-password-form.module.css"
 
 export const UpdatePasswordForm = () => {
