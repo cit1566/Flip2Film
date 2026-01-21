@@ -4,7 +4,6 @@ import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
 import ProfileUpload from "@/components/atom/profile-upload/profile-upload"
 import TermsText from "@/components/sign-up/terms-text/terms-text"
-import checkValidate from "@/libs/api/server/auth/checkValidate"
 import type { UserInsert } from "@/libs/supabase/types"
 import { DB_ERROR_CODES, getInputStatus } from "@/utils"
 import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
@@ -26,6 +25,8 @@ interface AuthError {
   hint?: string
 }
 
+type Key = "email" | "nickname"
+
 /**
  * 회원가입 폼에서 실제로 사용하는 데이터 타입
  * (DB insert 타입 + UI 전용 필드)
@@ -34,6 +35,27 @@ type SignUpFormData = Pick<UserInsert, "email" | "nickname" | "bio"> & {
   password: string
   passwordCheck: string
   profile_image: File | null
+}
+
+async function checkValidateClient({
+  key,
+  value,
+}: {
+  key: Key
+  value: string
+}): Promise<true | string> {
+  const res = await fetch("/api/auth/signup/validation", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key, value }),
+  })
+
+  // 서버 에러면 UX상 "일단 통과" 시키는 선택도 혼합(원하는 메시지로 바꾸는거 가능)
+  if (!res.ok) return true
+
+  const json = (await res.json()) as { ok: boolean; message?: string }
+
+  return json.ok ? true : (json.message ?? "유효성 검사에 실패하였습니다.")
 }
 
 export default function SignUpForm() {
@@ -79,20 +101,28 @@ export default function SignUpForm() {
 
     try {
       isSubmittingRef.current = true
+
       const formData = new FormData()
       formData.append("email", data.email)
-      formData.append("passowrd", data.password)
+      formData.append("password", data.password)
       formData.append("nickname", data.nickname)
-      formData.append("profile_image", data.profile_image ?? "")
+      formData.append("bio", data.bio ?? "")
+      if (data.profile_image instanceof File) {
+        formData.append("profile_image", data.profile_image)
+      }
 
       const res = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: formData,
       })
 
-      setIsSuccess(true)
-      toast.success("회원가입 완료!")
+      if (res.status >= 400) {
+        const message = await res.json()
+        toast.error(message ?? "에러")
+      } else {
+        setIsSuccess(true)
+        toast.success("회원가입 완료!")
+      }
     } catch (err: unknown) {
       const error = err as AuthError
       const errorCode = error?.code ?? ""
@@ -121,6 +151,8 @@ export default function SignUpForm() {
           )
           return
         }
+
+        if (err instanceof Error) toast.error(err.message)
       }
 
       toast.error(error.message ?? "회원가입에 실패했습니다")
@@ -129,8 +161,10 @@ export default function SignUpForm() {
     }
   }
 
+  //
+
   /**
-   * 회원가입 성공 화면
+   * 회원가입/로그인 성공 화면
    */
   if (isSuccess) {
     return (
@@ -143,20 +177,27 @@ export default function SignUpForm() {
               className={styles.CheckCircle2Icon}
             />
           </div>
-          <h2 className={styles.title}>회원가입이 완료되었습니다</h2>
+
+          <h2 className={styles.title}>로그인이 완료되었습니다</h2>
           <p className={styles.description}>
-            입력하신 이메일로 인증 링크를 보냈습니다
-            <br />
-            메일 인증 후 서비스 이용이 가능합니다
+            환영합니다! 바로 서비스를 이용하실 수 있습니다.
           </p>
         </header>
 
-        <Button
-          variant="green"
-          title="로그인으로 이동하기"
-          onClick={() => router.push("/login")}
-          className={styles.submitButton}
-        />
+        <div className={styles.actions}>
+          <Button
+            variant="green"
+            title="홈으로 이동"
+            onClick={() => router.push("/")}
+            className={styles.submitButton}
+          />
+          <Button
+            variant="base"
+            title="내 프로필 보기"
+            onClick={() => router.push("/me")}
+            className={styles.secondaryButton}
+          />
+        </div>
       </div>
     )
   }
@@ -188,7 +229,9 @@ export default function SignUpForm() {
         rules={{
           required: "이메일을 입력해주세요",
           pattern: VALIDATION_PATTERNS.email,
-          validate: value => checkValidate({ key: "email", value }),
+          validate: async value => {
+            return await checkValidateClient({ key: "email", value })
+          },
         }}
         render={({ field, fieldState }) => (
           <div className={styles.inputWrapper}>
@@ -207,8 +250,8 @@ export default function SignUpForm() {
                 field.value ?? ""
               )}
             />
-            {errors.email && (
-              <p className={styles.errorMessage}>{errors.email.message}</p>
+            {fieldState.error && (
+              <p className={styles.errorMessage}>{fieldState.error.message}</p>
             )}
           </div>
         )}
@@ -287,7 +330,9 @@ export default function SignUpForm() {
           required: "닉네임을 입력해주세요",
           minLength: { value: 2, message: "닉네임은 최소 2자입니다" },
           maxLength: { value: 6, message: "닉네임은 최대 6자입니다" },
-          validate: value => checkValidate({ key: "nickname", value }),
+          validate: async value => {
+            return await checkValidateClient({ key: "nickname", value })
+          },
         }}
         render={({ field, fieldState }) => (
           <div className={styles.inputWrapper}>

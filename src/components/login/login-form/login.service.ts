@@ -7,9 +7,9 @@ import type { User as AuthUser } from "@supabase/supabase-js"
 export function mapAuthUserToStore(user: AuthUser) {
   return {
     bio: (user.user_metadata?.bio as string | null) ?? null,
-    email: user.email ?? null,
+    email: user.email as string,
     id: user.id,
-    nickname: (user.user_metadata?.nickname as string) ?? null,
+    nickname: user.user_metadata?.nickname as string,
     profile_image: (user.user_metadata?.profile_image as string | null) ?? null,
   }
 }

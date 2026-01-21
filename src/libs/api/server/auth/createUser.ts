@@ -8,13 +8,11 @@ interface createClientProps {
   nickname: User["nickname"] | null
 }
 
-export default async function createUser({
-  email,
-  password,
-  bio,
-  nickname,
-}: createClientProps) {
-  if (!email) return
+export default async function createUser(
+  { email, password, bio, nickname }: createClientProps,
+  origin: string
+) {
+  if (!email) throw new Error("이메일이 존재하지 않습니다.")
 
   const supabase = await createClient()
   const { data, error } = await supabase.auth.signUp({
@@ -22,6 +20,7 @@ export default async function createUser({
     password,
     options: {
       data: { nickname: nickname ?? email.split("@")[0], bio },
+      emailRedirectTo: `${origin}/api/auth/callback`,
     },
   })
 

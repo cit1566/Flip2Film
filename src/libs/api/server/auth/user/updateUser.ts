@@ -6,7 +6,7 @@ export default async function updateUser(input: UserUpdate, userId: string) {
 
   const { data, error } = await supabase
     .from("user")
-    .update(input)
+    .update(input satisfies Partial<UserUpdate>)
     .eq("id", userId)
     .select()
     .maybeSingle()

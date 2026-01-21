@@ -46,3 +46,14 @@
   line-height: 1.6;
   color: var(--color-gray);
 }
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.secondaryButton {
+  width: 100%;
+}

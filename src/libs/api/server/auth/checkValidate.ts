@@ -1,12 +1,9 @@
 import { createClient } from "@/libs/supabase/server"
 import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
 
-interface checkValidateProps {
-  key: "email" | "nickname"
-  value: string
-}
+type FieldKey = "email" | "nickname"
 
-const MESSAGE = {
+const MESSAGE: Record<FieldKey, string> = {
   email: "이미 가입된 사용자입니다.",
   nickname: "이미 사용중인 닉네임입니다.",
 }
@@ -14,21 +11,28 @@ const MESSAGE = {
 export default async function checkValidate({
   key,
   value,
-}: checkValidateProps): Promise<string | boolean> {
-  if (key === "email")
-    if (!value || !VALIDATION_PATTERNS.email.value.test(value)) return true
+}: {
+  key: FieldKey
+  value: string
+}): Promise<true | string> {
+  const v = value.trim()
 
-  if (key === "nickname") if (!value || value.length < 2) return true
+  // 형식 검증은 다른 rule에서 하고, 여기서는 "중복 체크"만 한다는 가정(형식 틀리면 중복체크 스킵)
+  if (key === "email" && (!v || !VALIDATION_PATTERNS.email.value.test(v)))
+    return true
+  if (key === "nickname" && (!v || v.length < 2)) return true
 
   const supabase = await createClient()
 
   const { data, error } = await supabase
     .from("user")
-    .select(key)
-    .eq(key, value)
+    .select("id")
+    .eq(key, key === "email" ? v.toLowerCase() : v)
+    .limit(1)
     .maybeSingle()
 
   if (error) throw error
-  if (data) true
-  return key === "email" ? MESSAGE.email : MESSAGE.nickname
+
+  // 존재하면 에러 메시지, 없으면 통과(true)
+  return data ? MESSAGE[key] : true
 }
