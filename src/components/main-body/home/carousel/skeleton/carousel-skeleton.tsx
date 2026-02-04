@@ -1,6 +1,6 @@
 // carousel-skeleton.tsx
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import styles from "./carousel-skeletion.module.css"
+import styles from "./carousel-skeleton.module.css"
 
 interface CarouselSkeletonProps {
   /** 영화(큰 배너) 슬라이드 개수 */

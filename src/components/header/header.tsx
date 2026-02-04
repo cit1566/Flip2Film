@@ -3,74 +3,54 @@
 import { Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState, useRef } from "react"
+import { useState } from "react"
+import { toast } from "sonner"
 import styles from "./header.module.css"
+import { useDropdown } from "./hooks/use-drop-down"
+import { useHeaderVisivility } from "./hooks/use-header-visibility"
+import { useLogout } from "./hooks/use-logout"
+import { useMeProfile } from "./hooks/use-me-profile"
+import ProfileSkeleton from "./profile/profile-skeleton"
 
 interface HeaderProps {
   className?: string | undefined
 }
 
 export default function Header({ className }: HeaderProps) {
-  const [show, setShow] = useState(true)
-  const lastScroll = useRef(0)
+  const { show } = useHeaderVisivility(50)
   const [isSearchOpen, setSearchOpen] = useState(false)
-  const ticking = useRef(false)
 
-  useEffect(() => {
-    const SCROLL_THRESHOLD = 50
-    const SCROLL_DELTA = 5
+  const {
+    ref: dropdownRef,
+    open: isProfileOpen,
+    setOpen: setIsProfileOpen,
+  } = useDropdown<HTMLDivElement>()
+  const { authReady, profileImageUrl, isLoading } = useMeProfile()
 
-    const handleScroll = () => {
-      if (!ticking.current) {
-        window.requestAnimationFrame(() => {
-          const currentScroll = window.scrollY
+  const logoutMutation = useLogout()
 
-          // 최상단에서는 항상 표시
-          if (currentScroll <= SCROLL_THRESHOLD) {
-            setShow(true)
-            lastScroll.current = currentScroll
-            ticking.current = false
-            return
-          }
-
-          // 변화량이 작으면 무시
-          if (Math.abs(currentScroll - lastScroll.current) < SCROLL_DELTA) {
-            ticking.current = false
-            return
-          }
-
-          // 방향에 따라 표시/숨김
-          if (
-            currentScroll > lastScroll.current &&
-            currentScroll > SCROLL_THRESHOLD
-          ) {
-            setShow(false)
-          } else if (currentScroll < lastScroll.current) {
-            setShow(true)
-          }
-
-          lastScroll.current = currentScroll
-          ticking.current = false
-        })
-
-        ticking.current = true
+  const handleLogOut = async () => {
+    try {
+      toast.success("로그아웃되었습니다")
+      setIsProfileOpen(false)
+      await logoutMutation.mutateAsync()
+      window.location.href = "/"
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e?.message ?? "로그아웃 에러가 발생했습니다.")
       }
     }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }
 
   return (
     <header
-      aria-hidden={!show}
-      className={`${styles.header} ${className} ${show ? styles.show : styles.hide}`}
+      className={`${styles.header} ${className ?? ""} ${show ? styles.show : styles.hide}`}
     >
       <div className={styles.headerInner}>
-        <Link href="/" className={styles.logo} aria-label="메인 페이지로 이동">
+        <Link href="/" className={styles.logo}>
           <Image
             src="/logo/logo.svg"
-            alt="Flip2Film 로고"
+            alt="로고"
             width={40}
             height={40}
             priority
@@ -79,26 +59,63 @@ export default function Header({ className }: HeaderProps) {
 
         <div className={styles.searchBox}>
           <button
-            type="button"
+            onClick={() => setSearchOpen(!isSearchOpen)}
             className={styles.searchButton}
-            aria-label="검색 열기"
-            aria-expanded={isSearchOpen}
-            aria-controls="search-panel"
-            onClick={() => {
-              setSearchOpen(bool => !bool)
-            }}
           >
-            <Search aria-hidden="true" />
+            <Search />
           </button>
 
-          <Link
-            href="/auth/login"
-            role="link"
-            className={styles.loginLink}
-            aria-label="로그인 페이지로 이동"
-          >
-            로그인
-          </Link>
+          {authReady ? (
+            <div className={styles.profileWrapper} ref={dropdownRef}>
+              <button
+                className={styles.profileImageButton}
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                disabled={isLoading} // 로딩 중 클릭 방지
+              >
+                {isLoading ? (
+                  <ProfileSkeleton />
+                ) : (
+                  <Image
+                    src={profileImageUrl}
+                    alt="프로필"
+                    width={50}
+                    height={50}
+                    className={styles.profileImage}
+                  />
+                )}
+              </button>
+
+              {!isLoading && isProfileOpen && (
+                <div className={styles.dropdown}>
+                  {" "}
+                  <Link
+                    href="/my-posts"
+                    className={styles.dropdownItem}
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    나의 글
+                  </Link>
+                  <Link
+                    href="/settings"
+                    className={styles.dropdownItem}
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    설정
+                  </Link>
+                  <button
+                    className={styles.dropdownItem}
+                    onClick={handleLogOut}
+                  >
+                    로그아웃
+                  </button>{" "}
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link href="/login" className={styles.loginLink}>
+              로그인
+            </Link>
+          )}
         </div>
       </div>
     </header>

@@ -11,6 +11,11 @@ export default function NavLink() {
   const isMovie = pathname.startsWith("/movie")
   const isBook = pathname.startsWith("/book")
 
+  if (!isHome && !isMovie && !isBook) {
+    return null
+  }
+
+  // 3. 위 조건에 해당할 때만 아래 UI가 보임
   const activeLineKey = isHome
     ? "activeHome"
     : isMovie

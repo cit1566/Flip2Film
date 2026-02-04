@@ -1,14 +1,11 @@
 import type { NextConfig } from "next"
 
-const nextConfig: NextConfig = {
-  // 리액트 엄격 모드 활성화
-  reactStrictMode: true,
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL)
+  : null
 
-  // TypeScript 설정
-  typescript: {
-    // 빌드 시, 타입 검사 결과 무시 설정
-    // ignoreBuildErrors: false,
-  },
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -17,15 +14,28 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-      {
-        protocol: "https",
-        hostname: "image.tmdb.org",
-        pathname: "/t/p/**",
-      },
+      // Supabase 설정
+      ...(supabaseUrl
+        ? [
+            {
+              protocol: supabaseUrl.protocol.replace(":", "") as
+                | "http"
+                | "https",
+              hostname: supabaseUrl.hostname,
+              port: "",
+              pathname: "/storage/v1/object/public/**",
+            },
+          ]
+        : []),
       {
         protocol: "https",
         hostname: "image.aladin.co.kr",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        pathname: "/t/p/**",
       },
     ],
   },

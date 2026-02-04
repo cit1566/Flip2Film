@@ -2,7 +2,8 @@
 
 import { Plus } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
+import { validateProfileImage } from "../../../libs/api/client/user"
 import styles from "./profile-upload.module.css"
 
 interface ProfileUploadProps {
@@ -11,7 +12,6 @@ interface ProfileUploadProps {
 }
 
 export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
-  const inputRef = useRef<HTMLInputElement | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const [isInvalidType, setIsInvalidType] = useState(false)
 
@@ -21,24 +21,31 @@ export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
       return
     }
 
-    const url = URL.createObjectURL(value)
-    setPreviewImage(url)
+    if (value instanceof File) {
+      const url = URL.createObjectURL(value)
+      setPreviewImage(url)
 
-    return () => {
-      URL.revokeObjectURL(url)
+      return () => {
+        URL.revokeObjectURL(url)
+      }
     }
+
+    return
   }, [value])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    if (!["image/png", "image/jpeg"].includes(file.type)) {
+    const allowedTypes = ["image/png", "image/jpeg"]
+
+    if (!allowedTypes.includes(file.type)) {
       e.target.value = ""
       onChange(null)
       setIsInvalidType(true)
       return
     }
+    validateProfileImage(file)
 
     setIsInvalidType(false)
     onChange(file)
@@ -53,6 +60,8 @@ export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
           width={90}
           height={90}
           className={styles.profileImage}
+          unoptimized
+          priority
         />
 
         <label
@@ -65,7 +74,6 @@ export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
 
         <input
           id="profile-upload"
-          ref={inputRef}
           type="file"
           accept="image/png, image/jpeg"
           onChange={handleImageChange}
@@ -80,7 +88,7 @@ export default function ProfileUpload({ value, onChange }: ProfileUploadProps) {
           className={styles.profileHelpText}
           aria-live="polite"
         >
-          PNG 또는 JPEG 형식의 이미지만
+          .PNG 또는 .JPEG 형식의 이미지만
           <br /> 업로드할 수 있습니다
         </p>
       )}

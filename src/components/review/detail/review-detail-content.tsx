@@ -1,6 +1,5 @@
 import type { ReviewPartial } from "@/libs/supabase/types.ts"
-import { LucideStar, LucideHeart, LucidePen, LucideTrash2 } from "lucide-react"
-import ProfilePicture from "../../user/profile-picture"
+import { LucideHeart, LucidePen, LucideStar, LucideTrash2 } from "lucide-react"
 import styles from "./review-detail-content.module.css"
 
 interface ReviewDetailProps {

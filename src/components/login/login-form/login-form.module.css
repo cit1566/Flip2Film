@@ -9,7 +9,7 @@
 .loginFormSubmitButton {
   width: 100%;
   padding: 12px;
-  margin-top: 56px;
+  margin-top: 36px;
   border: none;
   border-radius: 6px;
 
@@ -38,7 +38,7 @@
 
 .errorMessage {
   margin-block: 0;
-  margin-top: 4px;
+  margin-top: 10px;
   font-size: 0.85rem;
   color: var(--color-red);
 }

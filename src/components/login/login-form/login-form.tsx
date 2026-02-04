@@ -2,25 +2,25 @@
 
 import Button from "@/components/atom/button/button"
 import Input from "@/components/atom/input/input"
-import supabase from "@/libs/supabase/client"
-import type { User } from "@/libs/supabase/types"
-import { VALIDATION_PATTERNS } from "@/utils/validation"
+import { VALIDATION_PATTERNS } from "@/utils/commonConstants/validation"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
+import { getInputStatus } from "../../../utils"
+import { useLogin } from "./hooks/use-login"
 import styles from "./login-form.module.css"
 
-type LoginFormData = Pick<User, "email"> & {
+interface LoginFormData {
+  email: string
   password: string
 }
 
 export default function LoginForm() {
-  const router = useRouter()
+  const loginMutation = useLogin()
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted, isValid },
+    formState: { errors, isSubmitting, isValidating, isValid },
   } = useForm<LoginFormData>({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -30,32 +30,8 @@ export default function LoginForm() {
     },
   })
 
-  function getInputStatus(
-    isTouched: boolean,
-    hasError: boolean,
-    value: string
-  ) {
-    if (hasError) return "error"
-    if (isTouched && value.trim().length > 0) return "success"
-    return "default"
-  }
-
   async function onSubmit(data: LoginFormData) {
-    const { email, password } = data
-    const client = supabase()
-
-    if (!email || !password) {
-      return
-    }
-
-    const { error } = await client.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) return
-
-    router.push("/")
+    loginMutation.mutate(data)
   }
 
   return (
@@ -73,14 +49,14 @@ export default function LoginForm() {
             type="email"
             placeholder="example@example.com"
             clearable
-            value={field.value ?? ""}
+            value={field.value}
             onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             onClear={() => field.onChange("")}
             status={getInputStatus(
               fieldState.isTouched,
               Boolean(fieldState.error),
-              field.value ?? ""
+              field.value
             )}
           />
         )}
@@ -103,13 +79,13 @@ export default function LoginForm() {
             type="password"
             placeholder="영문, 숫자, 특수문자 조합 8자리 이상"
             togglePassword
-            value={field.value ?? ""}
+            value={field.value}
             onChange={e => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             status={getInputStatus(
               fieldState.isTouched,
               Boolean(fieldState.error),
-              field.value ?? ""
+              field.value
             )}
           />
         )}
@@ -123,18 +99,18 @@ export default function LoginForm() {
         variant="green"
         title={isSubmitting ? "로그인 중..." : "로그인"}
         type="submit"
-        disabled={(isSubmitted && !isValid) || isSubmitting}
+        disabled={!isValid || isSubmitting || isValidating}
         className={styles.loginFormSubmitButton}
       />
 
       <div className={styles.loginFormBottomLinks}>
-        <Link href="/auth/sign-up" className={styles.loginFormLink}>
+        <Link href="/sign-up" className={styles.loginFormLink}>
           회원가입
         </Link>
 
         <span className={styles.loginFormSeparator}>/</span>
 
-        <Link href="/auth/forgot" className={styles.loginFormLink}>
+        <Link href="/forgot" className={styles.loginFormLink}>
           비밀번호 찾기
         </Link>
       </div>
