@@ -8,10 +8,10 @@ import {
   getFileExtension,
   makeProfileImagePath,
 } from "@/libs/api/client/user/profile-image"
-import createUser from "@/libs/api/server/auth/createUser"
 import setProfileStorage from "@/libs/api/server/auth/profile/setProfilestore"
+import createUser from "@/libs/api/server/auth/user/createUser"
+import updateUser from "@/libs/api/server/auth/user/updateUser"
 import { NextResponse } from "next/server"
-import updateUser from "../../../../libs/api/server/auth/user/updateUser"
 
 export async function POST(req: Request) {
   try {

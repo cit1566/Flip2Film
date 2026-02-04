@@ -1,16 +1,10 @@
-"server client"
-
 import "@/styles/main.css"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { StrictMode, type PropsWithChildren } from "react"
 import { Toaster } from "sonner"
 import Footer from "../components/footer/footer"
-import Header from "../components/header/header"
-import NavLink from "../components/nav-link/nav-link"
-import PageTransition from "../components/page-transition/page-transition"
-import Providers from "../libs/tanstack-query/providers"
-import styles from "./layout.module.css"
+import ClientLayoutContent from "./client-layout-content"
 
 export const metadata: Metadata = {
   title: "Next.js 프로젝트 템플릿",
@@ -28,17 +22,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="ko-KR">
       <body className={pretendard.className}>
         <StrictMode>
-          <Providers>
-            {/* 헤더 컴포넌트 */}
-            <Header className={styles.header}></Header>
-            {/* 메인 page.tsx */}
-            <div className={styles.mainBody}>
-              <div className={styles.container}>
-                <NavLink></NavLink>
-                <PageTransition>{children}</PageTransition>
-              </div>
-            </div>
-          </Providers>
+          <ClientLayoutContent>{children}</ClientLayoutContent>
           <Footer></Footer>
           <Toaster position="top-center" richColors />
         </StrictMode>
